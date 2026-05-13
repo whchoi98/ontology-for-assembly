@@ -206,7 +206,7 @@ def _build_subgraph(top_hit: opensearch.SearchHit) -> SubgraphModel:
                     id=vid, label="Vote",
                     data={"result": v.get("result", ""), "source": v.get("source", "real")},
                 ))
-                edges.append(SubgraphEdge(source=vid, target=top_hit.id, type="ON"))
+                edges.append(SubgraphEdge(source=vid, target=top_hit.id, type="VOTE_ON"))
 
     elif top_hit.node_type == "Person":
         # 발의 법안(Bill) - 일반 mock 사용

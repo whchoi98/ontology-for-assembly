@@ -136,7 +136,8 @@ def get_object(class_name: str, instance_id: str) -> InstanceDetailResponse:
 def _try_build_subgraph(class_name: str, instance_id: str, instance_data: dict) -> Optional[dict]:
     """루트 노드 + 직접 참조 ID들로 단순 subgraph 구성.
 
-    예: Bill의 proposer_id → Person 노드 추가, Vote의 bill_id → Bill 노드 추가.
+    관계 이름은 canonical relation (data/schemas.py RELATION_TYPES와 정합) - Cytoscape의
+    [relation="..."] 셀렉터가 일관 스타일 적용.
     """
     nodes: list[dict] = [{
         "id": instance_id,
@@ -145,40 +146,40 @@ def _try_build_subgraph(class_name: str, instance_id: str, instance_data: dict) 
     }]
     edges: list[dict] = []
 
-    # 참조 필드별 노드 추가.
-    references = {
-        "proposer_id": "Person",
-        "person_id": "Person",
-        "bill_id": "Bill",
-        "vote_id": "Vote",
-        "committee_id": "Committee",
-        "session_id": "Session",
-        "party_id": "Party",
-        "agency_id": "Agency",
-        "topic_id": "Topic",
-        "article_id": "Article",
-        "ad_id": "Advertisement",
-        "reader_id": "Reader",
+    # 참조 필드 → (대상 클래스, 관계 이름).
+    references: dict[str, tuple[str, str]] = {
+        "proposer_id": ("Person", "PROPOSED"),
+        "person_id": ("Person", "BY"),
+        "bill_id": ("Bill", "VOTE_ON"),
+        "vote_id": ("Vote", "VOTE_ON"),
+        "committee_id": ("Committee", "MEMBER_OF"),
+        "session_id": ("Session", "AT"),
+        "party_id": ("Party", "BELONGS_TO"),
+        "agency_id": ("Agency", "OVERSEES"),
+        "topic_id": ("Topic", "ABOUT"),
+        "article_id": ("Article", "REFERENCES"),
+        "ad_id": ("Advertisement", "CANDIDATE"),
+        "reader_id": ("Reader", "READ"),
     }
-    for field, ref_class in references.items():
+    for field, (ref_class, relation) in references.items():
         ref_id = instance_data.get(field)
         if ref_id and ref_id != instance_id and isinstance(ref_id, str):
             nodes.append({"id": ref_id, "label": ref_class, "data": {}})
-            edges.append({"source": instance_id, "target": ref_id, "type": field.upper()})
+            edges.append({"source": instance_id, "target": ref_id, "type": relation})
 
     # list 참조 (예: referenced_person_ids, referenced_bill_ids, topic_ids).
-    list_refs = {
-        "referenced_person_ids": "Person",
-        "referenced_bill_ids": "Bill",
-        "topic_ids": "Topic",
-        "candidate_ad_ids": "Advertisement",
+    list_refs: dict[str, tuple[str, str]] = {
+        "referenced_person_ids": ("Person", "MENTIONS"),
+        "referenced_bill_ids": ("Bill", "MENTIONS"),
+        "topic_ids": ("Topic", "ABOUT"),
+        "candidate_ad_ids": ("Advertisement", "CANDIDATE"),
     }
-    for field, ref_class in list_refs.items():
+    for field, (ref_class, relation) in list_refs.items():
         values = instance_data.get(field) or []
         for v in values[:3]:  # 최대 3개
             if isinstance(v, str) and v != instance_id:
                 nodes.append({"id": v, "label": ref_class, "data": {}})
-                edges.append({"source": instance_id, "target": v, "type": field.upper()})
+                edges.append({"source": instance_id, "target": v, "type": relation})
 
     if len(nodes) == 1:
         return None  # 1-hop 참조 없음

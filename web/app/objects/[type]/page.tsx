@@ -9,6 +9,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { CytoscapeView } from '../../../components/CytoscapeView';
 import { DataSourceBadge } from '../../../components/DataSourceBadge';
 
 const PUBLIC_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8080';
@@ -180,17 +181,11 @@ function DetailPanel({ data }: { data: Record<string, unknown> }) {
         )}
         {subgraph && (
           <div>
-            <div className="text-xs uppercase text-gray-500 mb-1">
-              1-hop subgraph ({subgraph.nodes.length} nodes · {subgraph.edges.length} edges)
-            </div>
-            <details>
-              <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700">
-                JSON
-              </summary>
-              <pre className="text-[10px] mt-1 overflow-x-auto bg-gray-50 p-2 rounded font-mono">
-                {JSON.stringify(subgraph, null, 2)}
-              </pre>
-            </details>
+            <div className="text-xs uppercase text-gray-500 mb-2">1-hop subgraph</div>
+            <CytoscapeView
+              subgraph={subgraph as unknown as Parameters<typeof CytoscapeView>[0]['subgraph']}
+              height={300}
+            />
           </div>
         )}
       </div>

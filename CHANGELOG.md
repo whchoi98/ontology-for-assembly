@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase 5 Track 5-7: CytoscapeView 4 고급 패턴 (2026-05-13)
+- `web/components/CytoscapeView.tsx` 재작성: 4 패턴 모두 적용.
+  ① **이미지 노드** — Person 노드에 placeholder 아바타 (data URI SVG, 모든 의원 동일 - ADR-0004 정치 중립). `background-image` + `background-clip: node`로 원형 클리핑. label은 노드 하단.
+  ② **`[relation="..."]` 셀렉터** — 16개 관계 타입별 색·width·line-style 차별화. PROPOSED 파랑 굵게 solid, MEMBER_OF 녹색 dashed, ABOUT 청록 dotted, BELONGS_TO 자주 가늘게, VOTED 주황 굵게, CANDIDATE 노랑 dashed 등.
+  ③ **fcose 레이아웃 + compound** — `cytoscape-fcose` extension 자동 register. MEMBER_OF 엣지 자동 감지 → Committee를 compound parent로, Person을 자식으로 묶음. 정당(BELONGS_TO)은 일반 노드로 유지 (ADR-0004 정파 시각화 회피).
+  ④ **1-hop 이웃 강조** — `cy.on('tap', 'node')` → `closedNeighborhood()` 외 elements에 `faded` class (opacity 0.2). 배경 tap reset.
+- `api/routers/search.py`: edge type "ON" → "VOTE_ON" canonical 정규화.
+- `api/routers/objects.py`: `_try_build_subgraph` 관계 이름 정규화 매핑 - field name uppercased → canonical relation (PROPOSED, BELONGS_TO, MEMBER_OF, ABOUT 등 schemas.py RELATION_TYPES와 정합).
+- `web/app/objects/[type]/page.tsx`: detail panel의 subgraph JSON viewer → CytoscapeView 임베드 (height 300).
+- `web/types/cytoscape-fcose.d.ts`: 외부 라이브러리 ambient declaration.
+- npm 의존성 추가: cytoscape-fcose 2.2.
+- 라이브 검증: search subgraph(B2206001) → PROPOSED 3건 + VOTE_ON 1건, objects(MONA_001) → BELONGS_TO 1건. 모든 관계가 셀렉터에 매핑됨.
+- 빌드: tsc 0 error, next build 9 routes (search 6.36 kB, objects/[type] 99.1 kB First Load).
+
 ### Added — Phase 5 Track 5-6: Object Explorer 31 클래스 (2026-05-13)
 - `api/services/objects_catalog.py`: 31 클래스 dispatcher 패턴. CLASS_GROUPS 7 그룹 + CLASS_DISPLAY_FIELDS (id·label·subtitle 매핑). 15 구현 (Person·Party·Bill·Vote·Committee·Session·Statement·Agency·Topic·Article·Reader·Advertisement·AdInventory·SocialSignal·PollResult) + 16 placeholder.
 - `api/routers/objects.py`: 4 엔드포인트 - GET /api/ontology/classes (전체 메타), /api/ontology/{cls} (단일), /api/objects/{cls} (페이징 리스트), /api/objects/{cls}/{id} (디테일 + 1-hop subgraph).

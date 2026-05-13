@@ -1,0 +1,31 @@
+# raw_data: 외부 공공 데이터지만 큰 용량 + 캐시 분리, KMS S3에 별도 보관
+raw_data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+.next/
+*.tsbuildinfo
+
+# CDK
+cdk.out/
+.cdk.staging/
+
+# Misc
+*.log
+.DS_Store
+.env
+!.env.example
+
+# harness-eval cache (latest.json은 commit, cache는 제외)
+.harness-eval/cache/
+
+# Claude Code harness: personal/runtime files
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

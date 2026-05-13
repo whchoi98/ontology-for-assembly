@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  push:
+    branches: [main, plan1-foundation]
+  pull_request:
+    branches: [main, plan1-foundation]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  python-ast:
+    name: Python AST validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: AST compile
+        run: python -m compileall -q api data scripts
+
+  tsc-check:
+    name: TypeScript type-check
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dir: [web, infra-cdk]
+    env:
+      TARGET_DIR: ${{ matrix.dir }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ${{ matrix.dir }}/package-lock.json
+      - name: Install
+        run: |
+          cd "$TARGET_DIR"
+          npm ci
+      - name: Type check
+        run: |
+          cd "$TARGET_DIR"
+          npx tsc --noEmit
+
+  cdk-synth:
+    name: CDK synth + snapshot
+    runs-on: ubuntu-latest
+    env:
+      CDK_DEFAULT_ACCOUNT: '111111111111'
+      CDK_DEFAULT_REGION: 'ap-northeast-2'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: infra-cdk/package-lock.json
+      - name: Install
+        run: |
+          cd infra-cdk
+          npm ci
+      - name: CDK synth
+        run: |
+          cd infra-cdk
+          npx cdk synth --quiet
+      - name: Jest snapshot
+        run: |
+          cd infra-cdk
+          npx jest --ci
+
+  pytest:
+    name: pytest (offline)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: pip install -r requirements.txt -r requirements-dev.txt
+      - name: pytest
+        run: pytest tests -q
+
+  political-neutrality-check:
+    name: Political neutrality field guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Forbidden field grep
+        run: |
+          set -eu
+          # Reader.political_leaning 등 금지 필드 신규 추가 차단 (ADR-0004 Layer 4)
+          if grep -rn -E '(political_leaning|political_loyalty_score|bias_label|party_attack_intent)' \
+            --include='*.py' --include='*.ts' --include='*.tsx' --include='*.yaml' \
+            api/ web/ data/ ontology/ 2>/dev/null; then
+            echo "::error::ADR-0004 Layer 4 violation - 정치 성향 추론 필드는 절대 생성/저장 금지"
+            exit 1
+          fi
+          echo "OK 정치 중립성 필드 가드 통과"

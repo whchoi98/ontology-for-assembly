@@ -106,6 +106,53 @@ def emit_synthetic_local(
     return counts
 
 
+# ─── 국회 OpenAPI 어댑터 통합 ───────────────────────────────────────────────
+
+def emit_real_local(
+    out_dir: Path,
+    *,
+    max_bills: int | None = None,
+    max_members: int | None = None,
+    max_votes: int | None = None,
+    verbose: bool = True,
+) -> dict[str, int]:
+    """data/real/ 어댑터 3종을 NDJSON으로 출력.
+
+    Demo mode (DEMO_PUBLIC_MODE=true)면 mock fixture 사용.
+    실 API key (ASSEMBLY_OPENAPI_KEY) 있으면 실 호출.
+    """
+    from data.real.bill import fetch_bills
+    from data.real.member import fetch_members
+    from data.real.vote import fetch_votes
+
+    def _log(msg: str) -> None:
+        if verbose:
+            print(msg, flush=True)
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    counts: dict[str, int] = {}
+
+    _log(f"[bill]    fetching → {out_dir}/bills.ndjson")
+    counts["bill"] = write_ndjson(
+        fetch_bills(max_rows=max_bills),
+        out_dir / "bills.ndjson",
+    )
+
+    _log(f"[member]  fetching → {out_dir}/members.ndjson")
+    counts["member"] = write_ndjson(
+        fetch_members(max_rows=max_members),
+        out_dir / "members.ndjson",
+    )
+
+    _log(f"[vote]    fetching → {out_dir}/votes.ndjson")
+    counts["vote"] = write_ndjson(
+        fetch_votes(max_rows=max_votes),
+        out_dir / "votes.ndjson",
+    )
+
+    return counts
+
+
 # ─── 미구현 stub (Phase 3) ──────────────────────────────────────────────────
 
 def emit_synthetic_s3(bucket: str, prefix: str = "synthetic/", **kwargs) -> dict[str, int]:
@@ -115,18 +162,39 @@ def emit_synthetic_s3(bucket: str, prefix: str = "synthetic/", **kwargs) -> dict
     )
 
 
-def emit_real(**kwargs) -> dict[str, int]:
-    """국회 OpenAPI 어댑터 - Phase 3에서 구현."""
-    raise NotImplementedError(
-        "real OpenAPI 어댑터는 Phase 3 (data/real/bill,member,vote)에서 구현."
+def emit_external_local(
+    out_dir: Path,
+    *,
+    news_query: str = "국회 입법",
+    news_count: int = 30,
+    poll_count: int = 50,
+    seed: int = 20260513,
+    verbose: bool = True,
+) -> dict[str, int]:
+    """data/external/ 어댑터를 NDJSON으로 출력 - 네이버 뉴스 + 합성 여론조사."""
+    from data.external.naver_news import fetch_news
+    from data.external.poll_result import generate_polls
+
+    def _log(msg: str) -> None:
+        if verbose:
+            print(msg, flush=True)
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    counts: dict[str, int] = {}
+
+    _log(f"[social_signal] fetching '{news_query}' display={news_count} → social_signals.ndjson")
+    counts["social_signal"] = write_ndjson(
+        fetch_news(news_query, display=news_count),
+        out_dir / "social_signals.ndjson",
     )
 
-
-def emit_external(**kwargs) -> dict[str, int]:
-    """네이버 뉴스·SNS·여론조사 ETL - Phase 3에서 구현."""
-    raise NotImplementedError(
-        "external 어댑터는 Phase 3 (data/external/naver_news 등)에서 구현."
+    _log(f"[poll_result]   generating {poll_count} → poll_results.ndjson")
+    counts["poll_result"] = write_ndjson(
+        generate_polls(count=poll_count, seed=seed),
+        out_dir / "poll_results.ndjson",
     )
+
+    return counts
 
 
 # ─── CLI ────────────────────────────────────────────────────────────────────
@@ -183,6 +251,47 @@ def _build_parser() -> argparse.ArgumentParser:
         default=500,
     )
     parser.add_argument(
+        "--max-bills",
+        type=int,
+        default=None,
+        help="--source real: 가져올 의안 최대 수 (기본 무제한)",
+    )
+    parser.add_argument(
+        "--max-members",
+        type=int,
+        default=None,
+        help="--source real: 가져올 의원 최대 수",
+    )
+    parser.add_argument(
+        "--max-votes",
+        type=int,
+        default=None,
+        help="--source real: 가져올 표결 최대 수",
+    )
+    parser.add_argument(
+        "--news-query",
+        type=str,
+        default="국회 입법",
+        help="--source external: 네이버 뉴스 검색어",
+    )
+    parser.add_argument(
+        "--news-count",
+        type=int,
+        default=30,
+        help="--source external: 네이버 뉴스 결과 수 (1-100)",
+    )
+    parser.add_argument(
+        "--poll-count",
+        type=int,
+        default=50,
+        help="--source external: 합성 여론조사 수",
+    )
+    parser.add_argument(
+        "--demo",
+        action="store_true",
+        help="DEMO_PUBLIC_MODE=true 설정 (실 API key 없이 mock fixture 사용)",
+    )
+    parser.add_argument(
         "--quiet",
         action="store_true",
         help="진행 메시지 출력 안 함",
@@ -192,17 +301,13 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     """CLI 진입점. Exit code: 0=성공, 1=오류, 2=미구현."""
+    import os
     args = _build_parser().parse_args(argv)
     verbose = not args.quiet
 
-    # Phase 3 트랙 안내
-    if args.source not in ("synthetic", "all"):
-        print(
-            f"[load] '--source {args.source}'는 Phase 3에서 구현됩니다 "
-            "(data/real/, data/external/).",
-            file=sys.stderr,
-        )
-        return 2
+    # --demo 플래그 → DEMO_PUBLIC_MODE 활성화
+    if args.demo:
+        os.environ["DEMO_PUBLIC_MODE"] = "true"
 
     if args.to == "s3":
         if not args.bucket:
@@ -215,15 +320,39 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 2
 
-    # synthetic + local
-    counts = emit_synthetic_local(
-        out_dir=args.out_dir,
-        article_count=args.article_count,
-        reader_count=args.reader_count,
-        ad_count=args.ad_count,
-        seed=args.seed,
-        verbose=verbose,
-    )
+    counts: dict[str, int] = {}
+
+    if args.source in ("synthetic", "all"):
+        synthetic_counts = emit_synthetic_local(
+            out_dir=args.out_dir,
+            article_count=args.article_count,
+            reader_count=args.reader_count,
+            ad_count=args.ad_count,
+            seed=args.seed,
+            verbose=verbose,
+        )
+        counts.update(synthetic_counts)
+
+    if args.source in ("real", "all"):
+        real_counts = emit_real_local(
+            out_dir=args.out_dir,
+            max_bills=args.max_bills,
+            max_members=args.max_members,
+            max_votes=args.max_votes,
+            verbose=verbose,
+        )
+        counts.update(real_counts)
+
+    if args.source in ("external", "all"):
+        external_counts = emit_external_local(
+            out_dir=args.out_dir,
+            news_query=args.news_query,
+            news_count=args.news_count,
+            poll_count=args.poll_count,
+            seed=args.seed,
+            verbose=verbose,
+        )
+        counts.update(external_counts)
 
     if verbose:
         print("\n=== 적재 완료 ===")

@@ -67,6 +67,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - pytest **495 케이스 전 통과** (1.03초).
 - 라이브 CLI 검증: 100 articles + 5000 readers + 30 ads = 1.1MB NDJSON. 균형 잡힌 정당 언급(민주 6건/국힘 6건), 익명 해시 ID, 17 시도 region 확인.
 
+### Added — Phase 2 Track 2-2: 국회 OpenAPI 어댑터 (2026-05-13)
+- `data/real/_client.py`: 공유 HTTP 클라이언트. SigV4 X (단순 KEY 인증), 페이징, JSON 응답 표준화 (`ApiResponse`). `AssemblyClient.iter_all_pages` row 단위 yield. `DEMO_PUBLIC_MODE=true` 분기.
+- `data/real/bill.py`: `nzmimeepazxkubdpn` (의안처리상황) → Pydantic Bill. `STATUS_MAP` 처리결과 정규화, `_parse_date` 다양한 형식 지원. mock 의안 10건 (양당 균형).
+- `data/real/member.py`: `nwvrqwxyaytdsfvhu` (국회의원 현황) → Pydantic Person. 지역구·비례대표 분류, party 4종 균형. mock 의원 10명.
+- `data/real/vote.py`: `nojepdqqaweusdfbi` (본회의 표결) → Pydantic Vote. vote_id = V_<BILL_ID>_<DATE> 결정적 생성. mock 10건 (passed 7, rejected 2, withdrawn 1).
+- 엔드포인트 코드는 env 변수(`ASSEMBLY_API_*_ENDPOINT`)로 외부화 - 환경별 격리.
+- `data/load.py` CLI: `--source real|all` + `--demo` 플래그 + `--max-bills/--max-members/--max-votes` 추가.
+- `tests/test_real_adapters.py` — 30 테스트 (API 응답 파싱·status 정규화·cross-adapter 참조 정합·정당 균형).
+
+### Added — Phase 2 Track 2-3: 외부 시그널 ETL (2026-05-13)
+- `data/external/naver_news.py`: 네이버 뉴스 검색 API → SocialSignal. HTML strip, pubDate 파싱, 결정적 signal_id (URL MD5 해시). Demo mock 10개 뉴스(균형 잡힌 정당 언급).
+- `data/external/poll_result.py`: 합성 여론조사 generator → PollResult. 정당 지지율 6 정당(합 100%, 한 정당 ≤60%) + 토픽 의견(찬성/반대/잘 모름). 가공 기관명("Synth-Poll-A" 등 - 실 기관명 미사용).
+- `data/load.py` CLI: `--source external` + `--news-query/--news-count/--poll-count` 추가.
+- `tests/test_external_adapters.py` — 23 테스트 (뉴스 결정성·정당 합 100%·토픽 의견 균형·정치 중립성).
+
+### Added — Phase 2 Track 2-5: PDF 시그니처 시드 + 통합 검증 (2026-05-13)
+- `data/synthetic/seeds.py`: PDF 3페이지 시그니처 시연 시드. 7 entity (Person/Bill/Article/Vote/Statement/AdMatchDecision/Cluster). 데모 자산 ID 상수 (`DEMO_HUB_PERSON_ID`, `DEMO_AI_BILL_ID`, `DEMO_TRAGIC_ARTICLE_ID`, `DEMO_SWING_VOTE_ID`).
+- 시나리오 B (3-stage chat) 허브 의원 + AI 의안 + 공동발의 패턴 시드.
+- 시나리오 K (표결 이상치) 당론 이탈 시드.
+- 시나리오 L (광고 매칭 거부) - `AdMatchDecision`의 `chosen_ad_id=None` + ADR-0004 Layer 6 reason 명시.
+- 시나리오 M (의원 정치 여정) - 허브 의원 Statement + 정합 person_id 연결.
+- 시나리오 E (클러스터) - 중립 추상 라벨 "혁신 입법 다수파".
+- `scripts/verify_demo_dataset.py`: 통합 검증 스크립트. 6 검사 (파일 존재·Pydantic round-trip·source 태깅·정치 균형·cross-reference·seeds). standalone 실행 + pytest 양용. exit code 0/1/2.
+- `tests/test_synthetic_seeds.py` — 13 테스트 (시드 ID·이념 라벨 가드·cross-reference·skip 결정 형식).
+- `tests/test_verify_demo_dataset.py` — 7 테스트 (검증 스크립트 self-test, 모든 check 통과).
+
+### Phase 2 누적 성과
+- pytest **574 케이스 전 통과** (1.09초, 411 → 495 → 574).
+- 10 NDJSON 파일 생성 (synthetic 5 + real 3 + external 2). `--source all --demo` 한 번에 718+ 노드.
+- 라이브 검증 스크립트 6/6 통과.
+- Phase 3 인프라(Neptune·OpenSearch·S3) 정착 후 즉시 `aws s3 sync` + Bulk Loader 적재 가능.
+
 ### Notes
 - `raw_data/`는 `.gitignore`. 국회 OpenAPI raw payload와 합성 독자/광고 시드는 KMS S3 별도 보관.
 - 첫 배포 도메인: `*.cloudfront.net` (커스텀 도메인은 Phase 5 polish에서 추가).

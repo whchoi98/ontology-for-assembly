@@ -148,6 +148,94 @@ export async function chat(
 }
 
 
+// ─── SSE streaming (Phase 5 Track 5-5) ──────────────────────────────────────
+
+export type StreamEvent =
+  | { type: 'phase'; data: { stage: string; status: string; approach?: string } }
+  | { type: 'log'; data: { stage: string; tool_called?: string; agent_invoked?: string } }
+  | { type: 'result'; data: { stage: string } & StageResult }
+  | { type: 'done'; data: { total_ms: number; persona_id: string; query: string } };
+
+export interface ChatStreamCallbacks {
+  onEvent: (event: StreamEvent) => void;
+  onError?: (error: Error) => void;
+}
+
+/** POST /api/chat/stream SSE 소비. ReadableStream + manual parse. */
+export async function chatStream(
+  query: string,
+  callbacks: ChatStreamCallbacks,
+  opts: RequestOpts = {},
+): Promise<void> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Accept: 'text/event-stream',
+  };
+  if (opts.personaId) headers['X-Persona-Id'] = opts.personaId;
+
+  let response: Response;
+  try {
+    response = await fetch(`${baseUrl()}/api/chat/stream`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ query, mode: 'compare' }),
+      signal: opts.signal,
+    });
+  } catch (e) {
+    callbacks.onError?.(e as Error);
+    return;
+  }
+  if (!response.ok || !response.body) {
+    callbacks.onError?.(new Error(`SSE stream failed: ${response.status}`));
+    return;
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buf = '';
+
+  // SSE 형식: "event: <name>\r\ndata: <json>\r\n\r\n" (sse-starlette) 또는 "\n\n".
+  // 양쪽 지원을 위해 \r\n → \n 정규화 후 \n\n으로 split.
+  while (true) {
+    let chunk: ReadableStreamReadResult<Uint8Array>;
+    try {
+      chunk = await reader.read();
+    } catch (e) {
+      callbacks.onError?.(e as Error);
+      return;
+    }
+    if (chunk.done) break;
+    buf += decoder.decode(chunk.value, { stream: true });
+    buf = buf.replace(/\r\n/g, '\n');  // CRLF → LF 정규화
+
+    let sep: number;
+    while ((sep = buf.indexOf('\n\n')) >= 0) {
+      const rawEvent = buf.slice(0, sep);
+      buf = buf.slice(sep + 2);
+      const parsed = parseSseEvent(rawEvent);
+      if (parsed) callbacks.onEvent(parsed);
+    }
+  }
+}
+
+
+function parseSseEvent(raw: string): StreamEvent | null {
+  let eventName = 'message';
+  let dataStr = '';
+  for (const line of raw.split('\n')) {
+    if (line.startsWith('event:')) eventName = line.slice(6).trim();
+    else if (line.startsWith('data:')) dataStr += line.slice(5).trim();
+  }
+  if (!dataStr) return null;
+  try {
+    const data = JSON.parse(dataStr);
+    return { type: eventName as StreamEvent['type'], data };
+  } catch {
+    return null;
+  }
+}
+
+
 // ─── 시나리오 L: Ad Match ───────────────────────────────────────────────────
 
 export type AdMatchMode = 'keyword' | 'embedding' | 'agent' | 'compare';

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase 5 Track 5-5: SSE streaming (시나리오 B 실시간 응답, 2026-05-13)
+- `api/routers/chat.py`: `POST /api/chat/stream` 신규. `sse_starlette.EventSourceResponse` 사용. 3 stage 비교 모드만 지원.
+- SSE 이벤트 어휘 정착: `phase` (stage 시작) / `log` (도구·에이전트 호출) / `result` (stage 완료) / `done` (전체 완료, total_ms).
+- 15 이벤트 sequence: phase(chatbot) → result(chatbot) → phase(agent) → 4 tool logs → result(agent) → phase(agentic) → 4 agent logs → result(agentic) → done.
+- 시연 효과를 위해 stage·tool 사이에 `asyncio.sleep(0.05~0.08)` 삽입 - 한 단계씩 나타나는 진행감.
+- `web/lib/api-client.ts`: `chatStream()` 함수 - fetch + ReadableStream 수동 SSE 파싱. CRLF/LF 양쪽 구분자 지원.
+- `web/app/chat/page.tsx`: SSE 소비 + 실시간 UI - 각 stage 카드에 status(대기/진행 중/완료) badge + log 라이브 표시 + 진행 중 카드 animate-pulse.
+- `tests/test_chat_stream.py`: **10 테스트** - 15 이벤트 sequence, phase·log·result·done 순서, 도구·에이전트 trace, 페르소나 전파, 422 유효성.
+- `requirements.txt` 기존 `sse-starlette==2.2.1` 활용.
+- 누적 pytest **690 통과**.
+
 ### Added — Phase 5 Track 5-4: harness-eval baseline + wow-eval 84 케이스 (2026-05-13)
 - `scripts/eval_wow_queries.py`: 6 페르소나 × 14 시나리오 = 84 케이스 평가. 현재 구현된 A·B·L 시나리오 = 18 active, 나머지 66 자동 SKIPPED. PASS_RATE_THRESHOLD=0.85, BALANCE_THRESHOLD=0.8. exit code 0/1 (CI gate).
 - in-process TestClient 지원 (`--base-url inproc`) - AWS 미배포 환경에서도 평가 가능.

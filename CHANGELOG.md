@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase 5 Track 5-4: harness-eval baseline + wow-eval 84 케이스 (2026-05-13)
+- `scripts/eval_wow_queries.py`: 6 페르소나 × 14 시나리오 = 84 케이스 평가. 현재 구현된 A·B·L 시나리오 = 18 active, 나머지 66 자동 SKIPPED. PASS_RATE_THRESHOLD=0.85, BALANCE_THRESHOLD=0.8. exit code 0/1 (CI gate).
+- in-process TestClient 지원 (`--base-url inproc`) - AWS 미배포 환경에서도 평가 가능.
+- `.harness-eval/latest.json`: 결과 자동 저장. 운영 콘솔 `wow-quality` 패널이 자동 읽기.
+- README 배지: ![wow-eval Pass Rate 100%], ![Avg Balance 0.95], ![Active 18/84], ![Last Eval].
+- 첫 baseline 결과: **18/18 active PASS (100%), avg balance 0.950**.
+- `tests/test_eval_wow_queries.py`: 9 테스트 (case 카탈로그·skip 로직·summarize·json output·in-process 전체 실행).
+
+### Added — Phase 5 Track 5-3: GuidedTour 6 페르소나 추천 흐름 (2026-05-13)
+- `web/components/GuidedTour.tsx`: 우측 하단 플로팅 가이드 버튼 + 모달. 6 페르소나별 권장 3-step 시나리오 흐름. 각 step에 "why this for you" 한 줄 설명.
+- TOURS 매핑: editorial(C→B→K) / data_ai(E→J→B) / ad_sales(L→G→F) / general_reader(A→B→H) / paid_subscriber(C→K→M) / b2b(A→J→K).
+- `web/app/layout.tsx`: GuidedTour 모든 페이지에서 사용 가능.
+- 미구현 시나리오는 disabled 표시 (후속 phase 추적).
+
+### Added — Phase 5 Track 5-2: 운영 콘솔 5 패널 (2026-05-13)
+- `api/services/ops_metrics.py`: thread-safe LLM trace 링버퍼(deque maxlen=100) + GuardrailCounters 누적.
+- `api/services/bedrock.py`: `invoke()` 매 호출 후 자동 `_record()` - persona·scenario·score·duration_ms 기록.
+- `api/routers/ops.py`: 5 패널 엔드포인트 - `/api/ops/{ingest,guardrail,memory,wow-quality,trace}`.
+- `web/lib/ops-client.ts` + `web/app/ops/page.tsx`: 5 패널 grid UI - Stat 카드 + trace 테이블 + 새로고침. 임계 미달 warn 색상.
+- `tests/test_ops_metrics.py`: 18 테스트.
+
 ### Added — Phase 5 Track 5-1: CytoscapeView 1-hop subgraph 시각화 (2026-05-13)
 - `web/components/CytoscapeView.tsx`: cytoscape 3.31 + cose force-directed 레이아웃. SSR 안전 dynamic import. 노드 타입별 색상 (Bill 파랑/Person 자주/Vote 주황/Article 녹색/Topic 청록/Statement 분홍/Committee 녹색/Party 자주/Agency 노랑). 루트 노드는 크기·border 강조.
 - `web/app/search/page.tsx`: JSON viewer 대체 → 실시간 그래프 + 노드 라벨·엣지 타입 표시. JSON은 디버깅용 details에 보존.

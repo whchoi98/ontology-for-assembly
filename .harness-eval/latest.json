@@ -1,0 +1,858 @@
+{
+  "run_iso": "2026-05-13T16:51:38.334198+00:00",
+  "total_cases": 84,
+  "active_cases": 18,
+  "skipped_cases": 66,
+  "pass_count": 18,
+  "pass_rate": 1.0,
+  "avg_balance_score": 0.95,
+  "threshold": 0.85,
+  "balance_threshold": 0.8,
+  "implemented_scenarios": [
+    "A",
+    "B",
+    "L"
+  ],
+  "results": [
+    {
+      "persona": "editorial",
+      "scenario": "A",
+      "query": "AI 입법",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 5,
+      "reason": "ok"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "B",
+      "query": "22대 국회 AI 입법 동향을 분석해주세요",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 0.85,
+      "latency_ms": 3,
+      "reason": "ok"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "L",
+      "query": "art_safe_normal",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 2,
+      "reason": "ok"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "C",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "D",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "E",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "F",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "G",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "H",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "I",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "J",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "K",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "M",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "editorial",
+      "scenario": "N",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "A",
+      "query": "AI 입법",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 1,
+      "reason": "ok"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "B",
+      "query": "22대 국회 AI 입법 동향을 분석해주세요",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 0.85,
+      "latency_ms": 2,
+      "reason": "ok"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "L",
+      "query": "art_safe_normal",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 2,
+      "reason": "ok"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "C",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "D",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "E",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "F",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "G",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "H",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "I",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "J",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "K",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "M",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "data_ai",
+      "scenario": "N",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "A",
+      "query": "AI 입법",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 1,
+      "reason": "ok"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "B",
+      "query": "22대 국회 AI 입법 동향을 분석해주세요",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 0.85,
+      "latency_ms": 2,
+      "reason": "ok"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "L",
+      "query": "art_safe_normal",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 2,
+      "reason": "ok"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "C",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "D",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "E",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "F",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "G",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "H",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "I",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "J",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "K",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "M",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "ad_sales",
+      "scenario": "N",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "A",
+      "query": "AI 입법",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 1,
+      "reason": "ok"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "B",
+      "query": "22대 국회 AI 입법 동향을 분석해주세요",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 0.85,
+      "latency_ms": 2,
+      "reason": "ok"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "L",
+      "query": "art_safe_normal",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 2,
+      "reason": "ok"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "C",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "D",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "E",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "F",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "G",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "H",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "I",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "J",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "K",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "M",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "general_reader",
+      "scenario": "N",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "A",
+      "query": "AI 입법",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 1,
+      "reason": "ok"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "B",
+      "query": "22대 국회 AI 입법 동향을 분석해주세요",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 0.85,
+      "latency_ms": 2,
+      "reason": "ok"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "L",
+      "query": "art_safe_normal",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 2,
+      "reason": "ok"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "C",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "D",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "E",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "F",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "G",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "H",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "I",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "J",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "K",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "M",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "paid_subscriber",
+      "scenario": "N",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "A",
+      "query": "AI 입법",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 1,
+      "reason": "ok"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "B",
+      "query": "22대 국회 AI 입법 동향을 분석해주세요",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 0.85,
+      "latency_ms": 2,
+      "reason": "ok"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "L",
+      "query": "art_safe_normal",
+      "passed": true,
+      "skipped": false,
+      "balance_score": 1.0,
+      "latency_ms": 1,
+      "reason": "ok"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "C",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "D",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "E",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "F",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "G",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "H",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "I",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "J",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "K",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "M",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    },
+    {
+      "persona": "b2b",
+      "scenario": "N",
+      "query": "(미구현)",
+      "passed": false,
+      "skipped": true,
+      "balance_score": 1.0,
+      "latency_ms": 0,
+      "reason": "시나리오 미구현 (skipped)"
+    }
+  ]
+}

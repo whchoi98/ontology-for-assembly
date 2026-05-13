@@ -264,7 +264,21 @@ MIT — [LICENSE](LICENSE) 참조.
 - 이메일: whchoi98@gmail.com
 
 <!-- harness-eval-badge:start -->
-![Harness Score](https://img.shields.io/badge/harness-pending-lightgrey)
-![Harness Grade](https://img.shields.io/badge/grade-pending-lightgrey)
-![Last Eval](https://img.shields.io/badge/eval-pending-lightgrey)
+![wow-eval Pass Rate](https://img.shields.io/badge/wow--eval-100%25-brightgreen)
+![Avg Balance Score](https://img.shields.io/badge/avg--balance-0.95-brightgreen)
+![Active Cases](https://img.shields.io/badge/active--cases-18%2F84-blue)
+![Last Eval](https://img.shields.io/badge/eval-2026--05--13-blue)
 <!-- harness-eval-badge:end -->
+
+## harness-eval 자동 평가
+
+```bash
+# 84 케이스 평가 (6 페르소나 × 14 시나리오)
+python scripts/eval_wow_queries.py
+
+# 운영 콘솔에서 결과 보기
+curl http://localhost:8080/api/ops/wow-quality
+```
+
+현재: **18 active / 100% PASS / avg balance 0.95** (Phase 3 시점 - A·B·L 구현).
+나머지 66 케이스는 후속 phase의 시나리오 라우터 구현 시 자동 active.

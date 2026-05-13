@@ -49,9 +49,11 @@ def _register_routers(app: FastAPI) -> None:
     from api.routers.ops import router as ops_router
     app.include_router(ops_router)
 
-    # 향후 시나리오 라우터들:
-    # from api.routers.insights import router as insights_router; app.include_router(insights_router) # C
-    # ... (D-N 그리고 objects, ontology, personas)
+    # Object Explorer + Ontology 메타 - 31 클래스 탐색기
+    from api.routers.objects import router as objects_router
+    app.include_router(objects_router)
+
+    # 향후 시나리오 라우터들 (C, D, E, F, G, H, I, J, K, M, N 11개).
 
 
 def _register_health(app: FastAPI) -> None:

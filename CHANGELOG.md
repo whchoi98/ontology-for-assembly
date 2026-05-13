@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase 5 Track 5-6: Object Explorer 31 클래스 (2026-05-13)
+- `api/services/objects_catalog.py`: 31 클래스 dispatcher 패턴. CLASS_GROUPS 7 그룹 + CLASS_DISPLAY_FIELDS (id·label·subtitle 매핑). 15 구현 (Person·Party·Bill·Vote·Committee·Session·Statement·Agency·Topic·Article·Reader·Advertisement·AdInventory·SocialSignal·PollResult) + 16 placeholder.
+- `api/routers/objects.py`: 4 엔드포인트 - GET /api/ontology/classes (전체 메타), /api/ontology/{cls} (단일), /api/objects/{cls} (페이징 리스트), /api/objects/{cls}/{id} (디테일 + 1-hop subgraph).
+- 1-hop subgraph 자동 추론: 참조 필드(proposer_id, bill_id, topic_ids, candidate_ad_ids 등) → 자동 관계 그래프 구성.
+- `web/app/objects/page.tsx`: 31 클래스 그룹 카드 그리드 (구현 15 + 미구현 16).
+- `web/app/objects/[type]/page.tsx`: 클래스별 인스턴스 페이징 + 인라인 디테일 패널. 디테일에 필드 dl + 1-hop subgraph JSON.
+- `web/components/Sidebar.tsx`: Object Explorer 링크 추가 (31 클래스 배지).
+- `tests/test_objects_router.py`: **31 테스트** - 클래스 메타, 페이징, 단일 객체, subgraph, 15 구현 클래스 parametrize, 422 유효성.
+- 누적 pytest **721 통과**. 9 web routes (정적 8 + 동적 /objects/[type] 1).
+
 ### Added — Phase 5 Track 5-5: SSE streaming (시나리오 B 실시간 응답, 2026-05-13)
 - `api/routers/chat.py`: `POST /api/chat/stream` 신규. `sse_starlette.EventSourceResponse` 사용. 3 stage 비교 모드만 지원.
 - SSE 이벤트 어휘 정착: `phase` (stage 시작) / `log` (도구·에이전트 호출) / `result` (stage 완료) / `done` (전체 완료, total_ms).

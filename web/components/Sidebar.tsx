@@ -31,6 +31,7 @@ const SCENARIOS = [
 
 const OPS_LINKS = [
   { name: '운영 콘솔', href: '/ops', implemented: true, badge: '5 패널' },
+  { name: 'Object Explorer', href: '/objects', implemented: true, badge: '31 클래스' },
 ];
 
 export function Sidebar() {

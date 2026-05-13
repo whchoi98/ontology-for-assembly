@@ -122,59 +122,86 @@ def _real_query(query: str, parameters: dict) -> CypherResult:
 # ─── Demo mode mock ─────────────────────────────────────────────────────────
 
 def _mock_result(query: str, parameters: dict) -> CypherResult:
-    """Demo mode mock. 쿼리 substring 매칭으로 그럴듯한 응답.
+    """Demo mode mock. RETURN 변수를 우선 살피고 라벨 패턴으로 fallback.
 
-    실 데이터 적재 전에 라우터·페이지 개발이 가능하도록.
+    실 데이터 적재 전에 라우터·페이지 개발이 가능하도록. 1-hop subgraph
+    쿼리(`MATCH (b:Bill)<-[:PROPOSED]-(p:Person) RETURN p`)도 RETURN 절을
+    인식해 정확한 변수로 응답.
     노드는 항상 source 태깅 포함 → DataSourceBadge 호환.
     """
+    import re
     q = query.lower()
 
-    # MATCH (b:Bill) — 의안
-    if ":bill" in q or "match (b" in q:
-        return CypherResult([
-            {"b": {"bill_id": "B2206001", "title": "AI 산업 진흥 및 활용 촉진법안",
-                   "proposed_date": "2026-04-15", "status": "in_committee",
-                   "category": "산업", "source": "real"}},
-            {"b": {"bill_id": "B2206002", "title": "개인정보 보호법 일부개정법률안",
-                   "proposed_date": "2026-04-20", "status": "in_plenary",
-                   "category": "법무", "source": "real"}},
-            {"b": {"bill_id": "B2206003", "title": "디지털 콘텐츠 진흥법",
-                   "proposed_date": "2026-04-22", "status": "proposed",
-                   "category": "문화", "source": "real"}},
-        ])
+    # RETURN 변수 추출 - 'return p', 'return b limit 3', 'return p, count(b)' 등
+    return_match = re.search(r"\breturn\s+([a-z])\b", q)
+    return_var = return_match.group(1) if return_match else None
 
-    # MATCH (p:Person) — 의원
-    if ":person" in q or "match (p" in q:
-        return CypherResult([
-            {"p": {"assembly_id": "MONA001", "name": "○○○", "term": 22,
-                   "district_id": "11110", "party_id": "P001", "source": "real"}},
-            {"p": {"assembly_id": "MONA002", "name": "△△△", "term": 22,
-                   "district_id": "11020", "party_id": "P002", "source": "real"}},
-            {"p": {"assembly_id": "MONA003", "name": "□□□", "term": 22,
-                   "district_id": "26110", "party_id": "P001", "source": "real"}},
-        ])
-
-    # MATCH (v:Vote) — 표결
-    if ":vote" in q or "match (v" in q:
-        return CypherResult([
-            {"v": {"vote_id": "V001", "bill_id": "B2206001",
-                   "date": "2026-04-30", "result": "passed",
-                   "attendance_count": 287, "source": "real"}},
-        ])
-
-    # MATCH (a:Article) — 기사 (synthetic)
-    if ":article" in q or "match (a" in q:
-        return CypherResult([
-            {"a": {"article_id": "ART001", "title": "AI 입법 동향 분석",
-                   "published_at": "2026-05-10T09:00:00", "source": "synthetic"}},
-        ])
-
-    # COUNT 쿼리
+    # COUNT 쿼리는 별도 처리
     if "count" in q:
         return CypherResult([{"count": 42}])
 
+    # RETURN 변수가 명시되면 변수로 결과 결정
+    if return_var == "p":
+        return _mock_persons(return_var)
+    if return_var == "b":
+        return _mock_bills(return_var)
+    if return_var == "v":
+        return _mock_votes(return_var)
+    if return_var == "a":
+        return _mock_articles(return_var)
+
+    # Fallback: RETURN 못 찾으면 라벨 패턴 매칭 (기존 동작)
+    if ":bill" in q:
+        return _mock_bills("b")
+    if ":person" in q:
+        return _mock_persons("p")
+    if ":vote" in q:
+        return _mock_votes("v")
+    if ":article" in q:
+        return _mock_articles("a")
+
     # 기본: 빈 결과
     return CypherResult([], request_id="mock-empty")
+
+
+def _mock_bills(var: str) -> CypherResult:
+    return CypherResult([
+        {var: {"bill_id": "B2206001", "title": "AI 산업 진흥 및 활용 촉진법안",
+               "proposed_date": "2026-04-15", "status": "in_committee",
+               "category": "산업", "source": "real"}},
+        {var: {"bill_id": "B2206002", "title": "개인정보 보호법 일부개정법률안",
+               "proposed_date": "2026-04-20", "status": "in_plenary",
+               "category": "법무", "source": "real"}},
+        {var: {"bill_id": "B2206003", "title": "디지털 콘텐츠 진흥법",
+               "proposed_date": "2026-04-22", "status": "proposed",
+               "category": "문화", "source": "real"}},
+    ])
+
+
+def _mock_persons(var: str) -> CypherResult:
+    return CypherResult([
+        {var: {"assembly_id": "MONA001", "name": "○○○", "term": 22,
+               "district_id": "11110", "party_id": "더불어민주당", "source": "real"}},
+        {var: {"assembly_id": "MONA002", "name": "△△△", "term": 22,
+               "district_id": "11020", "party_id": "국민의힘", "source": "real"}},
+        {var: {"assembly_id": "MONA003", "name": "□□□", "term": 22,
+               "district_id": "26110", "party_id": "더불어민주당", "source": "real"}},
+    ])
+
+
+def _mock_votes(var: str) -> CypherResult:
+    return CypherResult([
+        {var: {"vote_id": "V001", "bill_id": "B2206001",
+               "date": "2026-04-30", "result": "passed",
+               "attendance_count": 287, "source": "real"}},
+    ])
+
+
+def _mock_articles(var: str) -> CypherResult:
+    return CypherResult([
+        {var: {"article_id": "ART001", "title": "AI 입법 동향 분석",
+               "published_at": "2026-05-10T09:00:00", "source": "synthetic"}},
+    ])
 
 
 def _demo_mode() -> bool:

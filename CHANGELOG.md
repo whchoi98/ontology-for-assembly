@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase 3 Track 2: 시나리오 A 검색 라우터 (2026-05-13)
+- `api/routers/search.py`: POST /api/search + GET /api/search/info. 페르소나 cohort 필터 + `opensearch.hybrid_search` + Neptune 1-hop subgraph (top hit). Cytoscape 호환 `SubgraphModel` (nodes/edges).
+- 페르소나별 top_k 조정: 일반 독자 ≤5 (입문성), 데이터·AI ≥15 (분석 후보), 그 외 요청값.
+- 페르소나별 extras: guide_hint(일반 독자) / premium_cta(유료) / api_response_hint(B2B) / analytics_hint(데이터·AI) / coverage(광고/세일즈).
+- `api/main.py`: search 라우터 등록.
+- `api/services/neptune.py`: mock 개선 - RETURN 변수(`return p`, `return b` 등) 인식. 1-hop subgraph 쿼리에서 정확한 노드 타입 반환. 5 helper로 분리 (bills/persons/votes/articles).
+- `tests/test_search_router.py`: 37 테스트 (6 페르소나 처리, top_k 조정, cohort 전파, subgraph 모양, extras 페르소나별 분기, info endpoint).
+- 라이브 데모: subgraph root=Bill + 3 Persons(PROPOSED) + 1 Vote(ON) = 5 nodes/4 edges.
+
 ### Added — Phase 3 Track 1: infra-cdk 6 스택 (2026-05-13)
 - `infra-cdk/bin/assembly.ts`: 6 스택 인스턴스화 (network → data → ai → compute → edge → observability). 신규 VPC (ADR-0001 D7 - gcc retail VPC import 패턴과 분리).
 - `infra-cdk/lib/network-stack.ts`: VPC 10.30.0.0/16, 3-AZ, NAT 1개, 5 SG (alb·app·neptune·os·lambda). cloudfront prefix list ingress 강제.

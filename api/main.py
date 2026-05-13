@@ -33,12 +33,15 @@ def _register_routers(app: FastAPI) -> None:
 
     Auto-Sync 체크: 새 시나리오 라우터 추가 시 이 함수에 한 줄 추가.
     """
+    # 시나리오 A - 의미 검색
+    from api.routers.search import router as search_router
+    app.include_router(search_router)
+
     # 시나리오 B - 3-stage 챗봇
     from api.routers.chat import router as chat_router
     app.include_router(chat_router)
 
     # 향후 시나리오 라우터들:
-    # from api.routers.search import router as search_router; app.include_router(search_router)       # A
     # from api.routers.insights import router as insights_router; app.include_router(insights_router) # C
     # ... (D-N 그리고 objects, ontology, personas, ops)
 

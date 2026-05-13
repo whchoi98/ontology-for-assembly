@@ -9,7 +9,7 @@ import importlib
 import pytest
 
 
-# Phase 0–1 — services + schemas + routers + main 레이어 import 검증
+# Phase 0–3 — services + schemas + routers + main 레이어 import 검증
 SERVICE_MODULES = [
     "api.main",
     "api.services.persona",
@@ -21,6 +21,7 @@ SERVICE_MODULES = [
     "api.services.three_stage",
     "api.services.multi_agent",
     "api.routers.chat",
+    "api.routers.search",
     "data.schemas",
 ]
 

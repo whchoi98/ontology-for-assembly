@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase 3 Track 4: 국회 OpenAPI 나머지 4 어댑터 (2026-05-13)
+- `data/real/committee.py`: `npffdutiapkzbfyvr` 위원회 어댑터. 8 mock 위원회 (상임위·특별위 분류).
+- `data/real/session.py`: `nktulghyaivebdpnz` 회의록 - **Session + Statement 두 노드 동시 yield**. 5 mock 회의 × 발언 2-3건씩.
+- `data/real/party.py`: 정당 어댑터 (guardrails KNOWN_PARTIES와 정합, 6 정당).
+- `data/real/agency.py`: 국정감사 대상 기관 어댑터. 12 mock (정부부처/공기업/헌법기관 3 분류).
+- `data/load.py`: `emit_real_local` 확장 - **8 NDJSON 출력** (기존 3 + 신규 4 + statements 분리). max-* 옵션 8개 (`--max-committees/sessions/parties/agencies` 추가).
+- `scripts/verify_demo_dataset.py`: EXPECTED_FILES 업데이트 (real 8개 + 클래스 lookup 5개 추가).
+- `tests/test_real_adapters_extra.py` — **25 테스트** - 4 어댑터 Pydantic 검증, type 정규화, cross-reference (Session→Committee), 결정성.
+- `--source all --demo` 라이브: **15 NDJSON 파일** (synthetic 5 + real 8 + external 2) + 6/6 verification 통과.
+- 누적 pytest **653 통과** (Phase 3 +153).
+
 ### Added — Phase 3 Track 3: 시나리오 L 광고 매칭 (AI 거버넌스 데모 메인, 2026-05-13)
 - `api/services/ad_matcher.py`: 3 모드 광고 매칭 - keyword (토픽-카테고리 단순 매칭), embedding (코사인 유사도, mock=hash 기반), **agent (★ Bedrock 판단 - 민감 콘텐츠 감지)**.
 - ADR-0004 Layer 6 trigger: Agent 모드만 SENSITIVE_PATTERNS (scandal·tragedy·minor_victim·controversy)를 감지하여 `chosen_ad_id=None` (광고 노출 생략) + reason_text에 "ADR-0004 Layer 6 trigger" 명시.

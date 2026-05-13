@@ -152,20 +152,24 @@ def test_cli_external_source_runs(tmp_path: Path):
 
 # ─── emit_real_local (Phase 2 Track 2-2 신규) ──────────────────────────────
 
-def test_emit_real_local_writes_three_files(tmp_path: Path):
-    """3개 NDJSON: bills, members, votes."""
+def test_emit_real_local_writes_eight_files(tmp_path: Path):
+    """8 NDJSON: bills, members, votes, committees, sessions, statements, parties, agencies."""
     counts = load.emit_real_local(out_dir=tmp_path, verbose=False)
-    expected = {"bills.ndjson", "members.ndjson", "votes.ndjson"}
+    expected = {
+        "bills.ndjson", "members.ndjson", "votes.ndjson",
+        "committees.ndjson", "sessions.ndjson", "statements.ndjson",
+        "parties.ndjson", "agencies.ndjson",
+    }
     actual = {p.name for p in tmp_path.iterdir() if p.suffix == ".ndjson"}
     assert expected == actual
 
 
 def test_emit_real_local_counts_returned(tmp_path: Path):
     counts = load.emit_real_local(out_dir=tmp_path, verbose=False)
-    assert "bill" in counts
-    assert "member" in counts
-    assert "vote" in counts
-    assert all(n >= 1 for n in counts.values())
+    for key in ("bill", "member", "vote", "committee", "session", "statement",
+                "party", "agency"):
+        assert key in counts
+        assert counts[key] >= 1
 
 
 def test_emit_real_local_max_rows_limit(tmp_path: Path):
@@ -219,7 +223,7 @@ def test_cli_real_source_runs(tmp_path: Path):
 
 
 def test_cli_all_source_runs(tmp_path: Path):
-    """`--source all` synthetic + real + external 모두 출력 (10 NDJSON 파일)."""
+    """`--source all` synthetic + real + external 모두 출력 (15 NDJSON 파일)."""
     rc = load.main([
         "--source", "all",
         "--demo",
@@ -227,19 +231,18 @@ def test_cli_all_source_runs(tmp_path: Path):
         "--article-count", "5",
         "--reader-count", "10",
         "--ad-count", "3",
-        "--max-bills", "2",
-        "--max-members", "2",
-        "--max-votes", "2",
         "--news-count", "5",
         "--poll-count", "10",
         "--quiet",
     ])
     assert rc == 0
-    # synthetic 5 + real 3 + external 2 = 10 files
+    # synthetic 5 + real 8 + external 2 = 15 files
     expected_files = {
         "topics.ndjson", "articles.ndjson", "readers.ndjson",
         "advertisements.ndjson", "ad_inventories.ndjson",
         "bills.ndjson", "members.ndjson", "votes.ndjson",
+        "committees.ndjson", "sessions.ndjson", "statements.ndjson",
+        "parties.ndjson", "agencies.ndjson",
         "social_signals.ndjson", "poll_results.ndjson",
     }
     actual_files = {p.name for p in tmp_path.iterdir() if p.suffix == ".ndjson"}

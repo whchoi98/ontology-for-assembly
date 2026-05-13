@@ -32,7 +32,9 @@ if str(_REPO_ROOT) not in sys.path:
 EXPECTED_FILES = {
     "synthetic": ["topics.ndjson", "articles.ndjson", "readers.ndjson",
                   "advertisements.ndjson", "ad_inventories.ndjson"],
-    "real": ["bills.ndjson", "members.ndjson", "votes.ndjson"],
+    "real": ["bills.ndjson", "members.ndjson", "votes.ndjson",
+             "committees.ndjson", "sessions.ndjson", "statements.ndjson",
+             "parties.ndjson", "agencies.ndjson"],
     "external": ["social_signals.ndjson", "poll_results.ndjson"],
 }
 
@@ -55,8 +57,8 @@ def check_files_exist(out_dir: Path) -> tuple[bool, list[str]]:
 def check_pydantic_round_trip(out_dir: Path) -> tuple[bool, list[str]]:
     """각 파일을 schemas의 해당 클래스로 validate."""
     from data.schemas import (
-        Advertisement, AdInventory, Article, Bill, Person,
-        PollResult, Reader, SocialSignal, Topic, Vote,
+        Advertisement, AdInventory, Agency, Article, Bill, Committee, Party,
+        Person, PollResult, Reader, Session, SocialSignal, Statement, Topic, Vote,
     )
     mapping = {
         "topics.ndjson": Topic,
@@ -67,6 +69,11 @@ def check_pydantic_round_trip(out_dir: Path) -> tuple[bool, list[str]]:
         "bills.ndjson": Bill,
         "members.ndjson": Person,
         "votes.ndjson": Vote,
+        "committees.ndjson": Committee,
+        "sessions.ndjson": Session,
+        "statements.ndjson": Statement,
+        "parties.ndjson": Party,
+        "agencies.ndjson": Agency,
         "social_signals.ndjson": SocialSignal,
         "poll_results.ndjson": PollResult,
     }

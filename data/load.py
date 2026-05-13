@@ -114,16 +114,28 @@ def emit_real_local(
     max_bills: int | None = None,
     max_members: int | None = None,
     max_votes: int | None = None,
+    max_committees: int | None = None,
+    max_sessions: int | None = None,
+    max_parties: int | None = None,
+    max_agencies: int | None = None,
     verbose: bool = True,
 ) -> dict[str, int]:
-    """data/real/ 어댑터 3종을 NDJSON으로 출력.
+    """data/real/ 어댑터 7종을 NDJSON으로 출력.
 
     Demo mode (DEMO_PUBLIC_MODE=true)면 mock fixture 사용.
     실 API key (ASSEMBLY_OPENAPI_KEY) 있으면 실 호출.
+
+    Output 8 files: bills, members, votes, committees, sessions, statements, parties, agencies.
+    Note: session 어댑터가 Session·Statement 두 노드 yield하므로 출력은 2 파일.
     """
+    from data.real.agency import fetch_agencies
     from data.real.bill import fetch_bills
+    from data.real.committee import fetch_committees
     from data.real.member import fetch_members
+    from data.real.party import fetch_parties
+    from data.real.session import fetch_sessions_and_statements
     from data.real.vote import fetch_votes
+    from data.schemas import Session, Statement
 
     def _log(msg: str) -> None:
         if verbose:
@@ -132,23 +144,43 @@ def emit_real_local(
     out_dir.mkdir(parents=True, exist_ok=True)
     counts: dict[str, int] = {}
 
-    _log(f"[bill]    fetching → {out_dir}/bills.ndjson")
+    _log(f"[bill]       fetching → {out_dir}/bills.ndjson")
     counts["bill"] = write_ndjson(
-        fetch_bills(max_rows=max_bills),
-        out_dir / "bills.ndjson",
+        fetch_bills(max_rows=max_bills), out_dir / "bills.ndjson",
     )
 
-    _log(f"[member]  fetching → {out_dir}/members.ndjson")
+    _log(f"[member]     fetching → {out_dir}/members.ndjson")
     counts["member"] = write_ndjson(
-        fetch_members(max_rows=max_members),
-        out_dir / "members.ndjson",
+        fetch_members(max_rows=max_members), out_dir / "members.ndjson",
     )
 
-    _log(f"[vote]    fetching → {out_dir}/votes.ndjson")
+    _log(f"[vote]       fetching → {out_dir}/votes.ndjson")
     counts["vote"] = write_ndjson(
-        fetch_votes(max_rows=max_votes),
-        out_dir / "votes.ndjson",
+        fetch_votes(max_rows=max_votes), out_dir / "votes.ndjson",
     )
+
+    _log(f"[committee]  fetching → {out_dir}/committees.ndjson")
+    counts["committee"] = write_ndjson(
+        fetch_committees(max_rows=max_committees), out_dir / "committees.ndjson",
+    )
+
+    _log(f"[party]      fetching → {out_dir}/parties.ndjson")
+    counts["party"] = write_ndjson(
+        fetch_parties(max_rows=max_parties), out_dir / "parties.ndjson",
+    )
+
+    _log(f"[agency]     fetching → {out_dir}/agencies.ndjson")
+    counts["agency"] = write_ndjson(
+        fetch_agencies(max_rows=max_agencies), out_dir / "agencies.ndjson",
+    )
+
+    # Session generator는 Session·Statement 둘 다 yield → 분리 적재.
+    _log(f"[session+statement] fetching → sessions.ndjson + statements.ndjson")
+    items = list(fetch_sessions_and_statements(max_sessions=max_sessions))
+    sessions_only = [i for i in items if isinstance(i, Session)]
+    statements_only = [i for i in items if isinstance(i, Statement)]
+    counts["session"] = write_ndjson(sessions_only, out_dir / "sessions.ndjson")
+    counts["statement"] = write_ndjson(statements_only, out_dir / "statements.ndjson")
 
     return counts
 
@@ -269,6 +301,30 @@ def _build_parser() -> argparse.ArgumentParser:
         help="--source real: 가져올 표결 최대 수",
     )
     parser.add_argument(
+        "--max-committees",
+        type=int,
+        default=None,
+        help="--source real: 가져올 위원회 최대 수",
+    )
+    parser.add_argument(
+        "--max-sessions",
+        type=int,
+        default=None,
+        help="--source real: 가져올 회의(+발언) 최대 수",
+    )
+    parser.add_argument(
+        "--max-parties",
+        type=int,
+        default=None,
+        help="--source real: 가져올 정당 최대 수",
+    )
+    parser.add_argument(
+        "--max-agencies",
+        type=int,
+        default=None,
+        help="--source real: 가져올 국정감사 기관 최대 수",
+    )
+    parser.add_argument(
         "--news-query",
         type=str,
         default="국회 입법",
@@ -339,6 +395,10 @@ def main(argv: list[str] | None = None) -> int:
             max_bills=args.max_bills,
             max_members=args.max_members,
             max_votes=args.max_votes,
+            max_committees=args.max_committees,
+            max_sessions=args.max_sessions,
+            max_parties=args.max_parties,
+            max_agencies=args.max_agencies,
             verbose=verbose,
         )
         counts.update(real_counts)

@@ -47,8 +47,14 @@ def demo_dataset(tmp_path_factory):
 
 
 def test_check_files_exist_passes(verify_module, demo_dataset):
+    """15 NDJSON 파일 모두 존재 (synthetic 5 + real 8 + external 2)."""
     ok, missing = verify_module.check_files_exist(demo_dataset)
     assert ok, f"누락 파일: {missing}"
+
+
+def test_expected_file_count_is_fifteen(verify_module):
+    total = sum(len(files) for files in verify_module.EXPECTED_FILES.values())
+    assert total == 15
 
 
 def test_check_pydantic_round_trip(verify_module, demo_dataset):

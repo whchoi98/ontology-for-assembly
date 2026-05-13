@@ -53,6 +53,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - pytest **411 케이스 전 통과** (0.49초).
 - 원칙 근거 (사용자): "같은 질문에 일관된 답변이 맞고, 독자·부서별로 답변이 달라지는게 좋습니다" + "PoC 수준 + 계속 사용한 에셋 (GS Caltex처럼)".
 
+### Added — Phase 2 시작: 합성 generator + load CLI (2026-05-13)
+- `data/synthetic/topics.py`: 25개 중립 정책 토픽 카탈로그 (산업·법무·사회·경제·환경·문화·외교안보). 이념 라벨 0개. `to_graph_nodes()` Pydantic Topic 변환.
+- `data/synthetic/article.py`: 2,000 합성 기사 generator. 정치 균형(양당 빈도 CV<0.3) + 출처 인용 + 단정 표현 금지. AUTHOR_POOL 10명, PERSON_ID_POOL 100명, BILL_ID_POOL 100건, 9개 제목 템플릿. seed 결정성.
+- `data/synthetic/reader.py`: 50,000 합성 독자 generator. SHA-256 솔티드 해시 ID(64자 lowercase hex), tier 분포 anonymous 80/free 15/paid 5, 17 시도 region(sgg 이상 정밀도 금지), 관심사 0-5개. ADR-0003 익명화 + ADR-0004 Layer 4 PII 가드.
+- `data/synthetic/advertisement.py`: 500 합성 광고 + AdInventory 1:1 generator. 14 ADVERTISER_PROFILES (테크/금융/교육/친환경/자동차/통신/헬스케어/마케팅), 광고주별 avoid_topics 정책, 월 예산 50만~5천만 원 × 1~12개월, target_personas는 general_reader/paid_subscriber만.
+- `data/load.py`: CLI 통합. `--source synthetic --to local --out-dir ...` 동작. 5개 NDJSON 파일(topics·articles·readers·advertisements·ad_inventories) 출력. `write_ndjson()` Pydantic 모델→NDJSON 헬퍼. Phase 3 stub (`--source real|external`, `--to s3`)는 exit code 2로 안내.
+- `tests/test_synthetic_topics.py` — 9 테스트 (25개 등록·이념 라벨 가드·Pydantic 변환).
+- `tests/test_synthetic_article.py` — 17 테스트 (결정성·정치 균형·political_balance_score ≥0.8·출처 인용).
+- `tests/test_synthetic_reader.py` — 18 테스트 (HashedId 정규식·tier 분포 ±2%·PII 가드·salt 격리·관심사 tier 상관관계).
+- `tests/test_synthetic_advertisement.py` — 21 테스트 (advertiser/inventory 1:1·avoid_topics 정합·target_personas 정책·budget 범위).
+- `tests/test_load.py` — 16 테스트 (NDJSON round-trip·5개 파일·Phase 3 stub·subprocess CLI 실행).
+- pytest **495 케이스 전 통과** (1.03초).
+- 라이브 CLI 검증: 100 articles + 5000 readers + 30 ads = 1.1MB NDJSON. 균형 잡힌 정당 언급(민주 6건/국힘 6건), 익명 해시 ID, 17 시도 region 확인.
+
 ### Notes
 - `raw_data/`는 `.gitignore`. 국회 OpenAPI raw payload와 합성 독자/광고 시드는 KMS S3 별도 보관.
 - 첫 배포 도메인: `*.cloudfront.net` (커스텀 도메인은 Phase 5 polish에서 추가).

@@ -91,8 +91,10 @@ def invoke(
         - 정상 응답도 political_balance_score < 0.8이면 alarm=True (응답은 전달).
         - DEMO_PUBLIC_MODE에서는 mock 응답으로 fallback.
     """
+    import time
     pid = persona_id or "editorial"
     selected_model = model_id or os.environ.get("BEDROCK_CHAT_MODEL_ID", DEFAULT_MODEL_ID)
+    t0 = time.monotonic()
 
     # 1. System prompt — persona tone + KPI + NEUTRALITY_GUARD_SUFFIX 자동 첨부
     sys_prompt = system_prompt(pid, scenario_code)
@@ -100,12 +102,14 @@ def invoke(
     # 2. 입력 가드 (ADR-0004 Layer 1)
     input_check = guardrails.check_prompt(user_message, pid)
     if not input_check.passed:
-        return _blocked_input_result(
+        result = _blocked_input_result(
             blocked_topics=list(input_check.blocked_topics),
             persona_id=pid,
             scenario_code=scenario_code,
             model_id=selected_model,
         )
+        _record(result, int((time.monotonic() - t0) * 1000))
+        return result
 
     # 3. Bedrock invoke (또는 demo mock)
     response_text = _bedrock_invoke(
@@ -119,7 +123,7 @@ def invoke(
     # 4. 출력 평가 + annotate (ADR-0004 Layer 3)
     annotation = guardrails.annotate_response(response_text, pid)
 
-    return InvokeResult(
+    result = InvokeResult(
         text=response_text,
         model_id=selected_model,
         persona_id=pid,
@@ -132,8 +136,27 @@ def invoke(
         blocked_topics=[],
     )
 
+    # 5. 운영 콘솔 trace 링버퍼 기록 (ADR-0004 Layer 3 메트릭)
+    _record(result, int((time.monotonic() - t0) * 1000))
+    return result
+
 
 # ─── 내부 헬퍼 ────────────────────────────────────────────────────────────────
+
+def _record(result: "InvokeResult", duration_ms: int) -> None:
+    """LLM 호출 trace 1건을 ops_metrics 링버퍼에 기록."""
+    # Lazy import - 순환 의존 회피 + 테스트에서 mock 가능.
+    from api.services.ops_metrics import record_trace
+    record_trace(
+        persona_id=result.persona_id,
+        scenario_code=result.scenario_code,
+        model_id=result.model_id,
+        political_balance_score=result.political_balance_score,
+        alarm=result.alarm,
+        alarm_reason=result.alarm_reason,
+        blocked_topics=result.blocked_topics,
+        duration_ms=duration_ms,
+    )
 
 def _blocked_input_result(
     blocked_topics: list[str],

@@ -29,6 +29,10 @@ const SCENARIOS = [
   { code: 'N', name: '이슈 × 입법', href: '/issue-legislation', implemented: false },
 ];
 
+const OPS_LINKS = [
+  { name: '운영 콘솔', href: '/ops', implemented: true, badge: '5 패널' },
+];
+
 export function Sidebar() {
   return (
     <aside className="w-64 shrink-0 bg-gray-50 border-r border-gray-200 px-4 py-4 overflow-y-auto">
@@ -75,7 +79,28 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      <div className="mt-6 pt-4 border-t border-gray-200">
+      <div className="mt-4 pt-4 border-t border-gray-200">
+        <div className="text-xs uppercase text-gray-500 mb-2">운영</div>
+        <ul className="space-y-1">
+          {OPS_LINKS.map((o) => (
+            <li key={o.href}>
+              <Link
+                href={o.href}
+                className="block px-2 py-1.5 rounded-md text-sm hover:bg-gray-100 text-gray-700"
+              >
+                {o.name}
+                {o.badge && (
+                  <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-gray-200 text-gray-700">
+                    {o.badge}
+                  </span>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-4 pt-4 border-t border-gray-200">
         <div className="text-xs uppercase text-gray-500 mb-2">데이터 출처</div>
         <div className="flex flex-wrap gap-1.5">
           <DataSourceBadge source="real" size="xs" />

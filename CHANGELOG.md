@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase 3 Track 5: Next.js 14 web 앱 골격 (2026-05-13)
+- `web/package.json` + `tsconfig.json` + `next.config.js` + `tailwind.config.ts`: Next.js 14.2 + Tailwind CSS + TypeScript strict 모드. ECS Fargate ARM64 deploy 호환(`output: 'standalone'`).
+- `web/app/layout.tsx`: RootLayout - Sidebar + 메인 콘텐츠 2-column.
+- `web/app/page.tsx`: 홈 - 14 시나리오 카드 그리드. 구현 시나리오(A·B·L) 클릭 가능, 나머지 비활성.
+- `web/app/search/page.tsx`: 시나리오 A - POST /api/search 호출 + hits + 1-hop subgraph (JSON 자세히 보기).
+- `web/app/chat/page.tsx`: 시나리오 B - 3-stage 사이드바이사이드 비교. tools_called·agents_invoked·political_balance_score 표시. 3개 샘플 쿼리 버튼.
+- `web/app/ad-match/page.tsx`: 시나리오 L - 3-way 광고 매칭 비교. 안전/비위 2 샘플 콘텐츠. **거절 결정은 빨강 카드 + ★ 광고 노출 생략** 강조. governance_summary banner.
+- `web/components/PersonaSwitch.tsx`: 6 페르소나 토글 (localStorage). 변경 시 페이지 reload로 일관성 보장.
+- `web/components/Sidebar.tsx`: 페르소나 + 14 시나리오 nav + 데이터 출처 범례. 구현 안 된 시나리오는 비활성.
+- `web/components/DataSourceBadge.tsx`: real(녹색)·synthetic(노란색)·external(파란색) 색상 구분 배지. ADR-0004 - 정당 색 미사용.
+- `web/lib/personas.ts`: 6 페르소나 SSOT (백엔드와 정합. 향후 GET /api/personas로 fetch 대체 예정).
+- `web/lib/api-client.ts`: search·chat·adMatch 타입드 클라이언트. X-Persona-Id 자동 첨부. NEXT_PUBLIC_API_BASE_URL / INTERNAL_API_BASE_URL 분리.
+- `web/.env.example`: API base URL 설정 예시.
+- `npx tsc --noEmit` 통과 + `next build` 7 라우트 정적 prerendering 성공 (총 91 kB First Load JS).
+- 109 npm 패키지 (Next.js 14.2.30 + React 18.3 + Tailwind 3.4 + TypeScript 5.7).
+
 ### Added — Phase 3 Track 4: 국회 OpenAPI 나머지 4 어댑터 (2026-05-13)
 - `data/real/committee.py`: `npffdutiapkzbfyvr` 위원회 어댑터. 8 mock 위원회 (상임위·특별위 분류).
 - `data/real/session.py`: `nktulghyaivebdpnz` 회의록 - **Session + Statement 두 노드 동시 yield**. 5 mock 회의 × 발언 2-3건씩.

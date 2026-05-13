@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase 3 Track 1: infra-cdk 6 스택 (2026-05-13)
+- `infra-cdk/bin/assembly.ts`: 6 스택 인스턴스화 (network → data → ai → compute → edge → observability). 신규 VPC (ADR-0001 D7 - gcc retail VPC import 패턴과 분리).
+- `infra-cdk/lib/network-stack.ts`: VPC 10.30.0.0/16, 3-AZ, NAT 1개, 5 SG (alb·app·neptune·os·lambda). cloudfront prefix list ingress 강제.
+- `infra-cdk/lib/data-stack.ts`: Neptune cluster (t3.medium, isolated subnet), OpenSearch Serverless VECTORSEARCH 컬렉션, S3 3개 (raw/uploads/synthetic), DynamoDB 4개 (b2b-keys, ad-inventory, ad-impression with TTL, reader-profile).
+- `infra-cdk/lib/ai-stack.ts`: Bedrock Guardrail '정치 중립성' (PartyAttack/PoliticianInsult DENY 토픽 + HATE/INSULTS/MISCONDUCT 필터).
+- `infra-cdk/lib/compute-stack.ts`: ECS Fargate ARM64 (api+web 각 2 replica) + ALB + Ad Matcher Lambda 분리 (ADR-0004 Layer 6, ARM64).
+- `infra-cdk/lib/edge-stack.ts`: Cognito 3개 pool (staff/subscriber/guest) + 페르소나 그룹 6개 + API Gateway B2B + Usage Plan + CloudFront. us-east-1 deploy.
+- `infra-cdk/lib/observability-stack.ts`: CloudWatch Dashboard + 알람 2개 (political_balance_score < 0.8 + ALB 5xx > 1%).
+- `infra-cdk/test/stacks.test.ts`: **24 Jest 테스트** + **6 스냅샷**. ARM64 강제·Guardrail 존재·Cognito 6 그룹·TTL·정치 균형 임계 검증.
+- `cdk synth` 6 스택 통과 (76 feature flags - production hardening은 후속).
+- npm 의존성 300 패키지 (aws-cdk-lib 2.170 + ts-jest 29.2 + jest 29.7 + typescript 5.7).
+
 ### Added — Phase 0 Bootstrap (2026-05-13)
 - Fork target 결정: `ontology-for-gcc` (plan1-foundation) 아키텍처를 최대한 차용.
 - 디렉토리 트리 생성 (gcc 동등): `api/`, `web/`, `infra-cdk/`, `data/`, `ontology/`, `tests/`, `docs/`, `scripts/`, `.claude/`, `.harness-eval/`, `.github/workflows/`.

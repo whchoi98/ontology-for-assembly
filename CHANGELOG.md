@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase 3 Track 3: 시나리오 L 광고 매칭 (AI 거버넌스 데모 메인, 2026-05-13)
+- `api/services/ad_matcher.py`: 3 모드 광고 매칭 - keyword (토픽-카테고리 단순 매칭), embedding (코사인 유사도, mock=hash 기반), **agent (★ Bedrock 판단 - 민감 콘텐츠 감지)**.
+- ADR-0004 Layer 6 trigger: Agent 모드만 SENSITIVE_PATTERNS (scandal·tragedy·minor_victim·controversy)를 감지하여 `chosen_ad_id=None` (광고 노출 생략) + reason_text에 "ADR-0004 Layer 6 trigger" 명시.
+- `api/routers/ad_match.py`: POST /api/ad-match + GET /api/ad-match/modes. compare 모드에서 3 모드 동시 실행 + `governance_summary`로 차이 강조 ("Agent 모드만 광고를 거절").
+- `api/main.py`: ad_match 라우터 등록.
+- `tests/test_ad_match.py`: **39 테스트** - 안전/비위 콘텐츠 분리, Agent 거절 패턴, governance_summary, AdMatchDecision Pydantic 검증, SENSITIVE_PATTERNS 4 카테고리.
+- 라이브 데모:
+  - 안전(AI 산업 진흥) → 3 모드 모두 광고 매칭 (key 0.50 / emb 0.78 / agent 0.75)
+  - 비위(검찰 수사) → keyword 0.30 매칭, embedding 0.83 매칭, **Agent 거절** (audit trace: "skip — 민감 콘텐츠 감지 (controversy, scandal). ADR-0004 Layer 6 trigger")
+- 누적 pytest **627 통과** (Phase 3 +90).
+
 ### Added — Phase 3 Track 2: 시나리오 A 검색 라우터 (2026-05-13)
 - `api/routers/search.py`: POST /api/search + GET /api/search/info. 페르소나 cohort 필터 + `opensearch.hybrid_search` + Neptune 1-hop subgraph (top hit). Cytoscape 호환 `SubgraphModel` (nodes/edges).
 - 페르소나별 top_k 조정: 일반 독자 ≤5 (입문성), 데이터·AI ≥15 (분석 후보), 그 외 요청값.

@@ -41,6 +41,10 @@ def _register_routers(app: FastAPI) -> None:
     from api.routers.chat import router as chat_router
     app.include_router(chat_router)
 
+    # 시나리오 L - 광고 매칭 (AI 거버넌스 데모 메인)
+    from api.routers.ad_match import router as ad_match_router
+    app.include_router(ad_match_router)
+
     # 향후 시나리오 라우터들:
     # from api.routers.insights import router as insights_router; app.include_router(insights_router) # C
     # ... (D-N 그리고 objects, ontology, personas, ops)

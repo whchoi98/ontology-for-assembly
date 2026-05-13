@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase 5 Track 5-1: CytoscapeView 1-hop subgraph 시각화 (2026-05-13)
+- `web/components/CytoscapeView.tsx`: cytoscape 3.31 + cose force-directed 레이아웃. SSR 안전 dynamic import. 노드 타입별 색상 (Bill 파랑/Person 자주/Vote 주황/Article 녹색/Topic 청록/Statement 분홍/Committee 녹색/Party 자주/Agency 노랑). 루트 노드는 크기·border 강조.
+- `web/app/search/page.tsx`: JSON viewer 대체 → 실시간 그래프 + 노드 라벨·엣지 타입 표시. JSON은 디버깅용 details에 보존.
+- 시각 디자인 ADR-0004 준수: 정당 색·이념 색 미사용. 노드 타입(Bill·Person 등) 기반만.
+- npm 의존성 추가: cytoscape 3.31.0, react-cytoscapejs 2.0.0, @types/cytoscape 3.21.7 (lazy load - 초기 bundle 영향 최소).
+- `/search` First Load JS: 91 → 92 kB (+1 kB, Cytoscape는 동적 import).
+
 ### Added — Phase 3 Track 5: Next.js 14 web 앱 골격 (2026-05-13)
 - `web/package.json` + `tsconfig.json` + `next.config.js` + `tailwind.config.ts`: Next.js 14.2 + Tailwind CSS + TypeScript strict 모드. ECS Fargate ARM64 deploy 호환(`output: 'standalone'`).
 - `web/app/layout.tsx`: RootLayout - Sidebar + 메인 콘텐츠 2-column.

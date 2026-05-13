@@ -7,6 +7,7 @@
  * 검색 결과 + top hit 1-hop subgraph.
  */
 import React, { useState } from 'react';
+import { CytoscapeView } from '../../components/CytoscapeView';
 import { DataSourceBadge } from '../../components/DataSourceBadge';
 import { readPersonaIdSync } from '../../components/PersonaSwitch';
 import { search, type SearchResponse } from '../../lib/api-client';
@@ -98,19 +99,13 @@ export default function SearchPage() {
           </ul>
 
           {result.top_hit_subgraph && (
-            <section className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-              <h2 className="font-semibold mb-2">
-                Top hit 1-hop subgraph: {result.top_hit_subgraph.root_id}
-              </h2>
-              <div className="text-sm text-gray-700 mb-2">
-                <strong>{result.top_hit_subgraph.nodes.length}</strong> 노드 ·{' '}
-                <strong>{result.top_hit_subgraph.edges.length}</strong> 엣지
-                <span className="text-xs text-gray-500 ml-2">
-                  (Cytoscape 시각화는 후속 phase)
-                </span>
-              </div>
-              <details>
-                <summary className="text-sm text-gray-500 cursor-pointer">자세히</summary>
+            <section className="space-y-2">
+              <h2 className="font-semibold text-gray-900">Top hit 1-hop subgraph</h2>
+              <CytoscapeView subgraph={result.top_hit_subgraph} height={400} />
+              <details className="text-xs">
+                <summary className="text-gray-500 cursor-pointer hover:text-gray-700">
+                  JSON raw 데이터 (디버깅)
+                </summary>
                 <pre className="text-xs mt-2 overflow-x-auto bg-white p-2 rounded border border-gray-200">
                   {JSON.stringify(result.top_hit_subgraph, null, 2)}
                 </pre>

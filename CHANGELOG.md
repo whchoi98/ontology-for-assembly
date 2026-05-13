@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase 4 Track 4-1: 시나리오 K 표결 이상치 (PDF ★, 2026-05-13)
+- `api/services/outlier_detect.py`: 3 유형 탐지 - party_line_break (당론 이탈), swing_vote (박빙), cross_party (정파 초월 협력). 5 합성 시드 (deviation_score 0.68~0.82).
+- `api/routers/outlier.py`: GET /api/outlier (필터·페이징) + GET /api/outlier/{id} (디테일). 페르소나별 안내 메시지·후속 행동 제안.
+- ADR-0004 정치 중립성: ai_label에 정당 비방 어휘 미포함 (test로 강제). "당론 이탈"은 사실 기술, 평가 X.
+- `web/lib/scenario-clients.ts`: Phase 4 시나리오 API 클라이언트 모음 (outlierApi 신규).
+- `web/app/outlier/page.tsx`: 3 유형 필터 + 리스트·디테일 2-column + AI 패턴 라벨 amber 카드.
+- `web/components/Sidebar.tsx`: K 시나리오 활성화 + "PDF ★" 배지.
+- `tests/test_outlier_router.py`: 24 테스트 (3 유형, 정치 균형, 6 페르소나 안내, 유효성).
+- 누적 pytest **745 통과**.
+
 ### Added — Phase 5 Track 5-7: CytoscapeView 4 고급 패턴 (2026-05-13)
 - `web/components/CytoscapeView.tsx` 재작성: 4 패턴 모두 적용.
   ① **이미지 노드** — Person 노드에 placeholder 아바타 (data URI SVG, 모든 의원 동일 - ADR-0004 정치 중립). `background-image` + `background-clip: node`로 원형 클리핑. label은 노드 하단.

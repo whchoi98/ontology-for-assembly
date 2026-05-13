@@ -24,7 +24,7 @@ const SCENARIOS = [
   { code: 'H', name: '지역구 지도', href: '/district-map', implemented: false },
   { code: 'I', name: '편향·중립성', href: '/neutrality', implemented: false },
   { code: 'J', name: '외부 신호 융합', href: '/external-signal', implemented: false },
-  { code: 'K', name: '표결 이상치', href: '/outlier', implemented: false },
+  { code: 'K', name: '표결 이상치', href: '/outlier', implemented: true, badge: 'PDF ★' },
   { code: 'M', name: '의원 정치 여정', href: '/journey', implemented: false },
   { code: 'N', name: '이슈 × 입법', href: '/issue-legislation', implemented: false },
 ];

@@ -53,7 +53,11 @@ def _register_routers(app: FastAPI) -> None:
     from api.routers.objects import router as objects_router
     app.include_router(objects_router)
 
-    # 향후 시나리오 라우터들 (C, D, E, F, G, H, I, J, K, M, N 11개).
+    # 시나리오 K - 표결 이상치 (PDF 시그니처)
+    from api.routers.outlier import router as outlier_router
+    app.include_router(outlier_router)
+
+    # 향후 시나리오 라우터들 (C, D, E, F, G, H, I, J, M, N 10개).
 
 
 def _register_health(app: FastAPI) -> None:

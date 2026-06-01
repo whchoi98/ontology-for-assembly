@@ -1,6 +1,6 @@
 # infra-cdk/ — AWS CDK v2 (TypeScript) — 6 Stacks
 
-`infra-cdk/`는 6 스택을 인스턴스화하는 모놀리식 CDK 앱. assembly 전용 리소스만 생성 (gcc와 달리 retail VPC import 없음 — ADR-0001).
+`infra-cdk/`는 6 스택을 인스턴스화하는 모놀리식 CDK 앱. **공유 VPC를 import**하고 assembly 전용 리소스(SG 5개 + 모든 application 리소스)만 생성한다 (ADR-0006이 ADR-0001 D7의 전용 VPC 설계를 supersede).
 
 ## Stacks
 
@@ -8,8 +8,8 @@
 infra-cdk/
 ├── bin/assembly.ts               # 엔트리포인트 — 6 스택 인스턴스화
 └── lib/
-    ├── network-stack.ts          # VPC (10.30.0.0/16, 3-AZ) + SGs
-    ├── data-stack.ts             # Neptune cluster, OpenSearch Serverless, S3 4종,
+    ├── network-stack.ts          # 공유 VPC import (10.100.0.0/16, 2-AZ) + SG 5개
+    ├── data-stack.ts             # Neptune cluster, OpenSearch Serverless, S3 3종,
     │                             # DynamoDB 4종 (b2b-keys, ad-inventory, ad-impression, reader-profile)
     ├── compute-stack.ts          # ECS cluster, ALB, api+web Fargate (ARM64, 2/2),
     │                             # Ad Matcher Lambda (별도)
@@ -36,7 +36,7 @@ observability → 모든 스택의 메트릭 구독
 
 ## Key Design Decisions
 
-- **신규 VPC** (ADR-0001 D7): assembly 독립 운영. gcc의 retail VPC import 패턴 미적용.
+- **공유 VPC import** (ADR-0006, 2026-05-14): `vpc-0dfa5610180dfa628` (cc-on-bedrock-vpc, 10.100.0.0/16). gcc·retail·mfg와 동일 VPC + NAT GW 공유. assembly 전용 SG 5개만 신규. ADR-0001 D7 supersede.
 - **3 Cognito 풀** (ADR-0003): staff, subscriber, guest 분리. Lambda@Edge에서 분기.
 - **B2B API Gateway** (ADR-0003): 별도 도메인 (`api.assembly.example`). DynamoDB API Key store.
 - **Ad Matcher Lambda 분리** (ADR-0004 Layer 6): API와 별도 Lambda. Bedrock 호출 + AdMatchDecision 저장.
@@ -54,14 +54,14 @@ observability → 모든 스택의 메트릭 구독
 ## Stack-Specific Notes
 
 ### network-stack.ts
-- 3-AZ, public + private(NAT) + isolated subnet.
-- VPC CIDR `10.30.0.0/16` (gcc `10.10.x`, retail `10.20.x`와 분리).
-- SG: `assembly-api-sg`, `assembly-neptune-sg`, `assembly-os-sg`, `assembly-lambda-edge-sg`.
+- **공유 VPC import** `vpc-0dfa5610180dfa628` (cc-on-bedrock-vpc, 10.100.0.0/16). 2-AZ (ap-northeast-2a, 2b), NAT GW 2개 공유 (ADR-0006).
+- subnet ID 하드코딩: `SHARED_PUBLIC_SUBNETS` (2), `SHARED_PRIVATE_SUBNETS` (2 - ECS·Lambda 거주), `SHARED_ISOLATED_SUBNETS` (2 - Neptune 거주).
+- SG 5개 신규: `assembly-alb-sg`, `assembly-app-sg`, `assembly-neptune-sg`, `assembly-os-sg`, `assembly-lambda-sg`.
 
 ### data-stack.ts
 - Neptune: private isolated subnet, t3.medium(dev) / r6g.large(prod). Bulk Loader IAM role.
 - OpenSearch Serverless: 컬렉션 `assembly-${env}-collection`, 인덱스 `assembly-${env}-kb-index`.
-- S3 4종: raw-docs, uploads, synthetic-data, demo-recordings.
+- S3 3종: raw-docs, uploads, synthetic-data.
 - DynamoDB 4종: 모두 PAY_PER_REQUEST, TTL 활성화(`AdImpression` 14일).
 
 ### compute-stack.ts
@@ -81,8 +81,8 @@ observability → 모든 스택의 메트릭 구독
 - API Gateway Usage Plan + API Key (DynamoDB).
 
 ### observability-stack.ts
-- CloudWatch Dashboard: 시나리오 14개 × 페르소나 6개 latency, error rate.
-- 알람: `political_balance_score` 평균 < 0.8 (Critical), 5xx > 1%, Neptune CPU > 80%.
+- CloudWatch Dashboard: 위젯 2종 — ECS Service CPU/Memory + Ad Matcher Lambda invocations/errors.
+- 알람 2종: `political_balance_score` 평균 < 0.8 (Critical, LowBalanceScoreAlarm), ALB 5xx > 1% (AlbHttp5xxAlarm). (Neptune CPU 알람은 미구현.)
 - 로그 그룹 TTL 14일.
 
 ## Deployment

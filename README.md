@@ -4,9 +4,9 @@
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](#english)
 [![한국어](https://img.shields.io/badge/lang-한국어-red.svg)](#한국어)
 
-A 30–60 minute proof-of-concept demo for a Korean newsroom Agentic AI knowledge graph on AWS Bedrock + AgentCore + Neptune — powered by 국회 열린데이터광장 OpenAPI · 14 wow scenarios (A–N) · 25+ ontology classes · 6 personas (3 internal + 3 customer-facing) · real + synthetic + external data.
+A 30–60 minute proof-of-concept demo for a Korean newsroom Agentic AI knowledge graph on AWS Bedrock + AgentCore + Neptune — powered by 국회 열린데이터광장 OpenAPI · 23 wow scenarios (A–W) · 31 ontology classes · 6 personas (3 internal + 3 customer-facing) · real + synthetic + external data.
 
-AWS Bedrock + AgentCore + Neptune 위에서 **한국 언론사 Agentic 온톨로지**가 14개 wow 시나리오와 6개 페르소나(편집국·데이터·AI·광고/세일즈·일반 독자·유료 구독자·기업/B2B 정책 인텔리전스)를 통해 어떻게 *3-단계 진화 비교(Chatbot→Agent→Agentic AI)* 와 *AI 거버넌스 광고 매칭*을 시연하는지 보여주는 30–60분 PoC 데모.
+AWS Bedrock + AgentCore + Neptune 위에서 **한국 언론사 Agentic 온톨로지**가 23개 wow 시나리오와 6개 페르소나(편집국·데이터·AI·광고/세일즈·일반 독자·유료 구독자·기업/B2B 정책 인텔리전스)를 통해 어떻게 *3-단계 진화 비교(Chatbot→Agent→Agentic AI)* 와 *AI 거버넌스 광고 매칭*을 시연하는지 보여주는 30–60분 PoC 데모.
 
 차용 베이스: [`ontology-for-gcc`](https://github.com/whchoi98/ontology-for-gcc) (plan1-foundation) — 디렉토리·6-stack CDK·하니스 100% 차용, 도메인만 국회/언론으로 교체.
 
@@ -16,9 +16,9 @@ AWS Bedrock + AgentCore + Neptune 위에서 **한국 언론사 Agentic 온톨로
 
 ## Overview
 
-`ontology-for-assembly` is a hands-on demonstration of how a 25-class domain ontology (legislators, bills, votes, committees, statements, parties, agencies, readers, advertisements, etc.) can power **14 distinct** Agentic AI scenarios for a Korean newsroom on AWS managed AI services. The demo deploys a multi-tier application — FastAPI backend, Next.js 14 frontend, AWS CDK infrastructure (6 stacks) — that integrates Bedrock Sonnet 4.6, AgentCore Memory and Code Interpreter, Neptune openCypher, OpenSearch Serverless hybrid search, and CloudFront-fronted ECS Fargate (Graviton ARM64).
+`ontology-for-assembly` is a hands-on demonstration of how a 31-class domain ontology (legislators, bills, votes, committees, statements, parties, agencies, readers, advertisements, etc.) can power **23 distinct** Agentic AI scenarios for a Korean newsroom on AWS managed AI services. The demo deploys a multi-tier application — FastAPI backend, Next.js 14 frontend, AWS CDK infrastructure (6 stacks) — that integrates Bedrock Sonnet 4.6, AgentCore Memory and Code Interpreter, Neptune openCypher, OpenSearch Serverless hybrid search, and CloudFront-fronted ECS Fargate (Graviton ARM64).
 
-Scenarios span semantic search, conversational reporter/reader agent with multi-turn memory, MD-grade insights with streaming token summaries, persona matching, legislator clustering, lookalike expansion, article ROI/CTR simulation, district map, neutrality guardrails, external signal fusion, vote-pattern outlier detection, **ad-match governance (keyword vs embedding vs Agent-judgment)**, full legislator journey timeline, and issue-vs-legislation correlation.
+Scenarios span semantic search, conversational reporter/reader agent with multi-turn memory, MD-grade insights with streaming token summaries, persona matching, legislator clustering, lookalike expansion, article ROI/CTR simulation, district map, neutrality guardrails, external signal fusion, vote-pattern outlier detection, **ad-match governance (keyword vs embedding vs Agent-judgment)**, full legislator journey timeline, and issue-vs-legislation correlation (A–N) — plus person-relationship analysis, petition-to-legislation, committee influence heatmap, promise tracking, topic burst, party cohesion, influence ranking, voting clusters, and swing-voter detection (O–W).
 
 **Personas (6)**: editorial · data·AI · ad/sales (3 internal) + general reader · paid subscriber · B2B policy intelligence (3 customer-facing).
 
@@ -43,7 +43,13 @@ See `docs/superpowers/specs/2026-05-13-ontology-assembly-design.md` for the auth
 - **Legislator Journey Timeline (M)** — proposals + votes + statements + committee membership unified timeline.
 - **Issue × Legislation Correlation (N)** — topic trend ↔ bill proposal scatter plot.
 
-Plus: **25-class object explorer** (search · pagination · 1-hop subgraph), **meta page** (ER · Standards · Validation), **operational console** (5 panels — ingest · guardrail · memory · eval · trace), and **GuidedTour** (6 personas × 14 scenarios recommendation cards).
+Expansion scenarios (O–W):
+
+- **Person Relationship (O)** — graph path between two figures (`/api/relations/{a}/{b}`).
+- **Petition → Legislation (P)**, **Committee Influence Heatmap (Q)**, **Promise Tracker (R)**, **Topic Burst (S)** — frontend pages backed by member directory data + the generic `/api/insight` LLM narrative.
+- **Party Cohesion (T)**, **Influence Ranking (U)**, **Voting Cluster (V)**, **Swing Voter (W)** — Phase 4f advanced insights over real Neptune edges (`/api/insights/*`).
+
+Plus: **31-class object explorer** (search · pagination · 1-hop subgraph), **ontology mindmap** (1–3 hop relations graph), **member directory** (286 members · 9 metrics), **operational console** (5 panels — ingest · guardrail · memory · eval · trace), and **GuidedTour** (6 personas × scenario recommendation cards).
 
 ## Prerequisites
 
@@ -101,8 +107,8 @@ ontology-for-assembly/
 ├── web/                 Next.js 14 frontend (TypeScript, ARM64)
 ├── infra-cdk/           AWS CDK v2 — 6 stacks
 ├── data/                Real + synthetic + external data adapters
-├── ontology/            Classes / relations / mappings / standards / adapters
-├── tests/               pytest smoke + httpx integration
+├── ontology/            Catalog scaffold (live catalog in api/services/objects_catalog.py)
+├── tests/               pytest smoke + per-router httpx integration
 ├── docs/                architecture, ADRs, runbooks, design spec
 ├── scripts/             wow-query eval, Cognito provisioning
 ├── .claude/             Project harness
@@ -116,7 +122,7 @@ make test-fast              # Python AST + smoke (<1s)
 make test                   # full pytest
 make type-check             # tsc (web + infra-cdk) + mypy
 make cdk-test               # CDK 6-stack snapshot
-make wow-eval               # 14 × 6 wow queries (deployed CF)
+make wow-eval               # 84 cases — A–N core scenarios × 6 personas (deployed CF)
 ```
 
 CI runs the first four on every push/PR via `.github/workflows/ci.yml`.
@@ -144,9 +150,9 @@ MIT — see [LICENSE](LICENSE).
 
 ## 개요
 
-`ontology-for-assembly`는 25-class 도메인 온톨로지(의원, 의안, 표결, 위원회, 발언, 정당, 기관, 독자, 광고 등)가 AWS 매니지드 AI 서비스 위에서 한국 언론사를 위한 **14개** Agentic AI 시나리오를 어떻게 구동하는지 보여주는 실습형 데모입니다. FastAPI 백엔드, Next.js 14 프론트엔드, AWS CDK 인프라(6 stacks)로 구성된 다층 애플리케이션이 Bedrock Sonnet 4.6, AgentCore Memory와 Code Interpreter, Neptune openCypher, OpenSearch Serverless 하이브리드 검색, CloudFront 앞단에 ECS Fargate(Graviton ARM64)를 통합합니다.
+`ontology-for-assembly`는 31-class 도메인 온톨로지(의원, 의안, 표결, 위원회, 발언, 정당, 기관, 독자, 광고 등)가 AWS 매니지드 AI 서비스 위에서 한국 언론사를 위한 **23개** Agentic AI 시나리오를 어떻게 구동하는지 보여주는 실습형 데모입니다. FastAPI 백엔드, Next.js 14 프론트엔드, AWS CDK 인프라(6 stacks)로 구성된 다층 애플리케이션이 Bedrock Sonnet 4.6, AgentCore Memory와 Code Interpreter, Neptune openCypher, OpenSearch Serverless 하이브리드 검색, CloudFront 앞단에 ECS Fargate(Graviton ARM64)를 통합합니다.
 
-시나리오는 의미 검색, 다회차 메모리 기반 대화형 기자/독자 에이전트, 토큰 스트리밍 요약 기사 인사이트, 페르소나 매칭, 의원 클러스터링, 룩어라이크 확장, 기사 ROI/CTR 시뮬레이션, 지역구 지도, 정치 중립성 가드레일, 외부 신호 융합, 표결 패턴 변화 탐지, **광고 매칭 거버넌스(키워드·임베딩·Agent 판단 3-way)**, 의원 정치 여정 timeline, 사회 이슈 × 입법 상관 등 14개에 걸쳐 있습니다.
+시나리오는 의미 검색, 다회차 메모리 기반 대화형 기자/독자 에이전트, 토큰 스트리밍 요약 기사 인사이트, 페르소나 매칭, 의원 클러스터링, 룩어라이크 확장, 기사 ROI/CTR 시뮬레이션, 지역구 지도, 정치 중립성 가드레일, 외부 신호 융합, 표결 패턴 변화 탐지, **광고 매칭 거버넌스(키워드·임베딩·Agent 판단 3-way)**, 의원 정치 여정 timeline, 사회 이슈 × 입법 상관(A–N) — 여기에 인물 관계 분석, 청원→입법, 위원회 영향력 heatmap, 공약 이행 추적, 토픽 burst, 정당 응집도, 의원 영향력 랭킹, 표결 cluster, swing voter 탐지(O–W)를 더해 총 23개에 걸쳐 있습니다.
 
 **페르소나 (6개)**: 편집국 · 데이터·AI · 광고/세일즈 (내부 3) + 일반 독자 · 유료 구독자 · 기업/B2B 정책 인텔리전스 (대고객 3).
 
@@ -177,7 +183,13 @@ MIT — see [LICENSE](LICENSE).
 - **의원 정치 여정 (M)** — 발의·표결·발언·위원회 통합 timeline.
 - **이슈 × 입법 상관 (N)** — 토픽 트렌드 ↔ 법안 발의 산점도.
 
-추가: **25-class 객체 탐색기**, **메타 페이지** (ER · 표준 · 검증), **운영 콘솔** (5 패널), **GuidedTour** (6 페르소나 × 14 시나리오).
+확장 시나리오 (O–W):
+
+- **인물 관계 (O)** — 두 인물 간 그래프 경로 (`/api/relations/{a}/{b}`).
+- **청원→입법 (P)**, **위원회 영향력 heatmap (Q)**, **공약 이행 추적 (R)**, **토픽 burst (S)** — 의원 디렉토리 데이터 + 범용 `/api/insight` LLM narrative 기반 프론트 페이지.
+- **정당 응집도 (T)**, **의원 영향력 랭킹 (U)**, **표결 cluster (V)**, **swing voter (W)** — Phase 4f 고급 인사이트, real Neptune edges Cypher (`/api/insights/*`).
+
+추가: **31-class 객체 탐색기**, **온톨로지 관계 그래프**(1–3 hop), **의원 디렉토리**(286명·9 지표), **운영 콘솔** (5 패널), **GuidedTour** (6 페르소나 × 시나리오 추천).
 
 ## 사전 요구 사항
 
@@ -216,8 +228,8 @@ ontology-for-assembly/
 ├── web/                 Next.js 14 프론트엔드 (TS, ARM64)
 ├── infra-cdk/           AWS CDK v2 — 6 stacks
 ├── data/                실/합성/외부 데이터 어댑터
-├── ontology/            classes / relations / mappings / standards / adapters
-├── tests/               pytest smoke + httpx 통합
+├── ontology/            카탈로그 스캐폴드 (실 카탈로그는 api/services/objects_catalog.py)
+├── tests/               pytest smoke + 라우터별 httpx 통합
 ├── docs/                architecture, ADRs, runbooks, design spec
 ├── scripts/             wow-query 평가, Cognito 프로비저닝
 ├── .claude/             프로젝트 하니스
@@ -231,7 +243,7 @@ make test-fast              # AST + smoke (<1초)
 make test                   # 전체 pytest
 make type-check             # tsc + mypy
 make cdk-test               # CDK 스냅샷
-make wow-eval               # 14 × 6 wow 쿼리 (배포된 CF)
+make wow-eval               # 84 케이스 — A–N 핵심 시나리오 × 6 페르소나 (배포된 CF)
 ```
 
 CI는 push/PR마다 위 첫 4개를 `.github/workflows/ci.yml`로 실행.
@@ -265,20 +277,19 @@ MIT — [LICENSE](LICENSE) 참조.
 
 <!-- harness-eval-badge:start -->
 ![wow-eval Pass Rate](https://img.shields.io/badge/wow--eval-100%25-brightgreen)
-![Avg Balance Score](https://img.shields.io/badge/avg--balance-0.95-brightgreen)
-![Active Cases](https://img.shields.io/badge/active--cases-18%2F84-blue)
-![Last Eval](https://img.shields.io/badge/eval-2026--05--13-blue)
+![Avg Balance Score](https://img.shields.io/badge/avg--balance-0.98-brightgreen)
+![Active Cases](https://img.shields.io/badge/active--cases-84%2F84-brightgreen)
+![Last Eval](https://img.shields.io/badge/eval-2026--05--14-blue)
 <!-- harness-eval-badge:end -->
 
 ## harness-eval 자동 평가
 
 ```bash
-# 84 케이스 평가 (6 페르소나 × 14 시나리오)
+# 84 케이스 평가 (6 페르소나 × A–N 14 핵심 시나리오)
 python scripts/eval_wow_queries.py
 
 # 운영 콘솔에서 결과 보기
 curl http://localhost:8080/api/ops/wow-quality
 ```
 
-현재: **18 active / 100% PASS / avg balance 0.95** (Phase 3 시점 - A·B·L 구현).
-나머지 66 케이스는 후속 phase의 시나리오 라우터 구현 시 자동 active.
+현재: **84 active / 100% PASS / avg balance 0.98** (wow-eval은 핵심 14 시나리오 A–N × 6 페르소나 기준; 앱 자체는 23 시나리오 A–W 구현).

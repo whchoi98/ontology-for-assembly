@@ -8,7 +8,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-const PUBLIC_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8080';
+const PUBLIC_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
 interface ClassMeta {
   name: string;
@@ -48,7 +48,7 @@ export default function ObjectsHomePage() {
     <div>
       <header className="mb-6">
         <h1 className="text-2xl font-bold mb-1">Object Explorer</h1>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-slate-300">
           {data && (
             <>
               <strong>{data.total_classes}</strong> 클래스 ·{' '}
@@ -60,19 +60,19 @@ export default function ObjectsHomePage() {
       </header>
 
       {error && (
-        <div className="border border-red-200 bg-red-50 text-red-800 rounded-md p-3 text-sm mb-4">
+        <div className="border border-red-200 bg-red-500/15 text-red-300 rounded-md p-3 text-sm mb-4">
           {error}
         </div>
       )}
 
-      {loading && <p className="text-gray-500">로딩 중…</p>}
+      {loading && <p className="text-slate-400">로딩 중…</p>}
 
       {data && (
         <div className="space-y-6">
           {Object.entries(data.groups).map(([group, classes]) => (
             <section key={group}>
-              <h2 className="font-semibold text-gray-800 mb-2 text-sm uppercase tracking-wide">
-                {group} <span className="text-gray-400 font-normal">({classes.length})</span>
+              <h2 className="font-semibold text-slate-100 mb-2 text-sm uppercase tracking-wide">
+                {group} <span className="text-slate-500 font-normal">({classes.length})</span>
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                 {classes.map((cls) => (
@@ -93,19 +93,19 @@ function ClassCard({ cls }: { cls: ClassMeta }) {
     return (
       <Link
         href={`/objects/${cls.name}`}
-        className="block border border-gray-200 rounded-md p-3 bg-white hover:border-blue-300 hover:shadow-sm transition"
+        className="block border border-slate-800 rounded-md p-3 bg-slate-900/40 hover:border-blue-300 hover:shadow-sm transition"
       >
-        <div className="font-semibold text-gray-900 text-sm">{cls.name}</div>
-        <div className="text-xs text-gray-500 mt-1">
+        <div className="font-semibold text-white text-sm">{cls.name}</div>
+        <div className="text-xs text-slate-400 mt-1">
           {cls.fields.length} fields
         </div>
       </Link>
     );
   }
   return (
-    <div className="border border-gray-100 bg-gray-50 rounded-md p-3 opacity-60">
-      <div className="font-semibold text-gray-700 text-sm">{cls.name}</div>
-      <div className="text-xs text-gray-400 mt-1">⏳ 후속 phase</div>
+    <div className="border border-slate-800 bg-slate-800/40 rounded-md p-3 opacity-60">
+      <div className="font-semibold text-slate-200 text-sm">{cls.name}</div>
+      <div className="text-xs text-slate-500 mt-1">⏳ 후속 phase</div>
     </div>
   );
 }

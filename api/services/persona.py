@@ -23,6 +23,18 @@ PersonaId = Literal[
 
 Tier = Literal["staff", "b2c_free", "b2c_paid", "b2b"]
 
+
+# UI 그룹핑 — Sidebar·PersonaSwitch에서 헤더로 분리 노출.
+# 미디어/신문사 내부용 / 구독자용(무료) / 유료 구독자용 / B2B 4단 계층.
+TIER_GROUP_KR: dict[Tier, str] = {
+    "staff":    "미디어/신문사 내부용",
+    "b2c_free": "구독자용 (무료)",
+    "b2c_paid": "유료 구독자용",
+    "b2b":      "B2B 정책 인텔리전스",
+}
+
+TIER_GROUP_ORDER: list[Tier] = ["staff", "b2c_free", "b2c_paid", "b2b"]
+
 # 광고 노출 정책:
 #   no_ads             - 내부 staff. 광고 미노출.
 #   full_ads_agent     - B2C 무료. Agent 판단 모드로 광고 노출 (시나리오 L).
@@ -166,21 +178,86 @@ def get(persona_id: Optional[str]) -> dict:
     return {**PERSONA_REGISTRY[pid], "persona_id": pid}
 
 
-def system_prompt(persona_id: Optional[str], scenario_code: str) -> str:
-    """Compose full system prompt: 페르소나 어조 + KPI + 시나리오 + 정치 중립성 가드.
+# tier 별 audience framing — 시나리오와 무관, 매 system_prompt 합성 시 자동 첨부.
+# tier_group_kr와 짝이 되는 directive: 응답 어조·구조·기능 가시화에 영향.
+_TIER_DIRECTIVE: dict[Tier, str] = {
+    "staff":
+        "[Audience: 미디어/신문사 내부용] "
+        "당신의 응답은 신문사 내부 분석 도구입니다. 단정·평가는 회피하되 "
+        "내부 후속 취재·검증을 위한 hint·data lineage·counter-evidence를 적극 제시하세요. "
+        "외부 노출 대상이 아니므로 expert-level 약어·통계 용어를 그대로 사용 가능합니다.",
+    "b2c_free":
+        "[Audience: 구독자용 (무료) - 일반 독자] "
+        "당신의 응답은 정치 입문자도 이해할 수 있어야 합니다. "
+        "전문 용어 첫 등장 시 한 줄 설명, '내 지역구/관심사' 진입 권유, "
+        "추가 정보가 premium에 있을 경우 '유료 구독자에서 더 자세히 볼 수 있어요' 안내. "
+        "광고가 화면 우측에 표시될 수 있다는 점은 첫 화면에서만 한 번 언급.",
+    "b2c_paid":
+        "[Audience: 유료 구독자용 - 심층 분석] "
+        "당신의 응답은 깊이 있는 분석을 기대하는 유료 독자용입니다. "
+        "응답 분량 제한 없음 — 시계열·교차 분석·counter-evidence를 충분히 풀어 제시. "
+        "응답 끝에 'PDF 리포트로 받기' / '의원 비교 도구로 보기' / '알림 받기' premium 진입점 1-2개. "
+        "광고는 노출되지 않으므로 콘텐츠 흐름에 광고 안내를 끼워넣지 마세요.",
+    "b2b":
+        "[Audience: B2B 정책 인텔리전스 - 기업 정책 담당자] "
+        "당신의 응답은 공식 정책 분석 보고서 형식입니다. JSON 추출 가능한 구조 "
+        "(headline / summary / impact_score / confidence / sources)를 우선하세요. "
+        "정책 변화·규제 영향·법안 통과 가능성을 산업 관점에서 분석. "
+        "끝에 관련 KOSIS 통계 또는 정부 백서 후보 링크 제시.",
+}
 
-    NEUTRALITY_GUARD_SUFFIX는 ADR-0004 Layer 2에 의해 모든 페르소나·시나리오에
-    자동 첨부됩니다. ad_sales 페르소나도 예외 없음 - 광고 매칭 판단에도 같은 가드 적용.
+
+def tier_directive(tier: Tier) -> str:
+    """Tier 별 audience framing (응답 어조·구조 가이드)."""
+    return _TIER_DIRECTIVE.get(tier, _TIER_DIRECTIVE["staff"])
+
+
+def response_header_directive(persona_id: str) -> str:
+    """응답 시작 시 자동 첨부할 Markdown 헤더 directive.
+
+    LLM(또는 mock)이 일관된 헤더로 응답을 시작 → 사용자는 한 화면에서
+    여러 페르소나 응답을 비교할 때 즉시 어떤 청중용인지 식별 가능.
+    """
+    p = PERSONA_REGISTRY.get(persona_id) if persona_id in PERSONA_REGISTRY else PERSONA_REGISTRY["editorial"]
+    tg = TIER_GROUP_KR.get(p["tier"], p["tier"])
+    return (
+        f"응답 시작 시 다음 Markdown 헤더를 반드시 한 줄로 포함하세요 (그 후 본문):\n"
+        f"  **[{tg} — {p['name_kr']}]**\n"
+        f"이 헤더는 사용자가 다른 페르소나 응답과 비교할 때의 식별자입니다."
+    )
+
+
+def system_prompt(persona_id: Optional[str], scenario_code: str) -> str:
+    """Compose full system prompt: 페르소나 어조 + tier audience + KPI + 시나리오 + 정치 중립성 가드.
+
+    레이어 순서 (LLM에 전달되는 순서):
+    1. base — 시스템 정체성 + 페르소나 이름·tier·어조 (`_detect_persona_id`가 의존하는 '사용자는 {name_kr}' 패턴 유지)
+    2. tier_directive — 청중 framing (staff/b2c_free/b2c_paid/b2b 별 응답 구조)
+    3. response_header_directive — `**[tier_group_kr — name_kr]**` Markdown 헤더 강제
+    4. persona system_prompt_suffix — 페르소나별 어조·관심사 (PERSONA_REGISTRY)
+    5. NEUTRALITY_GUARD_SUFFIX — ADR-0004 Layer 2 정치 중립성 가드
+
+    NEUTRALITY_GUARD_SUFFIX는 모든 페르소나·시나리오에 자동 첨부됩니다.
+    ad_sales 페르소나도 예외 없음 - 광고 매칭 판단에도 같은 가드 적용.
     """
     p = get(persona_id)
+    pid = p["persona_id"]
+    tg = TIER_GROUP_KR.get(p["tier"], p["tier"])
     base = (
         f"당신은 한국 언론사 데이터 분석 시스템입니다. "
-        f'사용자는 {p["name_kr"]} ({p["tier"]} tier)이며, 어조는 다음과 같습니다: {p["tone"]}. '
+        f'사용자는 {p["name_kr"]} ({tg}, {p["tier"]} tier)이며, '
+        f'어조는 다음과 같습니다: {p["tone"]}. '
         f"현재 시나리오 코드는 {scenario_code}이며 KPI 우선순위는 "
         f'{", ".join(p["kpi_focus"])} 입니다. '
         f"데이터 인사이트를 제시할 때 출처(real/synthetic/external)를 항상 명시하세요."
     )
-    return f"{base}\n\n{p['system_prompt_suffix']}\n\n{NEUTRALITY_GUARD_SUFFIX}"
+    return (
+        f"{base}\n\n"
+        f"{tier_directive(p['tier'])}\n\n"
+        f"{response_header_directive(pid)}\n\n"
+        f"{p['system_prompt_suffix']}\n\n"
+        f"{NEUTRALITY_GUARD_SUFFIX}"
+    )
 
 
 def ad_policy_for(persona_id: Optional[str]) -> AdPolicy:

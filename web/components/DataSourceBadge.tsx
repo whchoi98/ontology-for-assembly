@@ -22,7 +22,7 @@ export function DataSourceBadge({
 }) {
   const config = CONFIG[source as Source] ?? {
     label: source,
-    bg: 'bg-gray-500',
+    bg: 'bg-slate-500',
     fg: 'text-white',
   };
   const sizeCls = size === 'xs' ? 'text-[10px] px-1.5 py-0.5' : 'text-xs px-2 py-1';

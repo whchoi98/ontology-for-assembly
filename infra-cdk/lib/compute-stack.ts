@@ -6,6 +6,7 @@
  */
 import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import * as iam from 'aws-cdk-lib/aws-iam';
@@ -14,6 +15,15 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
+
+
+// ─── 사전 빌드·푸시된 ECR 이미지 참조 ───────────────────────────────────
+// 빌드: `docker buildx build --platform linux/arm64 -f api/Dockerfile -t <ecr>:<sha> --push .`
+// SHA 갱신: 새 이미지 푸시 시 IMAGE_TAG 변경 + cdk deploy. `:latest`도 동시 push되므로 fallback.
+const API_REPO_NAME = 'ontology-assembly-dev-api';
+const WEB_REPO_NAME = 'ontology-assembly-dev-web';
+// 환경 변수로 SHA 주입 가능 (CI 자동 배포). 미설정 시 :latest fallback.
+const IMAGE_TAG = process.env.ASSEMBLY_IMAGE_TAG ?? 'latest';
 
 export interface ComputeStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
@@ -55,12 +65,15 @@ export class ComputeStack extends cdk.Stack {
       containerInsights: true,
     });
 
-    // ─── ALB ───────────────────────────────────────────────────────────────
+    // ─── ALB (Private) ─────────────────────────────────────────────────────
+    // 2024-11 GA CloudFront VPC Origin 사용 - ALB는 internal(private)로 유지.
+    // CF가 PrivateLink로 직접 ALB ENI 접근. Public exposure 0.
+    // 보안: SG ingress는 VPC CIDR로 좁힘 (network-stack.ts AlbSg).
     this.alb = new elbv2.ApplicationLoadBalancer(this, 'Alb', {
       vpc,
       internetFacing: false,
+      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       securityGroup: albSg as ec2.SecurityGroup,
-      loadBalancerName: 'assembly-dev-alb',
     });
     const listener = this.alb.addListener('Listener', {
       port: 80,
@@ -103,23 +116,41 @@ export class ComputeStack extends cdk.Stack {
       },
       taskRole: apiTaskRole,
     });
+    // ECR 리포 reference - lookup으로 이미지 권한 자동 grant.
+    const apiRepo = ecr.Repository.fromRepositoryName(this, 'ApiRepo', API_REPO_NAME);
+
     apiTaskDef.addContainer('api', {
-      // 첫 deploy는 placeholder image (ECR push 후 force-new-deployment)
-      image: ecs.ContainerImage.fromRegistry('public.ecr.aws/docker/library/nginx:alpine'),
+      image: ecs.ContainerImage.fromEcrRepository(apiRepo, IMAGE_TAG),
       memoryLimitMiB: 1024,
       portMappings: [{ containerPort: 8080 }],
       environment: {
         AWS_REGION: this.region,
         ASSEMBLY_ENV: 'dev',
+        // Demo 안전 모드 - boto3·외부 API 호출은 mock fixture. 라이브 시연 fail-safe.
+        DEMO_PUBLIC_MODE: 'true',
+        REQUIRE_ORIGIN_AUTH: 'false',
         NEPTUNE_ENDPOINT: neptuneEndpoint,
         OPENSEARCH_ENDPOINT: openSearchEndpoint,
+        OPENSEARCH_INDEX: 'assembly-dev-kb-index',
         BEDROCK_CHAT_MODEL_ID: 'global.anthropic.claude-sonnet-4-6',
         BEDROCK_EMBED_MODEL_ID: 'global.cohere.embed-v4:0',
+        BEDROCK_RERANKER_INFERENCE_PROFILE_ARN: 'arn:aws:bedrock:ap-northeast-2::reranker',
+        BEDROCK_KB_ID: 'kb-not-configured',
         BEDROCK_GUARDRAIL_ID: bedrockGuardrailId,
         AGENTCORE_MEMORY_ID: agentCoreMemoryId,
         RAW_DOCS_BUCKET: rawDocsBucket.bucketName,
         UPLOADS_BUCKET: uploadsBucket.bucketName,
         SYNTHETIC_DATA_BUCKET: syntheticDataBucket.bucketName,
+        // 외부 API key - DEMO_PUBLIC_MODE=true에선 미사용, 실 호출 시만 boto3로 fetch.
+        ASSEMBLY_OPENAPI_KEY: 'demo-mode-via-secrets-manager',
+        NAVER_NEWS_API_CLIENT_ID: 'demo-mode',
+        NAVER_NEWS_API_CLIENT_SECRET: 'demo-mode',
+        // Cognito - DEMO_PUBLIC_MODE에서 우회됨
+        COGNITO_USER_POOL_ID: 'demo-mode',
+        COGNITO_GUEST_IDENTITY_POOL_ID: 'demo-mode',
+        COGNITO_APP_CLIENT_ID: 'demo-mode',
+        ORIGIN_AUTH_SECRET_ARN: 'demo-mode',
+        PUBLIC_DOMAIN: 'demo.cloudfront.net',
       },
       logging: ecs.LogDriver.awsLogs({
         streamPrefix: 'assembly-api',
@@ -156,10 +187,15 @@ export class ComputeStack extends cdk.Stack {
         operatingSystemFamily: ecs.OperatingSystemFamily.LINUX,
       },
     });
+    const webRepo = ecr.Repository.fromRepositoryName(this, 'WebRepo', WEB_REPO_NAME);
+
     webTaskDef.addContainer('web', {
-      image: ecs.ContainerImage.fromRegistry('public.ecr.aws/docker/library/nginx:alpine'),
+      image: ecs.ContainerImage.fromEcrRepository(webRepo, IMAGE_TAG),
       memoryLimitMiB: 512,
       portMappings: [{ containerPort: 3000 }],
+      environment: {
+        NEXT_PUBLIC_API_BASE_URL: '',  // 빈 값 = same origin (ALB가 라우팅)
+      },
       logging: ecs.LogDriver.awsLogs({
         streamPrefix: 'assembly-web',
         logRetention: logs.RetentionDays.TWO_WEEKS,
@@ -179,7 +215,9 @@ export class ComputeStack extends cdk.Stack {
       port: 3000,
       protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [webService],
-      healthCheck: { path: '/healthz', healthyHttpCodes: '200,307' },
+      // Next.js standalone build에는 /healthz 라우트 없음 - "/"는 항상 200 또는 307(redirect).
+      // matcher를 2xx-3xx 범위로 두면 모든 정상 응답 허용.
+      healthCheck: { path: '/', healthyHttpCodes: '200-399' },
       conditions: [elbv2.ListenerCondition.pathPatterns(['/*'])],
       priority: 100, // api priority 10이 우선, 나머지 web
     });

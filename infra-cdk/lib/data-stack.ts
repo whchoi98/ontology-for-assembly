@@ -93,11 +93,80 @@ export class DataStack extends cdk.Stack {
     this.neptuneEndpoint = neptuneCluster.attrEndpoint;
 
     // ─── OpenSearch Serverless ─────────────────────────────────────────────
+    // Collection 생성 전 필수: encryption + network + data access security policy.
+    // 순서 - encryption policy → network policy → collection → data access policy.
+    const COLLECTION_NAME = 'assembly-dev-collection';
+
+    const osEncryptionPolicy = new opensearchserverless.CfnSecurityPolicy(this, 'OsEncryptionPolicy', {
+      name: 'assembly-dev-encrypt',
+      type: 'encryption',
+      description: 'AWS-managed KMS for assembly-dev-collection',
+      policy: JSON.stringify({
+        Rules: [{ ResourceType: 'collection', Resource: [`collection/${COLLECTION_NAME}`] }],
+        AWSOwnedKey: true,
+      }),
+    });
+
+    const osNetworkPolicy = new opensearchserverless.CfnSecurityPolicy(this, 'OsNetworkPolicy', {
+      name: 'assembly-dev-network',
+      type: 'network',
+      description: 'Public dashboard + collection endpoint (dev). Production: VPC endpoint only.',
+      policy: JSON.stringify([
+        {
+          Rules: [
+            { ResourceType: 'collection', Resource: [`collection/${COLLECTION_NAME}`] },
+            { ResourceType: 'dashboard', Resource: [`collection/${COLLECTION_NAME}`] },
+          ],
+          AllowFromPublic: true,
+        },
+      ]),
+    });
+
     const osCollection = new opensearchserverless.CfnCollection(this, 'OsCollection', {
-      name: 'assembly-dev-collection',
+      name: COLLECTION_NAME,
       type: 'VECTORSEARCH',
       description: 'Assembly hybrid BM25(Nori) + KNN(Cohere embed-v4)',
     });
+    osCollection.addDependency(osEncryptionPolicy);
+    osCollection.addDependency(osNetworkPolicy);
+
+    // Data access policy.
+    //
+    // ⚠️ 보안 trade-off (dev only): Principal이 account root.
+    // - OpenSearch Serverless는 Principal 와일드카드를 미지원 ("Invalid request" 에러).
+    //   참조: AWS Docs https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-data-access.html
+    // - 따라서 narrow ARN 패턴(`role/prefix-*`) 사용 불가.
+    // - Production 전환 시: compute stack의 task role ARN을 명시적으로 export →
+    //   data stack이 cross-stack reference로 정확한 ARN 사용. cyclic dependency 회피
+    //   위해 compute role을 별도 IamStack으로 분리하는 옵션 권장.
+    //
+    // Phase 5 polish 추적: docs/decisions/0007-opensearch-iam-tightening.md (작성 예정).
+    new opensearchserverless.CfnAccessPolicy(this, 'OsDataAccessPolicy', {
+      name: 'assembly-dev-access',
+      type: 'data',
+      description: 'Dev only: account root - Production은 명시적 task role ARN 사용 권장',
+      policy: JSON.stringify([
+        {
+          Rules: [
+            {
+              ResourceType: 'collection',
+              Resource: [`collection/${COLLECTION_NAME}`],
+              Permission: ['aoss:DescribeCollectionItems', 'aoss:CreateCollectionItems', 'aoss:UpdateCollectionItems'],
+            },
+            {
+              ResourceType: 'index',
+              Resource: [`index/${COLLECTION_NAME}/*`],
+              Permission: [
+                'aoss:CreateIndex', 'aoss:DescribeIndex', 'aoss:ReadDocument',
+                'aoss:WriteDocument', 'aoss:UpdateIndex', 'aoss:DeleteIndex',
+              ],
+            },
+          ],
+          Principal: [`arn:aws:iam::${this.account}:root`],
+        },
+      ]),
+    });
+
     this.openSearchEndpoint = osCollection.attrCollectionEndpoint;
 
     // ─── DynamoDB 4개 ──────────────────────────────────────────────────────

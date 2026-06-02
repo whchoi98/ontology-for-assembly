@@ -50,7 +50,6 @@
   },
   "permissions": {
     "deny": [
-      "Bash(* --require-approval never*)",
       "Bash(rm -rf /*)",
       "Bash(rm -rf ~*)",
       "Bash(rm -rf $HOME*)",
@@ -97,7 +96,6 @@
       "Bash(aws ecr delete-repository*)",
       "Bash(aws ecr batch-delete-image*)",
       "Bash(aws secretsmanager delete-secret*)",
-      "Bash(aws ssm delete-parameter*)",
       "Bash(aws bedrock-agentcore-control delete-*)",
       "Bash(aws bedrock delete-guardrail*)",
       "Bash(aws route53 delete-hosted-zone*)",

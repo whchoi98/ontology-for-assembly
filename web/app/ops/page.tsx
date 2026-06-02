@@ -56,9 +56,9 @@ export default function OpsPage() {
     <div>
       <header className="mb-6 flex items-center justify-between">
         <div>
-          <div className="text-sm text-gray-400 font-mono mb-1">/ops</div>
+          <div className="text-sm text-slate-500 font-mono mb-1">/ops</div>
           <h1 className="text-2xl font-bold">운영 콘솔</h1>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-sm text-slate-300 mt-1">
             5 패널 - 데이터 적재 · 가드레일 · 메모리 · 평가 · LLM trace.
           </p>
         </div>
@@ -72,7 +72,7 @@ export default function OpsPage() {
       </header>
 
       {error && (
-        <div className="border border-red-200 bg-red-50 text-red-800 rounded-md p-3 text-sm mb-4">
+        <div className="border border-red-200 bg-red-500/15 text-red-300 rounded-md p-3 text-sm mb-4">
           {error}
         </div>
       )}
@@ -99,10 +99,10 @@ function Panel({ title, wide, children }: { title: string; wide?: boolean; child
   return (
     <section
       className={
-        'border border-gray-200 rounded-lg bg-white p-4 ' + (wide ? 'lg:col-span-2' : '')
+        'border border-slate-800 rounded-lg bg-slate-900/40 p-4 ' + (wide ? 'lg:col-span-2' : '')
       }
     >
-      <h2 className="font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-100">{title}</h2>
+      <h2 className="font-semibold text-white mb-3 pb-2 border-b border-slate-800">{title}</h2>
       <div className="text-sm">{children}</div>
     </section>
   );
@@ -119,15 +119,15 @@ function IngestView({ data }: { data: IngestPanel }) {
         <Stat label="총 노드" value={totalNodes.toLocaleString()} />
       </div>
       {Object.keys(data.source_distribution).length > 0 && (
-        <div className="text-xs text-gray-600 pt-2">
+        <div className="text-xs text-slate-300 pt-2">
           출처 분포:{' '}
           {Object.entries(data.source_distribution)
             .map(([s, n]) => `${s}=${n}`)
             .join(' · ')}
         </div>
       )}
-      <details className="text-xs text-gray-500">
-        <summary className="cursor-pointer hover:text-gray-700">파일별 카운트</summary>
+      <details className="text-xs text-slate-400">
+        <summary className="cursor-pointer hover:text-slate-200">파일별 카운트</summary>
         <ul className="mt-1 space-y-0.5">
           {Object.entries(data.file_counts).map(([f, n]) => (
             <li key={f} className="font-mono">
@@ -136,7 +136,7 @@ function IngestView({ data }: { data: IngestPanel }) {
           ))}
         </ul>
       </details>
-      <p className="text-xs text-gray-400 italic">{data.note}</p>
+      <p className="text-xs text-slate-500 italic">{data.note}</p>
     </div>
   );
 }
@@ -156,10 +156,10 @@ function GuardrailView({ data }: { data: GuardrailPanel }) {
         <span className={lowBalance ? 'text-warn font-bold' : 'text-badge-real font-bold'}>
           {data.avg_balance_score.toFixed(3)}
         </span>
-        <span className="text-xs text-gray-500 ml-2">(임계 {data.threshold})</span>
+        <span className="text-xs text-slate-400 ml-2">(임계 {data.threshold})</span>
       </div>
       {Object.keys(data.blocked_by_topic).length > 0 && (
-        <div className="text-xs text-gray-600">
+        <div className="text-xs text-slate-300">
           차단 토픽:{' '}
           {Object.entries(data.blocked_by_topic)
             .map(([t, n]) => `${t}=${n}`)
@@ -175,13 +175,13 @@ function MemoryView({ data }: { data: MemoryPanel }) {
   return (
     <div className="space-y-2">
       <Stat label="활성 세션 (추정)" value={String(data.active_sessions_estimate)} />
-      <div className="text-xs text-gray-600">
+      <div className="text-xs text-slate-300">
         Namespaces: {data.namespaces.join(' / ')}
       </div>
-      <div className="text-xs text-gray-500 font-mono break-all">
+      <div className="text-xs text-slate-400 font-mono break-all">
         store: {data.store_id ?? '(미설정)'}
       </div>
-      <p className="text-xs text-gray-400 italic">{data.note}</p>
+      <p className="text-xs text-slate-500 italic">{data.note}</p>
     </div>
   );
 }
@@ -204,7 +204,7 @@ function QualityView({ data }: { data: QualityPanel }) {
           평균 balance: <strong>{data.avg_balance_score.toFixed(3)}</strong>
         </div>
       )}
-      <p className="text-xs text-gray-400 italic">{data.note}</p>
+      <p className="text-xs text-slate-500 italic">{data.note}</p>
     </div>
   );
 }
@@ -213,7 +213,7 @@ function QualityView({ data }: { data: QualityPanel }) {
 function TraceView({ data }: { data: TracePanel }) {
   if (data.entries.length === 0) {
     return (
-      <p className="text-gray-500">
+      <p className="text-slate-400">
         링버퍼 비어있음 (size {data.buffer_size}). LLM 호출 시 자동 기록.
       </p>
     );
@@ -221,7 +221,7 @@ function TraceView({ data }: { data: TracePanel }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-xs">
-        <thead className="text-gray-500 border-b border-gray-200">
+        <thead className="text-slate-400 border-b border-slate-800">
           <tr>
             <th className="text-left p-1">시각</th>
             <th className="text-left p-1">persona</th>
@@ -233,8 +233,8 @@ function TraceView({ data }: { data: TracePanel }) {
         </thead>
         <tbody>
           {data.entries.map((e, idx) => (
-            <tr key={idx} className="border-b border-gray-100">
-              <td className="p-1 text-gray-500">{e.ts_iso.slice(11, 19)}</td>
+            <tr key={idx} className="border-b border-slate-800">
+              <td className="p-1 text-slate-400">{e.ts_iso.slice(11, 19)}</td>
               <td className="p-1">{e.persona_id}</td>
               <td className="p-1 font-mono">{e.scenario_code}</td>
               <td className="p-1 text-right font-mono">{e.political_balance_score.toFixed(2)}</td>
@@ -247,7 +247,7 @@ function TraceView({ data }: { data: TracePanel }) {
                   '·'
                 )}
               </td>
-              <td className="p-1 text-right text-gray-500 font-mono">{e.duration_ms}</td>
+              <td className="p-1 text-right text-slate-400 font-mono">{e.duration_ms}</td>
             </tr>
           ))}
         </tbody>
@@ -272,11 +272,11 @@ function Stat({
       : tone === 'warn'
       ? 'text-warn'
       : tone === 'muted'
-      ? 'text-gray-400'
-      : 'text-gray-900';
+      ? 'text-slate-500'
+      : 'text-white';
   return (
-    <div className="border border-gray-100 bg-gray-50 rounded-md px-2 py-1.5">
-      <div className="text-xs text-gray-500">{label}</div>
+    <div className="border border-slate-800 bg-slate-800/40 rounded-md px-2 py-1.5">
+      <div className="text-xs text-slate-400">{label}</div>
       <div className={`text-lg font-bold ${toneCls}`}>{value}</div>
     </div>
   );

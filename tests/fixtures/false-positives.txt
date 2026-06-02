@@ -1,0 +1,27 @@
+# False positive samples — 정상 코드 패턴, scrub-secrets.sh가 *통과시켜야 함*.
+# 일반 변수명·문자열·UUID 등이 우연히 credential처럼 보이지 않는지 검증.
+
+# 일반 변수
+USER_NAME = "alice"
+API_BASE_URL = "https://api.example.com"
+session_id = "abc-123-def-456"
+
+# UUID (credential 아님)
+uuid = "550e8400-e29b-41d4-a716-446655440000"
+
+# 일반 hash (SHA-256 hex)
+file_hash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+# JWT의 *header*만 (base64 결과지만 실 JWT 아님)
+header_only = "eyJhbGciOiJIUzI1NiJ9"
+
+# Comment 안의 *언급*은 OK
+# 예: AKIA prefix는 AWS access key
+# 예: sk- prefix는 OpenAI
+
+# 환경 변수 이름 자체는 OK
+ENV_NAME_AWS_ACCESS_KEY_ID = "${AWS_ACCESS_KEY_ID}"   # variable interpolation
+ENV_NAME_OPENAI_API_KEY = "${OPENAI_API_KEY}"
+
+# Korean 일반 텍스트
+description = "비밀번호 정책은 강력해야 합니다"

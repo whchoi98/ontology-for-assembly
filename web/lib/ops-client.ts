@@ -4,7 +4,7 @@
  * 5 패널 데이터 fetch + 타입드 응답. server / client 양용.
  */
 
-const PUBLIC_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8080';
+const PUBLIC_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 const SERVER_BASE = process.env.INTERNAL_API_BASE_URL ?? PUBLIC_BASE;
 
 function baseUrl(): string {

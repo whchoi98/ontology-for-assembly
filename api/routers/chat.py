@@ -115,39 +115,70 @@ def chat_stream(
 
     async def event_gen() -> AsyncIterator[dict]:
         import time
+        import traceback
         t0 = time.monotonic()
+        # mode 분기: compare(default 3-stage) | chatbot | agent | agentic (single stage)
+        run_chatbot = req.mode in ("chatbot", "compare")
+        run_agent   = req.mode in ("agent", "compare")
+        run_agentic = req.mode in ("agentic", "compare")
+        try:
+            # ─── Stage 1: Chatbot (RAG) ────────────────────────────────────
+            if run_chatbot:
+                yield _sse("phase", {"stage": "chatbot", "status": "starting",
+                                     "approach": "RAG"})
+                await asyncio.sleep(0.02)
+                r1 = three_stage.stage1_chatbot(req.query, persona_id=pid)
+                async for chunk in _stream_text(r1.text):
+                    yield _sse("delta", {"stage": "chatbot", "text": chunk})
+                yield _sse("result", {"stage": "chatbot", **r1.to_dict()})
 
-        # ─── Stage 1: Chatbot (RAG) ────────────────────────────────────────
-        yield _sse("phase", {"stage": "chatbot", "status": "starting",
-                             "approach": "RAG"})
-        await asyncio.sleep(0.05)
-        r1 = three_stage.stage1_chatbot(req.query, persona_id=pid)
-        yield _sse("result", {"stage": "chatbot", **r1.to_dict()})
+            # ─── Stage 2: Agent (Tool Use) ─────────────────────────────────
+            if run_agent:
+                yield _sse("phase", {"stage": "agent", "status": "starting",
+                                     "approach": "Tool Use (사전 정의)"})
+                for tool in ("search_bills", "get_proposers", "cosponsor_network", "analyze_votes"):
+                    yield _sse("log", {"stage": "agent", "tool_called": tool})
+                    await asyncio.sleep(0.04)
+                r2 = three_stage.stage2_agent(req.query, persona_id=pid)
+                async for chunk in _stream_text(r2.text):
+                    yield _sse("delta", {"stage": "agent", "text": chunk})
+                yield _sse("result", {"stage": "agent", **r2.to_dict()})
 
-        # ─── Stage 2: Agent (Tool Use) ─────────────────────────────────────
-        yield _sse("phase", {"stage": "agent", "status": "starting",
-                             "approach": "Tool Use (사전 정의)"})
-        # 도구 호출을 순차적으로 log 이벤트로 표시 (시연 효과)
-        for tool in ("search_bills", "get_proposers", "cosponsor_network", "analyze_votes"):
-            yield _sse("log", {"stage": "agent", "tool_called": tool})
-            await asyncio.sleep(0.06)
-        r2 = three_stage.stage2_agent(req.query, persona_id=pid)
-        yield _sse("result", {"stage": "agent", **r2.to_dict()})
+            # ─── Stage 3: Agentic (Multi-Agent) ────────────────────────────
+            if run_agentic:
+                yield _sse("phase", {"stage": "agentic", "status": "starting",
+                                     "approach": "Multi-Agent (Planner/Graph/Analyst/Editor)"})
+                for agent in ("planner", "graph", "analyst", "editor"):
+                    yield _sse("log", {"stage": "agentic", "agent_invoked": agent})
+                    await asyncio.sleep(0.06)
+                r3 = three_stage.stage3_agentic(req.query, persona_id=pid)
+                async for chunk in _stream_text(r3.text):
+                    yield _sse("delta", {"stage": "agentic", "text": chunk})
+                yield _sse("result", {"stage": "agentic", **r3.to_dict()})
 
-        # ─── Stage 3: Agentic (Multi-Agent) ────────────────────────────────
-        yield _sse("phase", {"stage": "agentic", "status": "starting",
-                             "approach": "Multi-Agent (Planner/Graph/Analyst/Editor)"})
-        for agent in ("planner", "graph", "analyst", "editor"):
-            yield _sse("log", {"stage": "agentic", "agent_invoked": agent})
-            await asyncio.sleep(0.08)
-        r3 = three_stage.stage3_agentic(req.query, persona_id=pid)
-        yield _sse("result", {"stage": "agentic", **r3.to_dict()})
-
-        # ─── Done ─────────────────────────────────────────────────────────
-        yield _sse("done", {"total_ms": int((time.monotonic() - t0) * 1000),
-                            "persona_id": pid, "query": req.query})
+            yield _sse("done", {"total_ms": int((time.monotonic() - t0) * 1000),
+                                "persona_id": pid, "query": req.query})
+        except Exception as exc:  # final emit try/except: mid-stream 예외 → connection close 모호성 제거
+            tb = traceback.format_exc()
+            # CloudWatch 로그 + 클라이언트 final 동시 보장
+            import logging
+            logging.exception("chat_stream failed: %s", exc)
+            yield _sse("error", {"message": str(exc), "trace": tb[-2000:]})
+            yield _sse("done", {"total_ms": int((time.monotonic() - t0) * 1000),
+                                "persona_id": pid, "query": req.query, "aborted": True})
 
     return EventSourceResponse(event_gen())
+
+
+async def _stream_text(full_text: str, chunk: int = 16, sleep: float = 0.015) -> AsyncIterator[str]:
+    """텍스트를 토큰-급 chunk로 흘려보내 CloudFront keep-alive 카운터 reset.
+
+    실제 Bedrock converse_stream contentBlockDelta는 services.bedrock.invoke_stream에 구현.
+    /stream 라우터에서는 three_stage가 동기적으로 전체 텍스트를 반환하므로 chunk 시뮬레이션.
+    """
+    for i in range(0, len(full_text), chunk):
+        yield full_text[i:i + chunk]
+        await asyncio.sleep(sleep)
 
 
 def _sse(event: str, data: dict) -> dict:

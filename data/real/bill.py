@@ -72,16 +72,32 @@ def _parse_date(value: str) -> date:
 
 
 def _row_to_bill(row: dict) -> Bill:
-    """국회 API row → Pydantic Bill."""
+    """국회 API row → Pydantic Bill.
+
+    실제 OpenAPI response (nzmimeepazxkubdpn) field 매핑:
+    - BILL_ID, BILL_NO, BILL_NAME (BILL_NM 아님!), PROPOSE_DT, PROC_RESULT, COMMITTEE
+    - DETAIL_LINK, PROPOSER ("xxx의원 등 N인"), RST_MONA_CD, RST_PROPOSER
+    - PUBL_MONA_CD (콤마 구분), PUBL_PROPOSER (콤마 구분)
+    """
+    publ_mona = str(row.get("PUBL_MONA_CD") or "").strip()
+    publ_proposer = str(row.get("PUBL_PROPOSER") or "").strip()
+    co_ids = [s.strip() for s in publ_mona.split(",") if s.strip()] if publ_mona else []
+    co_names = [s.strip() for s in publ_proposer.split(",") if s.strip()] if publ_proposer else []
+
     return Bill(
         bill_id=str(row.get("BILL_ID", "")).strip(),
-        title=str(row.get("BILL_NM", "")).strip(),
+        bill_no=str(row.get("BILL_NO") or "").strip() or None,
+        title=str(row.get("BILL_NAME", "")).strip(),  # ← BILL_NM 아님!
         proposed_date=_parse_date(str(row.get("PROPOSE_DT", ""))),
-        status=_normalize_status(str(row.get("PROC_RESULT", ""))),
-        category=str(row.get("COMMITTEE", "") or "").strip() or None,
-        proposer_id=None,  # PROPOSER는 이름이라 별도 lookup 필요 - member 어댑터 연동
-        summary_text=str(row.get("SUMMARY", "") or "").strip() or None,
-        full_text_url=str(row.get("DETAIL_LINK", "") or "").strip() or None,
+        status=_normalize_status(str(row.get("PROC_RESULT") or "")),
+        category=str(row.get("COMMITTEE") or "").strip() or None,
+        proposer_id=str(row.get("RST_MONA_CD") or "").strip() or None,  # 대표발의자 MONA_CD
+        lead_proposer_name=str(row.get("RST_PROPOSER") or "").strip() or None,
+        co_proposer_ids=co_ids,
+        co_proposer_names=co_names,
+        co_proposer_count=len(co_ids),
+        summary_text=None,  # 별도 endpoint (ALLBILL · BILLINFOPPSR) 필요
+        full_text_url=str(row.get("DETAIL_LINK") or "").strip() or None,
         source="real",
     )
 

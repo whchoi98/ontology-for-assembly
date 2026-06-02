@@ -127,9 +127,15 @@ class Bill(GraphNode):
     proposed_date: date
     status: BillStatus
     category: Optional[str] = None
-    proposer_id: Optional[str] = None        # 대표발의자 assembly_id
+    proposer_id: Optional[str] = None        # 대표발의자 assembly_id (RST_MONA_CD)
     summary_text: Optional[str] = None
     full_text_url: Optional[str] = None
+    # 국회 OpenAPI 보강 필드 (Phase 4b)
+    bill_no: Optional[str] = None            # BILL_NO (의안 번호, 예: "2219026")
+    lead_proposer_name: Optional[str] = None # RST_PROPOSER (대표 발의자 이름)
+    co_proposer_ids: list[str] = Field(default_factory=list)   # PUBL_MONA_CD parse
+    co_proposer_names: list[str] = Field(default_factory=list) # PUBL_PROPOSER parse
+    co_proposer_count: int = 0
 
 
 class Law(GraphNode):
@@ -156,6 +162,15 @@ class Vote(GraphNode):
     date: date
     result: VoteResult
     attendance_count: int
+    # 국회 OpenAPI 집계 필드 (Phase 4b: nkalemivaqmoibxro)
+    bill_no: Optional[str] = None
+    bill_name: Optional[str] = None
+    bill_kind: Optional[str] = None     # "결산", "법률안", "결의안" 등
+    committee_name: Optional[str] = None
+    yes_count: int = 0
+    no_count: int = 0
+    blank_count: int = 0
+    link_url: Optional[str] = None
 
 
 # 개별 의원의 선택 (관계 속성으로 사용).

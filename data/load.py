@@ -23,6 +23,7 @@ References:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 from typing import Iterable
@@ -143,44 +144,42 @@ def emit_real_local(
 
     out_dir.mkdir(parents=True, exist_ok=True)
     counts: dict[str, int] = {}
+    failures: list[str] = []
 
-    _log(f"[bill]       fetching → {out_dir}/bills.ndjson")
-    counts["bill"] = write_ndjson(
-        fetch_bills(max_rows=max_bills), out_dir / "bills.ndjson",
-    )
+    def _safe_fetch(name: str, gen_fn, path: Path) -> int:
+        """Graceful fetch — 한 entity 실패가 전체 abort 안 되도록."""
+        _log(f"[{name}]   fetching → {path}")
+        try:
+            return write_ndjson(gen_fn(), path)
+        except Exception as e:
+            failures.append(name)
+            _log(f"[{name}]   ⚠️  실패 — skip 후 계속: {type(e).__name__}: {e}")
+            return 0
 
-    _log(f"[member]     fetching → {out_dir}/members.ndjson")
-    counts["member"] = write_ndjson(
-        fetch_members(max_rows=max_members), out_dir / "members.ndjson",
-    )
-
-    _log(f"[vote]       fetching → {out_dir}/votes.ndjson")
-    counts["vote"] = write_ndjson(
-        fetch_votes(max_rows=max_votes), out_dir / "votes.ndjson",
-    )
-
-    _log(f"[committee]  fetching → {out_dir}/committees.ndjson")
-    counts["committee"] = write_ndjson(
-        fetch_committees(max_rows=max_committees), out_dir / "committees.ndjson",
-    )
-
-    _log(f"[party]      fetching → {out_dir}/parties.ndjson")
-    counts["party"] = write_ndjson(
-        fetch_parties(max_rows=max_parties), out_dir / "parties.ndjson",
-    )
-
-    _log(f"[agency]     fetching → {out_dir}/agencies.ndjson")
-    counts["agency"] = write_ndjson(
-        fetch_agencies(max_rows=max_agencies), out_dir / "agencies.ndjson",
-    )
+    counts["bill"]      = _safe_fetch("bill",      lambda: fetch_bills(max_rows=max_bills),           out_dir / "bills.ndjson")
+    counts["member"]    = _safe_fetch("member",    lambda: fetch_members(max_rows=max_members),       out_dir / "members.ndjson")
+    counts["vote"]      = _safe_fetch("vote",      lambda: fetch_votes(max_rows=max_votes),           out_dir / "votes.ndjson")
+    counts["committee"] = _safe_fetch("committee", lambda: fetch_committees(max_rows=max_committees), out_dir / "committees.ndjson")
+    counts["party"]     = _safe_fetch("party",     lambda: fetch_parties(max_rows=max_parties),       out_dir / "parties.ndjson")
+    counts["agency"]    = _safe_fetch("agency",    lambda: fetch_agencies(max_rows=max_agencies),     out_dir / "agencies.ndjson")
 
     # Session generator는 Session·Statement 둘 다 yield → 분리 적재.
     _log(f"[session+statement] fetching → sessions.ndjson + statements.ndjson")
-    items = list(fetch_sessions_and_statements(max_sessions=max_sessions))
-    sessions_only = [i for i in items if isinstance(i, Session)]
-    statements_only = [i for i in items if isinstance(i, Statement)]
-    counts["session"] = write_ndjson(sessions_only, out_dir / "sessions.ndjson")
-    counts["statement"] = write_ndjson(statements_only, out_dir / "statements.ndjson")
+    try:
+        items = list(fetch_sessions_and_statements(max_sessions=max_sessions))
+        sessions_only = [i for i in items if isinstance(i, Session)]
+        statements_only = [i for i in items if isinstance(i, Statement)]
+        counts["session"] = write_ndjson(sessions_only, out_dir / "sessions.ndjson")
+        counts["statement"] = write_ndjson(statements_only, out_dir / "statements.ndjson")
+    except Exception as e:
+        failures.append("session+statement")
+        _log(f"[session+statement] ⚠️  실패 — skip 후 계속: {type(e).__name__}: {e}")
+        counts["session"] = 0
+        counts["statement"] = 0
+
+    if failures:
+        _log(f"\n⚠️  Partial success — 실패한 entity: {', '.join(failures)}")
+        _log(f"   (그 외 entity는 정상 적재; S3 업로드 진행)\n")
 
     return counts
 
@@ -352,12 +351,58 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="진행 메시지 출력 안 함",
     )
+
+    # ─── Phase 3: AWS 적재 ──────────────────────────────────────────
+    parser.add_argument(
+        "--neptune",
+        action="store_true",
+        help="Neptune 적재. 기본 mode=opencypher (NDJSON 직접 UNWIND MERGE).",
+    )
+    parser.add_argument(
+        "--neptune-mode",
+        choices=["opencypher", "bulk"],
+        default="opencypher",
+        help="opencypher (default, NDJSON 직접) 또는 bulk (Bulk Loader, CSV 필요).",
+    )
+    parser.add_argument(
+        "--opensearch",
+        action="store_true",
+        help="OpenSearch Serverless bulk index (article NDJSON). NORI + KNN 자동 생성.",
+    )
+    parser.add_argument(
+        "--embed-articles",
+        action="store_true",
+        help="색인된 article에 Cohere embedding 추가 (knn_vector 필드 update).",
+    )
+    parser.add_argument(
+        "--neptune-endpoint",
+        type=str,
+        default=os.environ.get("NEPTUNE_ENDPOINT", ""),
+        help="Neptune cluster endpoint (default: env NEPTUNE_ENDPOINT)",
+    )
+    parser.add_argument(
+        "--neptune-iam-role",
+        type=str,
+        default=os.environ.get("NEPTUNE_BULK_LOADER_ROLE_ARN", ""),
+        help="Neptune Bulk Loader IAM role ARN (S3 read 권한)",
+    )
+    parser.add_argument(
+        "--opensearch-endpoint",
+        type=str,
+        default=os.environ.get("OPENSEARCH_ENDPOINT", ""),
+        help="AOSS collection endpoint (default: env OPENSEARCH_ENDPOINT)",
+    )
+    parser.add_argument(
+        "--opensearch-index",
+        type=str,
+        default=os.environ.get("OPENSEARCH_INDEX", "assembly-dev-kb-index"),
+        help="OpenSearch index name (default: assembly-dev-kb-index)",
+    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     """CLI 진입점. Exit code: 0=성공, 1=오류, 2=미구현."""
-    import os
     args = _build_parser().parse_args(argv)
     verbose = not args.quiet
 
@@ -365,16 +410,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.demo:
         os.environ["DEMO_PUBLIC_MODE"] = "true"
 
-    if args.to == "s3":
-        if not args.bucket:
-            print("[load] ERROR: --to s3 requires --bucket", file=sys.stderr)
-            return 1
-        print(
-            "[load] '--to s3'는 Phase 3에서 구현됩니다. "
-            "임시로 `--to local`로 출력 후 `aws s3 sync`를 사용하세요.",
-            file=sys.stderr,
-        )
-        return 2
+    # --to s3 flag - 로컬 emit 먼저 (Phase 2) + 그 다음 S3 upload (Phase 3).
+    if args.to == "s3" and not args.bucket:
+        print("[load] ERROR: --to s3 requires --bucket", file=sys.stderr)
+        return 1
 
     counts: dict[str, int] = {}
 
@@ -415,13 +454,97 @@ def main(argv: list[str] | None = None) -> int:
         counts.update(external_counts)
 
     if verbose:
-        print("\n=== 적재 완료 ===")
+        print("\n=== NDJSON 생성 완료 ===")
         total = 0
         for entity, n in counts.items():
             print(f"  {entity:20s}: {n:>7,}")
             total += n
         print(f"  {'TOTAL':20s}: {total:>7,}")
         print(f"\n출력 위치: {args.out_dir.absolute()}")
+
+    # ─── Phase 3: AWS 적재 ──────────────────────────────────────────
+    s3_uris: dict[str, str] = {}
+    if args.to == "s3" or args.neptune or args.opensearch:
+        from data.load_aws import emit_to_s3
+        if not args.bucket:
+            print("[load] ERROR: --neptune/--opensearch require --bucket for S3 staging", file=sys.stderr)
+            return 1
+        if verbose:
+            print(f"\n=== S3 업로드 → s3://{args.bucket}/ndjson/ ===")
+        s3_uris = emit_to_s3(args.out_dir, bucket=args.bucket, verbose=verbose)
+
+    if args.neptune:
+        from data.load_aws import (
+            load_neptune_bulk, load_neptune_opencypher, NeptuneLoaderError,
+        )
+        if not args.neptune_endpoint:
+            print("[load] ERROR: --neptune requires --neptune-endpoint (or env NEPTUNE_ENDPOINT)", file=sys.stderr)
+            return 1
+        if verbose:
+            print(f"\n=== Neptune 적재 (mode={args.neptune_mode}) ===")
+        try:
+            if args.neptune_mode == "opencypher":
+                counts = load_neptune_opencypher(
+                    neptune_endpoint=args.neptune_endpoint,
+                    ndjson_dir=args.out_dir,
+                    verbose=verbose,
+                )
+                if verbose:
+                    print(f"[neptune] merged: {counts}")
+            else:
+                if not args.neptune_iam_role:
+                    print("[load] ERROR: --neptune-mode bulk requires --neptune-iam-role", file=sys.stderr)
+                    return 1
+                result = load_neptune_bulk(
+                    neptune_endpoint=args.neptune_endpoint,
+                    s3_uri=f"s3://{args.bucket}/ndjson/",
+                    iam_role_arn=args.neptune_iam_role,
+                    verbose=verbose,
+                )
+                if verbose:
+                    print(f"[neptune] result: {result['status']} (loadId={result['loadId']})")
+        except NeptuneLoaderError as e:
+            print(f"[neptune] FAILED: {e}", file=sys.stderr)
+            return 1
+
+    if args.opensearch:
+        from data.load_aws import load_opensearch_bulk, OpenSearchLoaderError
+        if not args.opensearch_endpoint:
+            print("[load] ERROR: --opensearch requires --opensearch-endpoint (or env OPENSEARCH_ENDPOINT)", file=sys.stderr)
+            return 1
+        articles_ndjson = args.out_dir / "articles.ndjson"
+        if not articles_ndjson.exists():
+            print(f"[load] ERROR: --opensearch requires articles.ndjson at {articles_ndjson}", file=sys.stderr)
+            return 1
+        if verbose:
+            print(f"\n=== OpenSearch bulk index ===")
+        try:
+            result = load_opensearch_bulk(
+                endpoint=args.opensearch_endpoint,
+                index_name=args.opensearch_index,
+                ndjson_path=articles_ndjson,
+                verbose=verbose,
+            )
+            if verbose:
+                print(f"[opensearch] indexed={result['indexed']} errors={result['errors']}")
+        except OpenSearchLoaderError as e:
+            print(f"[opensearch] FAILED: {e}", file=sys.stderr)
+            return 1
+
+    if args.embed_articles:
+        from data.load_aws import enrich_articles_with_embedding
+        if not args.opensearch_endpoint:
+            print("[load] ERROR: --embed-articles requires --opensearch-endpoint", file=sys.stderr)
+            return 1
+        if verbose:
+            print(f"\n=== Bedrock embedding enrich ===")
+        result = enrich_articles_with_embedding(
+            endpoint=args.opensearch_endpoint,
+            index_name=args.opensearch_index,
+            verbose=verbose,
+        )
+        if verbose:
+            print(f"[embed] updated {result['updated']}/{result['total']}")
 
     return 0
 

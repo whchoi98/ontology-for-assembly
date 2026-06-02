@@ -118,12 +118,15 @@ export class EdgeStack extends cdk.Stack {
     usagePlan.addApiStage({ stage: b2bApi.deploymentStage });
     this.b2bApiId = b2bApi.restApiId;
 
-    // ─── CloudFront (B2C web + API) ────────────────────────────────────────
+    // ─── CloudFront (B2C web + API) - VPC Origin ──────────────────────────
+    // 2024-11 GA: CloudFront가 internal ALB에 PrivateLink로 직접 접근.
+    // Public ALB·prefix list 모두 불필요. ALB는 private subnet 안.
     this.distribution = new cloudfront.Distribution(this, 'Distribution', {
-      comment: 'Assembly B2C/staff distribution',
+      comment: 'Assembly B2C/staff distribution (VPC origin)',
       defaultBehavior: {
-        origin: new origins.LoadBalancerV2Origin(alb, {
+        origin: origins.VpcOrigin.withApplicationLoadBalancer(alb, {
           protocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY,
+          httpPort: 80,
         }),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,

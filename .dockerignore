@@ -1,0 +1,36 @@
+# 컨테이너 이미지에서 제외 - 빌드 컨텍스트 슬림
+.git
+.github
+.claude
+.harness-eval
+.pytest_cache
+__pycache__
+*.pyc
+*.pyo
+.coverage
+.venv
+.env
+.env.local
+.env.*.local
+
+# node modules (web build는 자체적으로 npm ci)
+web/node_modules
+web/.next
+web/.next/cache
+web/out
+
+# infra (이미지에 불필요)
+infra-cdk
+
+# docs / 개발 산출물
+docs
+tests
+scripts/eval_*.json
+.harness-eval
+
+# editor / OS
+.vscode
+.idea
+.DS_Store
+*.swp
+*.swo

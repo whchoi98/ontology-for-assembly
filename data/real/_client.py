@@ -102,8 +102,17 @@ class AssemblyClient:
         }
         if params:
             query.update(params)
+        # 국회 OpenAPI는 User-Agent 헤더 누락 시 400 Bad Request 반환 (2026-05 확인).
+        # 일반 브라우저 UA로 우회 - rate-limit 추적 가능하도록 식별자 포함.
+        headers = {
+            "User-Agent": (
+                "ontology-for-assembly/0.1 "
+                "(Mozilla/5.0 compatible; +https://github.com/whchoi98/ontology-for-assembly)"
+            ),
+            "Accept": "application/json",
+        }
         try:
-            response = requests.get(url, params=query, timeout=self.timeout)
+            response = requests.get(url, params=query, headers=headers, timeout=self.timeout)
             response.raise_for_status()
             payload = response.json()
         except requests.RequestException as e:
@@ -148,10 +157,23 @@ class AssemblyClient:
 # ─── 응답 파싱 ─────────────────────────────────────────────────────────────
 
 def _parse_response(payload: dict, endpoint: str) -> ApiResponse:
-    """국회 OpenAPI 응답 → ApiResponse 표준화."""
+    """국회 OpenAPI 응답 → ApiResponse 표준화.
+
+    Defensive: empty body (페이지 범위 초과·해당 데이터 없음) → 빈 ApiResponse (no raise).
+    또한 payload 전체가 RESULT만 있는 경우 (INFO-200, ERROR-300 등) → 정상 처리.
+    """
     body = payload.get(endpoint, [])
-    if not isinstance(body, list) or not body:
+    if not isinstance(body, list):
         raise AssemblyApiError(f"unexpected response shape for {endpoint}")
+    if not body:
+        # body가 비어있으면 payload top-level RESULT 시도 (INFO-200 또는 errored)
+        top_result = payload.get("RESULT") or {}
+        code = top_result.get("CODE", "INFO-200")
+        msg = top_result.get("MESSAGE", "no data")
+        # INFO-200 = "해당 데이터 없음" 정상; 그 외는 raise
+        if code not in ("", "INFO-000", "INFO-200"):
+            raise AssemblyApiError(f"{endpoint} 호출 실패: [{code}] {msg}")
+        return ApiResponse(total_count=0, result_code=code, result_message=msg, rows=[])
 
     # body[0] = head 메타데이터, body[1] = row 리스트
     head_block = next((b.get("head") for b in body if isinstance(b, dict) and "head" in b), None)

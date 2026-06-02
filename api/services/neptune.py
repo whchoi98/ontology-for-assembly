@@ -70,7 +70,9 @@ def open_cypher(
         for row in result:
             print(row["b"]["title"])
     """
-    if _demo_mode():
+    # Phase 4e: ENABLE_NEPTUNE_REAL=true이면 DEMO_PUBLIC_MODE 무관하게 real Neptune query 사용
+    real_enabled = os.environ.get("ENABLE_NEPTUNE_REAL", "false").lower() == "true"
+    if not real_enabled and _demo_mode():
         return _mock_result(query, parameters or {})
     return _real_query(query, parameters or {})
 
@@ -78,11 +80,11 @@ def open_cypher(
 # ─── Production 경로 ─────────────────────────────────────────────────────────
 
 def _real_query(query: str, parameters: dict) -> CypherResult:
-    """SigV4 signed POST to /openCypher."""
-    import requests  # lazy
-    from aws_requests_auth.aws_auth import AWSRequestsAuth  # lazy
-    from api.aws_clients import session as boto_session  # lazy
+    """boto3 neptunedata.execute_open_cypher_query (SigV4 auto by SDK).
 
+    Phase 4e: aws_requests_auth + raw HTTP는 403 Forbidden → boto3 SDK로 교체.
+    """
+    import boto3  # lazy
     endpoint = os.environ.get("NEPTUNE_ENDPOINT", "")
     port = int(os.environ.get("NEPTUNE_PORT", "8182"))
     region = os.environ.get("AWS_REGION", "ap-northeast-2")
@@ -90,32 +92,23 @@ def _real_query(query: str, parameters: dict) -> CypherResult:
     if not endpoint:
         raise CypherError("NEPTUNE_ENDPOINT not configured")
 
-    session = boto_session()
-    credentials = session.get_credentials()
-    auth = AWSRequestsAuth(
-        aws_access_key=credentials.access_key,
-        aws_secret_access_key=credentials.secret_key,
-        aws_token=credentials.token,
-        aws_host=endpoint,
-        aws_region=region,
-        aws_service="neptune-db",
+    client = boto3.client(
+        "neptunedata",
+        endpoint_url=f"https://{endpoint}:{port}",
+        region_name=region,
     )
 
-    url = f"https://{endpoint}:{port}/openCypher"
-    body = {"query": query, "parameters": json.dumps(parameters)}
-
     try:
-        response = requests.post(url, json=body, auth=auth, timeout=30)
-        response.raise_for_status()
-        payload = response.json()
-    except requests.RequestException as e:
-        raise CypherError(f"Neptune HTTP error: {e}") from e
-    except json.JSONDecodeError as e:
-        raise CypherError(f"Neptune response parse error: {e}") from e
+        response = client.execute_open_cypher_query(
+            openCypherQuery=query,
+            parameters=json.dumps(parameters, ensure_ascii=False) if parameters else "{}",
+        )
+    except Exception as e:
+        raise CypherError(f"Neptune query error: {type(e).__name__}: {e}") from e
 
     return CypherResult(
-        rows=payload.get("results", []),
-        request_id=payload.get("requestId"),
+        rows=response.get("results", []),
+        request_id=response.get("ResponseMetadata", {}).get("RequestId"),
     )
 
 

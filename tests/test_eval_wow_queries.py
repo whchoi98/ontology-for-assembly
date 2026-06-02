@@ -31,21 +31,22 @@ def test_build_cases_returns_84(eval_module):
 
 
 def test_active_cases_count(eval_module):
-    """현재 구현된 A·B·L 시나리오 = 6 페르소나 × 3 = 18 active."""
+    """Phase 4 완료 - 14/14 시나리오 모두 active = 6 페르소나 × 14 = 84 active."""
     cases = eval_module.build_cases()
     active = [c for c in cases if c.implemented]
     skipped = [c for c in cases if not c.implemented]
-    assert len(active) == 18
-    assert len(skipped) == 66
+    assert len(active) == 84
+    assert len(skipped) == 0
 
 
-def test_each_persona_has_three_active_cases(eval_module):
+def test_each_persona_has_all_14_active_cases(eval_module):
     cases = eval_module.build_cases()
+    expected = set("ABCDEFGHIJKLMN")
     for persona in eval_module.PERSONAS:
         active = [c for c in cases if c.persona == persona and c.implemented]
-        assert len(active) == 3
+        assert len(active) == 14
         scenario_set = {c.scenario for c in active}
-        assert scenario_set == {"A", "B", "L"}
+        assert scenario_set == expected
 
 
 # ─── 케이스 실행 ────────────────────────────────────────────────────────────
@@ -116,14 +117,13 @@ def test_write_latest_creates_valid_json(tmp_path, eval_module):
 # ─── 통합: in-process 전체 실행 ────────────────────────────────────────────
 
 def test_full_run_inproc_returns_zero(tmp_path, eval_module, monkeypatch):
-    """in-process TestClient로 전체 실행 - 18 active 100% PASS 기대."""
-    import os
+    """in-process TestClient로 전체 실행 - 84 active 100% PASS 기대 (Phase 4 완료)."""
     monkeypatch.setenv("DEMO_PUBLIC_MODE", "true")
     out_path = tmp_path / "latest.json"
     rc = eval_module.main(["--base-url", "inproc", "--output", str(out_path), "--quiet"])
     assert rc == 0
     summary = json.loads(out_path.read_text(encoding="utf-8"))
-    assert summary["active_cases"] == 18
-    assert summary["pass_count"] == 18
+    assert summary["active_cases"] == 84
+    assert summary["pass_count"] == 84
     assert summary["pass_rate"] == 1.0
     assert summary["avg_balance_score"] >= 0.8

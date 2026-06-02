@@ -1,0 +1,15 @@
+{
+  "_comment": "MCP (Model Context Protocol) servers for this project. Empty by default. Examples in references/mcp-json-template.md.",
+  "_examples": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "<from-secrets-manager>" }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/ec2-user/my-project/ontology-for-assembly"]
+    }
+  },
+  "mcpServers": {}
+}

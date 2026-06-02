@@ -159,7 +159,35 @@ def _mock_search(
     top_k: int,
     source_filter: Optional[list[str]],
 ) -> list[SearchHit]:
-    """결정적 mock 결과. 균형 잡힌 정당 분포 + 다양한 node_type."""
+    """결정적 mock 결과. 균형 잡힌 정당 분포 + 다양한 node_type.
+
+    Person hit은 member_directory의 실 22대 의원 (composite_score top 3) 사용.
+    """
+    # 실 의원 top 3 - 양당 균형 분포 (정치 중립성: 점수순)
+    from api.services import member_directory as md
+    top_members = md.list_top_by_metric("composite_score", top_n=3)
+    person_hits: list[SearchHit] = []
+    for i, m in enumerate(top_members):
+        person_hits.append(SearchHit(
+            id=m.assembly_id,
+            score=0.90 - i * 0.02,
+            source="real",
+            title=f"{m.name} 의원 ({m.party})",
+            snippet=(
+                f"{m.district} · {m.reelection} · {m.committee or '미배정 위원회'} · "
+                f"22대 활동 점수 {m.analytics.composite_score:.1f}/100 "
+                f"(발의 {m.analytics.bills_proposed}건, 출처: 국회 OpenAPI)"
+            ),
+            node_type="Person",
+            metadata={
+                "term": m.term,
+                "district_id": m.district,
+                "party": m.party,
+                "profile_image_url": m.profile_image_url,
+                "composite_score": m.analytics.composite_score,
+            },
+        ))
+
     # 균형: 정당 언급 없거나 양쪽 균형 (정치 중립성 가드 통과)
     base_hits = [
         SearchHit(
@@ -176,13 +204,7 @@ def _mock_search(
             node_type="Bill",
             metadata={"category": "법무", "proposed_date": "2026-04-20"},
         ),
-        SearchHit(
-            id="MONA001", score=0.88, source="real",
-            title="○○○ 의원",
-            snippet="22대, AI 관련 법안 3건 발의 (출처: 국회 OpenAPI)",
-            node_type="Person",
-            metadata={"term": 22, "district_id": "11110"},
-        ),
+        # placeholder Person hit 제거 - 실 의원 person_hits로 교체
         SearchHit(
             id="ART001", score=0.85, source="synthetic",
             title="AI 입법 동향 분석 - 1분기 리뷰",
@@ -206,11 +228,14 @@ def _mock_search(
         ),
     ]
 
+    # 실 의원 hit를 적절한 위치에 삽입 (점수순 자연 정렬)
+    all_hits = sorted(base_hits + person_hits, key=lambda h: -h.score)
+
     # source_filter 적용
     if source_filter and "*" not in source_filter:
-        base_hits = [h for h in base_hits if h.source in source_filter]
+        all_hits = [h for h in all_hits if h.source in source_filter]
 
-    return base_hits[:top_k]
+    return all_hits[:top_k]
 
 
 def _demo_mode() -> bool:

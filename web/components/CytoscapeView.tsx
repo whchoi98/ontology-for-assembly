@@ -1,26 +1,26 @@
 'use client';
 
 /**
- * CytoscapeView - 고급 1-hop subgraph 시각화 (Phase 5 Track 5-7).
+ * CytoscapeView - 다단계 홉 온톨로지 관계 그래프 + 의원 사진 노드 + 다크 톤.
  *
- * 4 패턴 모두 적용:
- * 1. 이미지 노드 — Person은 placeholder 아바타 (ADR-0004: 모든 의원 동일, 정파 중립)
- * 2. [relation="..."] 셀렉터 — 엣지 타입별 색상·두께·점선
- * 3. fcose + compound — Committee가 등장하면 자동으로 그룹 박스 (정당 그룹화는 회피)
- * 4. 1-hop 이웃 강조 — 노드 클릭 시 이웃 외 노드 dim, 배경 클릭 reset
+ * UX 패턴 (open.assembly.go.kr searchVisualPage 참고):
+ * - 처음에 root + 1-hop 표시 (concentric layout)
+ * - leaf 노드 더블 클릭 → 그 노드를 root로 한 1-hop을 추가 fetch + merge (이미 있는 ID skip)
+ * - 노드 단일 클릭 → closed neighborhood 강조 (외부 dim)
+ * - 배경 클릭 → 강조 해제
  *
- * 의존성:
- * - cytoscape 3.31 + cytoscape-fcose 2.2
+ * 노드 시각:
+ * - Person: 의원 사진(profile_image_url) background-image + 이름 라벨
+ *   (member_directory에 매칭된 노드만 사진. 그 외 SVG avatar placeholder)
+ *   ADR-0004 정치 중립: 정당 색 미사용, 모든 의원 동일 border 색.
+ * - 그 외 클래스(Bill/Vote/Article/Topic/...): 색상 원 + 라벨
  *
- * 노드 타입 색상 (ADR-0004: 정당 색·이념 색 미사용):
- *   Bill 파랑 / Person 자주 / Vote 주황 / Article 녹색 / Topic 청록
- *   Statement 분홍 / Committee 녹색 / Party 자주 / Agency 노랑
+ * 의존성: cytoscape 3.31 + cytoscape-fcose 2.2
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { Core, ElementDefinition } from 'cytoscape';
-import type { Subgraph } from '../lib/api-client';
+import type { Subgraph, SubgraphNode, SubgraphEdge } from '../lib/api-client';
 
-// fcose extension은 client에서만 register.
 let _fcoseRegistered = false;
 
 async function loadCytoscape(): Promise<(opts: object) => Core> {
@@ -35,73 +35,135 @@ async function loadCytoscape(): Promise<(opts: object) => Core> {
       const reg = (cytoscapeFn as unknown as { use: (ext: unknown) => void }).use;
       if (typeof reg === 'function') {
         reg.call(cytoscapeFn, fcose);
+        _fcoseRegistered = true;
       }
-      _fcoseRegistered = true;
-    } catch {
-      // fcose 로드 실패 시 cose로 fallback.
-    }
+    } catch { /* fallback cose */ }
   }
   return cytoscapeFn;
 }
 
-// 노드 타입별 색상 (정당 색 미사용).
+
+// 다크 노드 색상 (ADR-0004: 정당 색·이념 색 미사용)
 const NODE_COLORS: Record<string, string> = {
-  Bill: '#2563eb',
-  Person: '#7c3aed',
-  Vote: '#ea580c',
-  Article: '#16a34a',
-  Topic: '#0891b2',
-  Statement: '#ec4899',
-  Committee: '#059669',
-  Party: '#9333ea',
-  Agency: '#d97706',
-  Advertisement: '#f59e0b',
-  Reader: '#6366f1',
-  default: '#6b7280',
+  Bill:          '#3b82f6',
+  Person:        '#a78bfa',
+  Vote:          '#fb923c',
+  Article:       '#34d399',
+  Topic:         '#22d3ee',
+  Statement:     '#f472b6',
+  Committee:     '#10b981',
+  Party:         '#c084fc',
+  Agency:        '#fbbf24',
+  Advertisement: '#fbbf24',
+  Reader:        '#818cf8',
+  default:       '#94a3b8',
 };
 
-// Placeholder 아바타 (data URI SVG, base64 인코딩) - 모든 Person 노드 동일.
-// ADR-0004 정치 중립성 - 실 인물 사진 미사용.
+
 const AVATAR_SVG = encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'
-  + '<circle cx="32" cy="32" r="32" fill="#7c3aed"/>'
-  + '<circle cx="32" cy="24" r="10" fill="white"/>'
-  + '<path d="M14 56 a18 18 0 0 1 36 0 z" fill="white"/>'
+  + '<circle cx="32" cy="32" r="32" fill="#475569"/>'
+  + '<circle cx="32" cy="24" r="10" fill="#cbd5e1"/>'
+  + '<path d="M14 56 a18 18 0 0 1 36 0 z" fill="#cbd5e1"/>'
   + '</svg>',
 );
 const AVATAR_DATA_URI = `data:image/svg+xml;utf8,${AVATAR_SVG}`;
 
-// 엣지 관계별 스타일.
-interface EdgeStyle {
-  color: string;
-  width: number;
-  lineStyle: 'solid' | 'dashed' | 'dotted';
-}
+
+interface EdgeStyle { color: string; width: number; lineStyle: 'solid'|'dashed'|'dotted'; label: string }
 
 const EDGE_STYLES: Record<string, EdgeStyle> = {
-  PROPOSED: { color: '#2563eb', width: 3, lineStyle: 'solid' },
-  CO_PROPOSED: { color: '#2563eb', width: 2, lineStyle: 'dashed' },
-  VOTED: { color: '#ea580c', width: 3, lineStyle: 'solid' },
-  VOTE_ON: { color: '#9ca3af', width: 2, lineStyle: 'solid' },
-  MEMBER_OF: { color: '#16a34a', width: 2, lineStyle: 'dashed' },
-  BELONGS_TO: { color: '#7c3aed', width: 1.5, lineStyle: 'solid' },
-  ABOUT: { color: '#0891b2', width: 2, lineStyle: 'dotted' },
-  AT: { color: '#9ca3af', width: 1, lineStyle: 'dashed' },
-  MENTIONS: { color: '#ec4899', width: 1.5, lineStyle: 'dotted' },
-  REFERENCES: { color: '#9ca3af', width: 1, lineStyle: 'dotted' },
-  READ: { color: '#ec4899', width: 1.5, lineStyle: 'dotted' },
-  CANDIDATE: { color: '#d97706', width: 2, lineStyle: 'dashed' },
-  CHOSE: { color: '#d97706', width: 3, lineStyle: 'solid' },
-  CONSIDERED: { color: '#d97706', width: 1.5, lineStyle: 'dashed' },
-  OVERSEES: { color: '#d97706', width: 2, lineStyle: 'solid' },
-  BY: { color: '#6b7280', width: 1, lineStyle: 'solid' },
-  default: { color: '#9ca3af', width: 1.5, lineStyle: 'solid' },
+  PROPOSED:     { color: '#3b82f6', width: 3,   lineStyle: 'solid',  label: '발의' },
+  CO_PROPOSED:  { color: '#3b82f6', width: 2,   lineStyle: 'dashed', label: '공동발의' },
+  VOTED:        { color: '#fb923c', width: 3,   lineStyle: 'solid',  label: '표결' },
+  VOTE_ON:      { color: '#64748b', width: 2,   lineStyle: 'solid',  label: '대상' },
+  MEMBER_OF:    { color: '#10b981', width: 2,   lineStyle: 'dashed', label: '소속' },
+  BELONGS_TO:   { color: '#a78bfa', width: 1.5, lineStyle: 'solid',  label: '소속 정당' },
+  ABOUT:        { color: '#22d3ee', width: 2,   lineStyle: 'dotted', label: '관련 주제' },
+  ASSIGNED_TO:  { color: '#10b981', width: 2,   lineStyle: 'dashed', label: '소관위' },
+  AT:           { color: '#64748b', width: 1,   lineStyle: 'dashed', label: '회기' },
+  MENTIONS:     { color: '#f472b6', width: 1.5, lineStyle: 'dotted', label: '언급' },
+  REFERENCES:   { color: '#64748b', width: 1,   lineStyle: 'dotted', label: '참조' },
+  READ:         { color: '#f472b6', width: 1.5, lineStyle: 'dotted', label: '독자 열람' },
+  CANDIDATE:    { color: '#fbbf24', width: 2,   lineStyle: 'dashed', label: '광고 후보' },
+  CHOSE:        { color: '#fbbf24', width: 3,   lineStyle: 'solid',  label: '광고 선정' },
+  CONSIDERED:   { color: '#fbbf24', width: 1.5, lineStyle: 'dashed', label: '검토' },
+  OVERSEES:     { color: '#fbbf24', width: 2,   lineStyle: 'solid',  label: '관할' },
+  BY:           { color: '#94a3b8', width: 1,   lineStyle: 'solid',  label: '저자' },
+  default:      { color: '#64748b', width: 1.5, lineStyle: 'solid',  label: '관계' },
 };
 
 
-export function CytoscapeView({ subgraph, height = 400 }: { subgraph: Subgraph; height?: number }) {
+/** 클래스명 → /api/objects/{type-slug} 매핑 (객체 expand fetch용) */
+const CLASS_TO_TYPE_SLUG: Record<string, string> = {
+  Bill: 'bill', Person: 'person', Vote: 'vote', Article: 'article',
+  Topic: 'topic', Statement: 'statement', Committee: 'committee',
+  Party: 'party', Agency: 'agency', Advertisement: 'advertisement',
+  Reader: 'reader',
+};
+
+
+type NodeData = Record<string, unknown>;
+
+
+export function CytoscapeView({
+  subgraph,
+  height = 500,
+  expandable = true,
+}: {
+  subgraph: Subgraph;
+  height?: number;
+  expandable?: boolean;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
+  // multi-hop: 추가 fetch한 노드/엣지 누적
+  const [extra, setExtra] = useState<{ nodes: SubgraphNode[]; edges: SubgraphEdge[] }>({ nodes: [], edges: [] });
+  const [expandingId, setExpandingId] = useState<string | null>(null);
+  const [hopCount, setHopCount] = useState(1);
+
+  // subgraph 변경 시 extra 리셋
+  useEffect(() => {
+    setExtra({ nodes: [], edges: [] });
+    setHopCount(1);
+  }, [subgraph.root_id]);
+
+  async function expandNode(nodeId: string, nodeLabel: string, nodeData?: NodeData) {
+    if (!expandable) return;
+    const typeSlug = CLASS_TO_TYPE_SLUG[nodeLabel];
+    if (!typeSlug) return;
+    setExpandingId(nodeId);
+    try {
+      // dbltap = "더 깊이 보고 싶다" 시그널 → depth=2 (Neptune Cypher multi-hop traversal)
+      const resp = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL ?? ''}/api/objects/${typeSlug}/${encodeURIComponent(nodeId)}?depth=2`,
+        { cache: 'no-store' },
+      );
+      if (!resp.ok) return;
+      const d = await resp.json();
+      const sg = d.subgraph as Subgraph | null;
+      if (!sg) return;
+      const seen = new Set<string>([
+        ...subgraph.nodes.map((n) => n.id),
+        ...extra.nodes.map((n) => n.id),
+      ]);
+      const seenEdge = new Set<string>([
+        ...subgraph.edges.map((e) => `${e.source}-${e.target}-${e.type}`),
+        ...extra.edges.map((e) => `${e.source}-${e.target}-${e.type}`),
+      ]);
+      const newNodes = sg.nodes.filter((n) => !seen.has(n.id));
+      const newEdges = sg.edges.filter((e) => !seenEdge.has(`${e.source}-${e.target}-${e.type}`));
+      // 자기 자신은 추가 안 함 (이미 root)
+      void nodeData;
+      setExtra((prev) => ({
+        nodes: [...prev.nodes, ...newNodes],
+        edges: [...prev.edges, ...newEdges],
+      }));
+      setHopCount((h) => Math.max(h, 2));
+    } finally {
+      setExpandingId(null);
+    }
+  }
 
   useEffect(() => {
     let mounted = true;
@@ -112,31 +174,26 @@ export function CytoscapeView({ subgraph, height = 400 }: { subgraph: Subgraph; 
       const cytoscape = await loadCytoscape();
       if (!mounted || !containerRef.current) return;
 
-      // Compound 추론: MEMBER_OF 엣지가 있으면 source(Person) → target(Committee) parent 관계로.
+      const allNodes = [...subgraph.nodes, ...extra.nodes];
+      const allEdges = [...subgraph.edges, ...extra.edges];
+
+      // Compound 추론: MEMBER_OF
       const parentMap = new Map<string, string>();
-      for (const e of subgraph.edges) {
+      for (const e of allEdges) {
         if (e.type === 'MEMBER_OF') parentMap.set(e.source, e.target);
       }
       const parentIds = new Set(parentMap.values());
 
       const elements: ElementDefinition[] = [];
-
-      // Compound 부모 노드 먼저 (예: Committee).
-      for (const node of subgraph.nodes) {
+      for (const node of allNodes) {
         if (parentIds.has(node.id)) {
-          elements.push({
-            data: {
-              id: node.id,
-              label: shortLabel(node),
-              nodeType: node.label,
-              isCompound: 1,
-            },
-          });
+          elements.push({ data: { id: node.id, label: shortLabel(node), nodeType: node.label, isCompound: 1 } });
         }
       }
-      // 자식·일반 노드.
-      for (const node of subgraph.nodes) {
-        if (parentIds.has(node.id)) continue; // 이미 compound로 추가됨
+      for (const node of allNodes) {
+        if (parentIds.has(node.id)) continue;
+        const d = (node.data ?? {}) as NodeData;
+        const photoUrl = typeof d.profile_image_url === 'string' ? d.profile_image_url : null;
         elements.push({
           data: {
             id: node.id,
@@ -144,157 +201,214 @@ export function CytoscapeView({ subgraph, height = 400 }: { subgraph: Subgraph; 
             nodeType: node.label,
             parent: parentMap.get(node.id),
             isRoot: node.id === subgraph.root_id ? 1 : 0,
+            photoUrl: photoUrl ?? (node.label === 'Person' ? AVATAR_DATA_URI : ''),
+            hasPhoto: photoUrl ? 1 : 0,
           },
         });
       }
-      // 엣지 (MEMBER_OF는 compound 계층으로 표현되므로 명시 엣지 생략).
-      subgraph.edges.forEach((e, idx) => {
+      allEdges.forEach((e, idx) => {
         if (e.type === 'MEMBER_OF' && parentMap.has(e.source)) return;
+        const krLabel = (EDGE_STYLES[e.type] ?? EDGE_STYLES.default).label;
         elements.push({
           data: {
             id: `${e.source}-${e.target}-${idx}`,
-            source: e.source,
-            target: e.target,
-            relation: e.type,
-            label: e.type,
+            source: e.source, target: e.target,
+            relation: e.type, label: krLabel,
           },
         });
       });
-
-      const style = buildStyle();
 
       cy = cytoscape({
         container: containerRef.current,
         elements,
-        style,
+        style: buildStyle(),
         layout: {
           name: _fcoseRegistered ? 'fcose' : 'cose',
           animate: false,
-          padding: 30,
+          padding: 40,
           nodeDimensionsIncludeLabels: true,
           randomize: false,
-        },
+        } as object,
         wheelSensitivity: 0.25,
       });
 
-      // ─── 1-hop 이웃 강조 인터랙션 ──────────────────────────────────────
+      // 단일 클릭: 1-hop 강조
       cy.on('tap', 'node', (evt) => {
         const target = evt.target;
         const neighborhood = target.closedNeighborhood();
         cy?.elements().addClass('faded');
         neighborhood.removeClass('faded');
       });
-      cy.on('tap', (evt) => {
-        if (evt.target === cy) {
-          cy?.elements().removeClass('faded');
+      // 더블 클릭: multi-hop expand
+      cy.on('dbltap', 'node', (evt) => {
+        const target = evt.target;
+        const nodeId = target.data('id');
+        const nodeType = target.data('nodeType');
+        if (nodeId && nodeType) {
+          void expandNode(nodeId, nodeType);
         }
+      });
+      cy.on('tap', (evt) => {
+        if (evt.target === cy) cy?.elements().removeClass('faded');
       });
 
       cyRef.current = cy;
     })();
 
-    return () => {
-      mounted = false;
-      if (cy) cy.destroy();
-    };
-  }, [subgraph]);
+    return () => { mounted = false; if (cy) cy.destroy(); };
+  }, [subgraph, extra]);
+
+  const totalNodes = subgraph.nodes.length + extra.nodes.length;
+  const totalEdges = subgraph.edges.length + extra.edges.length;
+
+  // 클래스별 노드 카운트 + 관계별 엣지 카운트
+  const allNodes = [...subgraph.nodes, ...extra.nodes];
+  const allEdges = [...subgraph.edges, ...extra.edges];
+  const nodeClassCount: Record<string, number> = {};
+  for (const n of allNodes) nodeClassCount[n.label] = (nodeClassCount[n.label] ?? 0) + 1;
+  const edgeRelCount: Record<string, number> = {};
+  for (const e of allEdges) edgeRelCount[e.type] = (edgeRelCount[e.type] ?? 0) + 1;
 
   return (
-    <div className="border border-gray-200 rounded-lg bg-white overflow-hidden">
-      <div className="px-3 py-2 border-b border-gray-200 bg-gray-50 flex items-center justify-between text-xs">
-        <span className="text-gray-700">
-          1-hop subgraph: <strong>{subgraph.root_id}</strong>
+    <div className="border border-slate-700 rounded-lg bg-slate-900 overflow-hidden">
+      <div className="px-3 py-2 border-b border-slate-800 bg-slate-900/50 flex items-center justify-between text-xs">
+        <span className="text-slate-300">
+          🧠 온톨로지 관계 그래프 ({hopCount}-hop): <strong className="text-white">{subgraph.root_id}</strong>
         </span>
-        <span className="text-gray-500">
-          {subgraph.nodes.length} 노드 · {subgraph.edges.length} 엣지 · <em>노드 클릭 → 이웃 강조</em>
+        <span className="text-slate-500">
+          {totalNodes} 노드 · {totalEdges} 엣지
+          {expandable && <span className="ml-2 text-amber-400/80">· 더블클릭 → 1-hop 확장</span>}
+          {expandingId && <span className="ml-2 text-blue-400 animate-pulse">⏳</span>}
         </span>
       </div>
-      <div ref={containerRef} style={{ width: '100%', height }} />
+      {/* 통계 패널 — 클래스별 노드 + 관계별 엣지 분포 */}
+      <div className="px-3 py-2 border-b border-slate-800 bg-slate-900/30 flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px]">
+        <div className="flex items-center gap-1.5">
+          <span className="text-slate-500 font-semibold">노드:</span>
+          {Object.entries(nodeClassCount).map(([cls, cnt]) => (
+            <span key={cls} className="inline-flex items-center gap-1">
+              <span className="inline-block w-2 h-2 rounded-full"
+                    style={{ backgroundColor: NODE_COLORS[cls] ?? NODE_COLORS.default }} aria-hidden />
+              <span className="text-slate-300">{cls}</span>
+              <span className="font-mono text-slate-500">{cnt}</span>
+            </span>
+          ))}
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="text-slate-500 font-semibold">관계:</span>
+          {Object.entries(edgeRelCount).map(([rel, cnt]) => {
+            const s = EDGE_STYLES[rel] ?? EDGE_STYLES.default;
+            return (
+              <span key={rel} className="inline-flex items-center gap-1">
+                <span className="inline-block w-3 h-0.5"
+                      style={{ backgroundColor: s.color }} aria-hidden />
+                <span className="text-slate-300">{s.label}</span>
+                <span className="font-mono text-slate-500">{cnt}</span>
+              </span>
+            );
+          })}
+        </div>
+      </div>
+      <div ref={containerRef} style={{ width: '100%', height, background: '#0f172a' }} />
       <Legend />
     </div>
   );
 }
 
 
-function shortLabel(node: { id: string; data?: Record<string, unknown> }): string {
+function shortLabel(node: { id: string; label?: string; data?: NodeData }): string {
   const d = node.data ?? {};
-  for (const k of ['title', 'name', 'label']) {
+  // summary_label 우선 (backend가 클래스별 사람-친화 라벨 합성).
+  // 사용자 신고: Vote "V_PRC_..." + Article "art_synth_..." 같은 unique ID가
+  // 온톨로지 관계 그래프에 그대로 보이는 가독성 issue.
+  for (const k of ['summary_label', 'name', 'title', 'label']) {
     const v = d[k];
     if (typeof v === 'string' && v) {
-      return v.length > 14 ? v.slice(0, 14) + '…' : v;
+      return v.length > 18 ? v.slice(0, 18) + '…' : v;
     }
   }
-  return node.id.length > 12 ? node.id.slice(0, 12) + '…' : node.id;
+  return node.id.length > 14 ? node.id.slice(0, 14) + '…' : node.id;
 }
 
 
 function buildStyle() {
-  // 노드 + 엣지 + 상태(faded·compound) 스타일을 동적 구성.
+  // 클래스별 shape (시각적 차별화) — Person·Bill·Topic·Article·Vote·Committee 구분
+  const SHAPE_BY_TYPE: Record<string, string> = {
+    Person:     'ellipse',
+    Bill:       'round-rectangle',
+    Vote:       'octagon',
+    Topic:      'hexagon',
+    Article:    'round-diamond',
+    Committee:  'round-rectangle',
+    Party:      'tag',
+    Statement:  'star',
+    default:    'ellipse',
+  };
+
   const baseStyles: Array<{ selector: string; style: Record<string, unknown> }> = [
-    // ─── 기본 노드 (색상 원) ───────────────────────────────────────────────
+    // ─── 기본 노드 ───
     {
       selector: 'node',
       style: {
         'background-color': (ele: { data: (k: string) => string }) =>
           NODE_COLORS[ele.data('nodeType')] ?? NODE_COLORS.default,
+        shape: (ele: { data: (k: string) => string }) =>
+          SHAPE_BY_TYPE[ele.data('nodeType')] ?? SHAPE_BY_TYPE.default,
         label: 'data(label)',
-        color: '#ffffff',
-        'font-size': 10,
+        color: '#e2e8f0',
+        'font-size': 11,
+        'font-weight': 600,
         'text-valign': 'center',
         'text-halign': 'center',
-        'text-outline-color': '#111827',
-        'text-outline-width': 0.5,
-        width: 'mapData(isRoot, 0, 1, 38, 56)',
-        height: 'mapData(isRoot, 0, 1, 38, 56)',
-        'border-width': 'mapData(isRoot, 0, 1, 1, 3)',
-        'border-color': '#1f2937',
+        'text-outline-color': '#020617',
+        'text-outline-width': 2,
+        width: 'mapData(isRoot, 0, 1, 50, 76)',
+        height: 'mapData(isRoot, 0, 1, 50, 76)',
+        'border-width': 'mapData(isRoot, 0, 1, 1, 4)',
+        'border-color': (ele: { data: (k: string) => number }) =>
+          ele.data('isRoot') === 1 ? '#fbbf24' : '#1e293b',
       },
     },
-    // ─── Person 노드: placeholder 아바타 background-image ────────────────
+    // ─── Person 노드: 사진 background-image ───
     {
       selector: 'node[nodeType = "Person"]',
       style: {
-        'background-image': `url("${AVATAR_DATA_URI}")`,
+        'background-image': 'data(photoUrl)',
         'background-fit': 'cover',
         'background-clip': 'node',
-        'background-color': '#ffffff',
+        'background-color': '#1e293b',
         label: 'data(label)',
-        'text-margin-y': 8,
+        'text-margin-y': 10,
         'text-valign': 'bottom',
-        color: '#1f2937',
-        'text-outline-color': '#ffffff',
+        color: '#f1f5f9',
+        'text-outline-color': '#020617',
         'text-outline-width': 2,
-        'font-size': 9,
+        'font-size': 10,
       },
     },
-    // ─── Compound 노드 (Committee 그룹 박스) ─────────────────────────────
+    // ─── Compound (Committee 그룹) ───
     {
       selector: 'node[isCompound = 1]',
       style: {
-        'background-color': '#f0fdf4',
-        'background-opacity': 0.5,
+        'background-color': '#064e3b',
+        'background-opacity': 0.3,
         'border-width': 2,
-        'border-color': '#16a34a',
+        'border-color': '#10b981',
         'border-style': 'dashed',
         'text-valign': 'top',
         'text-halign': 'center',
-        'text-margin-y': -5,
-        color: '#15803d',
-        'font-size': 11,
+        'text-margin-y': -6,
+        color: '#6ee7b7',
+        'font-size': 12,
         'font-weight': 'bold' as unknown as number,
         'text-outline-width': 0,
         shape: 'round-rectangle',
-        padding: 18 as unknown as number,
+        padding: 22 as unknown as number,
       },
     },
-    // ─── Faded 상태 (1-hop 강조 시 외부 노드) ────────────────────────────
-    {
-      selector: '.faded',
-      style: {
-        opacity: 0.2,
-      },
-    },
-    // ─── 기본 엣지 ───────────────────────────────────────────────────────
+    // ─── Faded ───
+    { selector: '.faded', style: { opacity: 0.15 } },
+    // ─── 기본 엣지 ───
     {
       selector: 'edge',
       style: {
@@ -304,16 +418,15 @@ function buildStyle() {
         'target-arrow-shape': 'triangle',
         'curve-style': 'bezier',
         label: 'data(label)',
-        'font-size': 9,
-        color: '#374151',
-        'text-background-color': '#ffffff',
+        'font-size': 8,
+        color: '#94a3b8',
+        'text-background-color': '#0f172a',
         'text-background-opacity': 0.85,
-        'text-background-padding': 1,
+        'text-background-padding': 2,
       },
     },
   ];
 
-  // 엣지 관계별 셀렉터 (Track 5-7 핵심).
   const edgeRelationStyles = Object.entries(EDGE_STYLES)
     .filter(([key]) => key !== 'default')
     .map(([relation, s]) => ({
@@ -332,41 +445,42 @@ function buildStyle() {
 
 function Legend() {
   return (
-    <div className="px-3 py-2 border-t border-gray-200 bg-gray-50 text-[10px] text-gray-600 space-y-1">
-      <div className="flex flex-wrap gap-2">
-        <span className="font-semibold text-gray-700">노드:</span>
+    <div className="px-3 py-2 border-t border-slate-800 bg-slate-900/40 text-[10px] text-slate-400 space-y-1">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="font-semibold text-slate-300">노드:</span>
         {Object.entries(NODE_COLORS)
           .filter(([k]) => k !== 'default')
           .map(([type, color]) => (
             <span key={type} className="inline-flex items-center gap-1">
-              <span
-                className="inline-block w-2.5 h-2.5 rounded-full"
-                style={{ backgroundColor: color }}
-                aria-hidden
-              />
+              <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: color }} aria-hidden />
               {type}
             </span>
           ))}
       </div>
-      <div className="flex flex-wrap gap-2">
-        <span className="font-semibold text-gray-700">관계:</span>
-        <span className="inline-flex items-center gap-1">
-          <span className="inline-block w-4 h-0.5" style={{ backgroundColor: '#2563eb' }} aria-hidden />
-          PROPOSED
-        </span>
-        <span className="inline-flex items-center gap-1">
-          <span className="inline-block w-4 h-0.5 border-t-2 border-dashed" style={{ borderColor: '#16a34a' }} aria-hidden />
-          MEMBER_OF
-        </span>
-        <span className="inline-flex items-center gap-1">
-          <span className="inline-block w-4 h-0.5 border-t-2 border-dotted" style={{ borderColor: '#0891b2' }} aria-hidden />
-          ABOUT
-        </span>
-        <span className="inline-flex items-center gap-1">
-          <span className="inline-block w-4 h-0.5" style={{ backgroundColor: '#ea580c' }} aria-hidden />
-          VOTED
-        </span>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="font-semibold text-slate-300">관계:</span>
+        <Sample color="#3b82f6" label="PROPOSED" />
+        <Sample color="#fb923c" label="VOTED" />
+        <Sample color="#10b981" label="MEMBER_OF" style="dashed" />
+        <Sample color="#22d3ee" label="ABOUT" style="dotted" />
+        <Sample color="#f472b6" label="MENTIONS" style="dotted" />
       </div>
     </div>
+  );
+}
+
+
+function Sample({ color, label, style = 'solid' }: { color: string; label: string; style?: string }) {
+  const lineClass = style === 'dashed' ? 'border-t-2 border-dashed'
+                  : style === 'dotted' ? 'border-t-2 border-dotted'
+                  : '';
+  return (
+    <span className="inline-flex items-center gap-1">
+      {style === 'solid'
+        ? <span className="inline-block w-4 h-0.5" style={{ backgroundColor: color }} aria-hidden />
+        : <span className={`inline-block w-4 h-0.5 ${lineClass}`} style={{ borderColor: color }} aria-hidden />
+      }
+      {label}
+    </span>
   );
 }

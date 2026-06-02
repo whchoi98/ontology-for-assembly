@@ -1,0 +1,500 @@
+{"source":"synthetic","ad_id":"ad_0000","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0001","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0002","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0003","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 통합 간편 이용","avoid_topics":["topic_judicial","topic_transport"]}
+{"source":"synthetic","ad_id":"ad_0004","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 실시간 자동화","avoid_topics":["topic_health"]}
+{"source":"synthetic","ad_id":"ad_0005","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_market"]}
+{"source":"synthetic","ad_id":"ad_0006","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial","topic_environment"]}
+{"source":"synthetic","ad_id":"ad_0007","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 엔드투엔드 최적화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0008","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - 엔터프라이즈 건강 관리","avoid_topics":["topic_judicial","topic_local"]}
+{"source":"synthetic","ad_id":"ad_0009","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":["topic_population"]}
+{"source":"synthetic","ad_id":"ad_0010","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - AI 간편 이용","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0011","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0012","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0013","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_health"]}
+{"source":"synthetic","ad_id":"ad_0014","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0015","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial","topic_data"]}
+{"source":"synthetic","ad_id":"ad_0016","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial","topic_data"]}
+{"source":"synthetic","ad_id":"ad_0017","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0018","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_data"]}
+{"source":"synthetic","ad_id":"ad_0019","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - 엔터프라이즈 건강 관리","avoid_topics":["topic_judicial","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0020","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0021","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0022","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 엔터프라이즈 간편 이용","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0023","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 엔드투엔드 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0024","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 자동화 간편 이용","avoid_topics":["topic_judicial","topic_tax"]}
+{"source":"synthetic","ad_id":"ad_0025","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 엔터프라이즈 간편 이용","avoid_topics":["topic_judicial","topic_admin","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0026","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0027","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":["topic_smb"]}
+{"source":"synthetic","ad_id":"ad_0028","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_market"]}
+{"source":"synthetic","ad_id":"ad_0029","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 엔드투엔드 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0030","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - 엔터프라이즈 건강 관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0031","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_transport"]}
+{"source":"synthetic","ad_id":"ad_0032","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_education"]}
+{"source":"synthetic","ad_id":"ad_0033","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0034","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial","topic_transport"]}
+{"source":"synthetic","ad_id":"ad_0035","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial","topic_finance"]}
+{"source":"synthetic","ad_id":"ad_0036","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 통합 자동화","avoid_topics":["topic_local"]}
+{"source":"synthetic","ad_id":"ad_0037","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_market"]}
+{"source":"synthetic","ad_id":"ad_0038","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0039","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 실시간 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_smb"]}
+{"source":"synthetic","ad_id":"ad_0040","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0041","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial","topic_youth"]}
+{"source":"synthetic","ad_id":"ad_0042","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 실시간 최적화","avoid_topics":["topic_culture"]}
+{"source":"synthetic","ad_id":"ad_0043","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - AI 연결성","avoid_topics":["topic_judicial","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0044","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - AI 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0045","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - AI 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0046","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":["topic_market"]}
+{"source":"synthetic","ad_id":"ad_0047","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0048","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0049","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0050","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial","topic_environment"]}
+{"source":"synthetic","ad_id":"ad_0051","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0052","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0053","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 실시간 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0054","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0055","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0056","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0057","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 자동화 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0058","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":["topic_welfare"]}
+{"source":"synthetic","ad_id":"ad_0059","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0060","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 스마트 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0061","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 통합 자동화","avoid_topics":["topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0062","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":["topic_data"]}
+{"source":"synthetic","ad_id":"ad_0063","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0064","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0065","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_smb"]}
+{"source":"synthetic","ad_id":"ad_0066","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0067","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0068","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 자동화 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0069","advertiser":"친환경A","category":"sustainability","content_summary":"친환경 솔루션 - 엔터프라이즈 탄소 감축","avoid_topics":["topic_defense","topic_youth"]}
+{"source":"synthetic","ad_id":"ad_0070","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_transport"]}
+{"source":"synthetic","ad_id":"ad_0071","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 엔드투엔드 최적화","avoid_topics":["topic_population"]}
+{"source":"synthetic","ad_id":"ad_0072","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0073","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0074","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0075","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin","topic_culture"]}
+{"source":"synthetic","ad_id":"ad_0076","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_market"]}
+{"source":"synthetic","ad_id":"ad_0077","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0078","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - AI 최적화","avoid_topics":["topic_welfare"]}
+{"source":"synthetic","ad_id":"ad_0079","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0080","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0081","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial","topic_telecom"]}
+{"source":"synthetic","ad_id":"ad_0082","advertiser":"친환경A","category":"sustainability","content_summary":"친환경 솔루션 - 스마트 탄소 감축","avoid_topics":["topic_defense","topic_labor"]}
+{"source":"synthetic","ad_id":"ad_0083","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0084","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial","topic_welfare"]}
+{"source":"synthetic","ad_id":"ad_0085","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial","topic_smb"]}
+{"source":"synthetic","ad_id":"ad_0086","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 자동화 효율화","avoid_topics":["topic_data"]}
+{"source":"synthetic","ad_id":"ad_0087","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0088","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0089","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_welfare"]}
+{"source":"synthetic","ad_id":"ad_0090","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 스마트 연결성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0091","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 엔터프라이즈 간편 이용","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0092","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0093","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0094","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0095","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_welfare"]}
+{"source":"synthetic","ad_id":"ad_0096","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0097","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0098","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 맞춤형 간편 이용","avoid_topics":["topic_judicial","topic_smb"]}
+{"source":"synthetic","ad_id":"ad_0099","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0100","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0101","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 자동화 연결성","avoid_topics":["topic_judicial","topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0102","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0103","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_local"]}
+{"source":"synthetic","ad_id":"ad_0104","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 실시간 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0105","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0106","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 엔드투엔드 간편 이용","avoid_topics":["topic_judicial","topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0107","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0108","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0109","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0110","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 자동화 효율화","avoid_topics":["topic_data"]}
+{"source":"synthetic","ad_id":"ad_0111","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - 스마트 건강 관리","avoid_topics":["topic_judicial","topic_smb"]}
+{"source":"synthetic","ad_id":"ad_0112","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - AI 자동화","avoid_topics":["topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0113","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0114","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 실시간 최적화","avoid_topics":["topic_science"]}
+{"source":"synthetic","ad_id":"ad_0115","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0116","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - AI 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_local"]}
+{"source":"synthetic","ad_id":"ad_0117","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 실시간 효율화","avoid_topics":["topic_population"]}
+{"source":"synthetic","ad_id":"ad_0118","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 통합 탄소 감축","avoid_topics":["topic_defense","topic_culture"]}
+{"source":"synthetic","ad_id":"ad_0119","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 자동화 효율화","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0120","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - 엔드투엔드 건강 관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0121","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 스마트 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0122","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 엔터프라이즈 최적화","avoid_topics":["topic_population"]}
+{"source":"synthetic","ad_id":"ad_0123","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0124","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense","topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0125","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 스마트 효율화","avoid_topics":["topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0126","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 자동화 간편 이용","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0127","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - AI 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_market"]}
+{"source":"synthetic","ad_id":"ad_0128","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 엔터프라이즈 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0129","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0130","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin","topic_market"]}
+{"source":"synthetic","ad_id":"ad_0131","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 스마트 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0132","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":["topic_market"]}
+{"source":"synthetic","ad_id":"ad_0133","advertiser":"친환경A","category":"sustainability","content_summary":"친환경 솔루션 - 스마트 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0134","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0135","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 맞춤형 자동화","avoid_topics":["topic_market"]}
+{"source":"synthetic","ad_id":"ad_0136","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0137","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 실시간 간편 이용","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0138","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0139","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0140","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0141","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 실시간 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_youth"]}
+{"source":"synthetic","ad_id":"ad_0142","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 엔드투엔드 연결성","avoid_topics":["topic_judicial","topic_youth"]}
+{"source":"synthetic","ad_id":"ad_0143","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 엔드투엔드 최적화","avoid_topics":["topic_culture"]}
+{"source":"synthetic","ad_id":"ad_0144","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense","topic_telecom"]}
+{"source":"synthetic","ad_id":"ad_0145","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 실시간 자동화","avoid_topics":["topic_health"]}
+{"source":"synthetic","ad_id":"ad_0146","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial","topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0147","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0148","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0149","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0150","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0151","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - AI 건강 관리","avoid_topics":["topic_judicial","topic_local"]}
+{"source":"synthetic","ad_id":"ad_0152","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0153","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 실시간 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0154","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial","topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0155","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 맞춤형 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0156","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0157","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0158","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0159","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0160","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 통합 간편 이용","avoid_topics":["topic_judicial","topic_admin","topic_local"]}
+{"source":"synthetic","ad_id":"ad_0161","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_transport"]}
+{"source":"synthetic","ad_id":"ad_0162","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0163","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0164","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0165","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0166","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0167","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 엔드투엔드 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0168","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_youth"]}
+{"source":"synthetic","ad_id":"ad_0169","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0170","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - AI 간편 이용","avoid_topics":["topic_judicial","topic_labor"]}
+{"source":"synthetic","ad_id":"ad_0171","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0172","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0173","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_tax"]}
+{"source":"synthetic","ad_id":"ad_0174","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 자동화 최적화","avoid_topics":["topic_labor"]}
+{"source":"synthetic","ad_id":"ad_0175","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0176","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 엔드투엔드 네트워크","avoid_topics":["topic_defense","topic_finance"]}
+{"source":"synthetic","ad_id":"ad_0177","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 엔터프라이즈 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0178","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0179","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0180","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 엔드투엔드 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_population"]}
+{"source":"synthetic","ad_id":"ad_0181","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense","topic_welfare"]}
+{"source":"synthetic","ad_id":"ad_0182","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial","topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0183","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":["topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0184","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 맞춤형 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0185","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 자동화 네트워크","avoid_topics":["topic_defense","topic_energy"]}
+{"source":"synthetic","ad_id":"ad_0186","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 엔터프라이즈 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0187","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 통합 효율화","avoid_topics":["topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0188","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - AI 간편 이용","avoid_topics":["topic_judicial","topic_admin","topic_local"]}
+{"source":"synthetic","ad_id":"ad_0189","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 엔터프라이즈 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0190","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0191","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0192","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0193","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 엔드투엔드 간편 이용","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0194","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 자동화 효율화","avoid_topics":["topic_education"]}
+{"source":"synthetic","ad_id":"ad_0195","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - AI 자동화","avoid_topics":["topic_environment"]}
+{"source":"synthetic","ad_id":"ad_0196","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0197","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":["topic_transport"]}
+{"source":"synthetic","ad_id":"ad_0198","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - AI 네트워크","avoid_topics":["topic_defense","topic_environment"]}
+{"source":"synthetic","ad_id":"ad_0199","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0200","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - AI 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_welfare"]}
+{"source":"synthetic","ad_id":"ad_0201","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin","topic_education"]}
+{"source":"synthetic","ad_id":"ad_0202","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 실시간 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0203","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 맞춤형 연결성","avoid_topics":["topic_judicial","topic_smb"]}
+{"source":"synthetic","ad_id":"ad_0204","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0205","advertiser":"친환경A","category":"sustainability","content_summary":"친환경 솔루션 - 엔터프라이즈 탄소 감축","avoid_topics":["topic_defense","topic_youth"]}
+{"source":"synthetic","ad_id":"ad_0206","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 맞춤형 최적화","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0207","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 맞춤형 효율화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0208","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0209","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 실시간 네트워크","avoid_topics":["topic_defense","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0210","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0211","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 통합 간편 이용","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0212","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_tax"]}
+{"source":"synthetic","ad_id":"ad_0213","advertiser":"친환경A","category":"sustainability","content_summary":"친환경 솔루션 - 엔드투엔드 탄소 감축","avoid_topics":["topic_defense","topic_energy"]}
+{"source":"synthetic","ad_id":"ad_0214","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 자동화 자동화","avoid_topics":["topic_health"]}
+{"source":"synthetic","ad_id":"ad_0215","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 통합 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0216","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0217","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0218","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0219","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0220","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0221","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 통합 최적화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0222","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial","topic_market"]}
+{"source":"synthetic","ad_id":"ad_0223","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0224","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 스마트 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0225","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial","topic_telecom"]}
+{"source":"synthetic","ad_id":"ad_0226","advertiser":"친환경A","category":"sustainability","content_summary":"친환경 솔루션 - AI 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0227","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial","topic_local"]}
+{"source":"synthetic","ad_id":"ad_0228","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0229","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":["topic_local"]}
+{"source":"synthetic","ad_id":"ad_0230","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0231","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial","topic_tax"]}
+{"source":"synthetic","ad_id":"ad_0232","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 실시간 연결성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0233","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_health"]}
+{"source":"synthetic","ad_id":"ad_0234","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0235","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial","topic_population"]}
+{"source":"synthetic","ad_id":"ad_0236","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_population"]}
+{"source":"synthetic","ad_id":"ad_0237","advertiser":"친환경A","category":"sustainability","content_summary":"친환경 솔루션 - 실시간 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0238","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0239","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 스마트 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0240","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0241","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 자동화 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_culture"]}
+{"source":"synthetic","ad_id":"ad_0242","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0243","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 엔터프라이즈 최적화","avoid_topics":["topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0244","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_culture"]}
+{"source":"synthetic","ad_id":"ad_0245","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_energy"]}
+{"source":"synthetic","ad_id":"ad_0246","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0247","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0248","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 자동화 간편 이용","avoid_topics":["topic_judicial","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0249","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0250","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0251","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0252","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 엔드투엔드 간편 이용","avoid_topics":["topic_judicial","topic_admin","topic_tax"]}
+{"source":"synthetic","ad_id":"ad_0253","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0254","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0255","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - AI 간편 이용","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0256","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial","topic_smb"]}
+{"source":"synthetic","ad_id":"ad_0257","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0258","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0259","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - AI 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0260","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0261","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0262","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_finance"]}
+{"source":"synthetic","ad_id":"ad_0263","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 자동화 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0264","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 스마트 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0265","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 스마트 자동화","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0266","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 실시간 최적화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0267","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 맞춤형 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0268","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0269","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 실시간 자동화","avoid_topics":["topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0270","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0271","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_health"]}
+{"source":"synthetic","ad_id":"ad_0272","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":["topic_tax"]}
+{"source":"synthetic","ad_id":"ad_0273","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0274","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0275","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 스마트 최적화","avoid_topics":["topic_transport"]}
+{"source":"synthetic","ad_id":"ad_0276","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0277","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0278","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0279","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0280","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 통합 연결성","avoid_topics":["topic_judicial","topic_labor"]}
+{"source":"synthetic","ad_id":"ad_0281","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0282","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 엔드투엔드 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0283","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 엔터프라이즈 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0284","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0285","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 통합 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0286","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 맞춤형 효율화","avoid_topics":["topic_data"]}
+{"source":"synthetic","ad_id":"ad_0287","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_population"]}
+{"source":"synthetic","ad_id":"ad_0288","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - AI 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0289","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 엔드투엔드 간편 이용","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0290","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0291","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - AI 간편 이용","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0292","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0293","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin","topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0294","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 엔터프라이즈 자동화","avoid_topics":["topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0295","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0296","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 실시간 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0297","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - AI 효율화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0298","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 엔터프라이즈 간편 이용","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0299","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_population"]}
+{"source":"synthetic","ad_id":"ad_0300","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_data"]}
+{"source":"synthetic","ad_id":"ad_0301","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 통합 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0302","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_culture"]}
+{"source":"synthetic","ad_id":"ad_0303","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0304","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 스마트 최적화","avoid_topics":["topic_education"]}
+{"source":"synthetic","ad_id":"ad_0305","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0306","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin","topic_youth"]}
+{"source":"synthetic","ad_id":"ad_0307","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0308","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0309","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 맞춤형 탄소 감축","avoid_topics":["topic_defense","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0310","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0311","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 스마트 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0312","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0313","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0314","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0315","advertiser":"친환경A","category":"sustainability","content_summary":"친환경 솔루션 - 실시간 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0316","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - AI 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0317","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 엔드투엔드 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0318","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0319","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0320","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - AI 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0321","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 자동화 효율화","avoid_topics":["topic_finance"]}
+{"source":"synthetic","ad_id":"ad_0322","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 맞춤형 탄소 감축","avoid_topics":["topic_defense","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0323","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0324","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 엔드투엔드 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0325","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_transport"]}
+{"source":"synthetic","ad_id":"ad_0326","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 통합 간편 이용","avoid_topics":["topic_judicial","topic_transport"]}
+{"source":"synthetic","ad_id":"ad_0327","advertiser":"친환경A","category":"sustainability","content_summary":"친환경 솔루션 - AI 탄소 감축","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0328","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 스마트 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0329","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0330","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0331","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 스마트 최적화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0332","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - AI 연결성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0333","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin","topic_education"]}
+{"source":"synthetic","ad_id":"ad_0334","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0335","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - AI 간편 이용","avoid_topics":["topic_judicial","topic_admin","topic_local"]}
+{"source":"synthetic","ad_id":"ad_0336","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 엔드투엔드 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0337","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 엔드투엔드 네트워크","avoid_topics":["topic_defense","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0338","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0339","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 실시간 간편 이용","avoid_topics":["topic_judicial","topic_admin","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0340","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial","topic_environment"]}
+{"source":"synthetic","ad_id":"ad_0341","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 자동화 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0342","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0343","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 통합 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0344","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0345","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 실시간 효율화","avoid_topics":["topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0346","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - 통합 건강 관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0347","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 통합 네트워크","avoid_topics":["topic_defense","topic_finance"]}
+{"source":"synthetic","ad_id":"ad_0348","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0349","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0350","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 엔터프라이즈 최적화","avoid_topics":["topic_energy"]}
+{"source":"synthetic","ad_id":"ad_0351","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 실시간 연결성","avoid_topics":["topic_judicial","topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0352","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 실시간 탄소 감축","avoid_topics":["topic_defense","topic_data"]}
+{"source":"synthetic","ad_id":"ad_0353","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0354","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 실시간 연결성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0355","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense","topic_culture"]}
+{"source":"synthetic","ad_id":"ad_0356","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 맞춤형 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0357","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0358","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0359","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 스마트 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0360","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial","topic_population"]}
+{"source":"synthetic","ad_id":"ad_0361","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 엔터프라이즈 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0362","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0363","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_finance"]}
+{"source":"synthetic","ad_id":"ad_0364","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 스마트 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0365","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 스마트 자동화","avoid_topics":["topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0366","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0367","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - 엔드투엔드 건강 관리","avoid_topics":["topic_judicial","topic_health"]}
+{"source":"synthetic","ad_id":"ad_0368","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_science"]}
+{"source":"synthetic","ad_id":"ad_0369","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 통합 간편 이용","avoid_topics":["topic_judicial","topic_admin","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0370","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 자동화 최적화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0371","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0372","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_population"]}
+{"source":"synthetic","ad_id":"ad_0373","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 실시간 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0374","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0375","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0376","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0377","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0378","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 엔터프라이즈 최적화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0379","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0380","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_science"]}
+{"source":"synthetic","ad_id":"ad_0381","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 통합 간편 이용","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0382","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial","topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0383","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - 통합 자동화","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0384","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0385","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 스마트 연결성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0386","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0387","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 엔터프라이즈 최적화","avoid_topics":["topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0388","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial","topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0389","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 엔터프라이즈 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0390","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 스마트 최적화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0391","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - AI 효율화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0392","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 엔터프라이즈 최적화","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0393","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 실시간 효율화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0394","advertiser":"재생에너지A","category":"sustainability","content_summary":"친환경 솔루션 - 실시간 탄소 감축","avoid_topics":["topic_defense","topic_market"]}
+{"source":"synthetic","ad_id":"ad_0395","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0396","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial","topic_welfare"]}
+{"source":"synthetic","ad_id":"ad_0397","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0398","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - 자동화 건강 관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0399","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - 엔드투엔드 건강 관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0400","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 엔드투엔드 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0401","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0402","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0403","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0404","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0405","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 자동화 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0406","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0407","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0408","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0409","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_finance"]}
+{"source":"synthetic","ad_id":"ad_0410","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 통합 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0411","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0412","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 맞춤형 간편 이용","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0413","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - AI 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0414","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_energy"]}
+{"source":"synthetic","ad_id":"ad_0415","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_local"]}
+{"source":"synthetic","ad_id":"ad_0416","advertiser":"통신사A","category":"telecom","content_summary":"통신 솔루션 - 클라우드 통합","avoid_topics":["topic_judicial","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0417","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial","topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0418","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - AI 효율화","avoid_topics":["topic_science"]}
+{"source":"synthetic","ad_id":"ad_0419","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0420","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0421","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0422","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 엔드투엔드 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0423","advertiser":"친환경A","category":"sustainability","content_summary":"친환경 솔루션 - 맞춤형 탄소 감축","avoid_topics":["topic_defense","topic_finance"]}
+{"source":"synthetic","ad_id":"ad_0424","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 엔터프라이즈 연결성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0425","advertiser":"에듀테크A","category":"education","content_summary":"온라인 교육 플랫폼 - 스마트 학습 콘텐츠","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_telecom"]}
+{"source":"synthetic","ad_id":"ad_0426","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0427","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":["topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0428","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 맞춤형 연결성","avoid_topics":["topic_judicial","topic_culture"]}
+{"source":"synthetic","ad_id":"ad_0429","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 스마트 최적화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0430","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_health"]}
+{"source":"synthetic","ad_id":"ad_0431","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial","topic_smb"]}
+{"source":"synthetic","ad_id":"ad_0432","advertiser":"친환경A","category":"sustainability","content_summary":"친환경 솔루션 - 통합 탄소 감축","avoid_topics":["topic_defense","topic_market"]}
+{"source":"synthetic","ad_id":"ad_0433","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 스마트 연결성","avoid_topics":["topic_judicial","topic_culture"]}
+{"source":"synthetic","ad_id":"ad_0434","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0435","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 자동화 네트워크","avoid_topics":["topic_defense","topic_science"]}
+{"source":"synthetic","ad_id":"ad_0436","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0437","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0438","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 맞춤형 최적화","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0439","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial","topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0440","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0441","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0442","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_smb"]}
+{"source":"synthetic","ad_id":"ad_0443","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0444","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 맞춤형 간편 이용","avoid_topics":["topic_judicial","topic_transport"]}
+{"source":"synthetic","ad_id":"ad_0445","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_smb"]}
+{"source":"synthetic","ad_id":"ad_0446","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":["topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0447","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0448","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 실시간 효율화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0449","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0450","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0451","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 맞춤형 간편 이용","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0452","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0453","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 엔터프라이즈 간편 이용","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0454","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_finance"]}
+{"source":"synthetic","ad_id":"ad_0455","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 엔드투엔드 네트워크","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0456","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 엔터프라이즈 효율화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0457","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0458","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial","topic_youth"]}
+{"source":"synthetic","ad_id":"ad_0459","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_tax"]}
+{"source":"synthetic","ad_id":"ad_0460","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - AI 최적화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0461","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 엔드투엔드 연결성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0462","advertiser":"친환경A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_data"]}
+{"source":"synthetic","ad_id":"ad_0463","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - AI 건강 관리","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0464","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0465","advertiser":"자동차A","category":"automotive","content_summary":"스마트 모빌리티 서비스","avoid_topics":["topic_defense"]}
+{"source":"synthetic","ad_id":"ad_0466","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0467","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0468","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - 맞춤형 건강 관리","avoid_topics":["topic_judicial","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0469","advertiser":"핀테크A","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0470","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 맞춤형 간편 이용","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0471","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0472","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy"]}
+{"source":"synthetic","ad_id":"ad_0473","advertiser":"사이버보안A","category":"security","content_summary":"사이버보안 솔루션 - 위협 탐지 자동화","avoid_topics":["topic_judicial","topic_transport"]}
+{"source":"synthetic","ad_id":"ad_0474","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"기업 데이터 통합 솔루션 - AI 자동화","avoid_topics":["topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0475","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 실시간 최적화","avoid_topics":["topic_tax"]}
+{"source":"synthetic","ad_id":"ad_0476","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0477","advertiser":"재생에너지A","category":"sustainability","content_summary":"재생에너지 서비스 - ESG 보고서 지원","avoid_topics":["topic_defense","topic_digital"]}
+{"source":"synthetic","ad_id":"ad_0478","advertiser":"에듀테크A","category":"education","content_summary":"EdTech 솔루션 - 개인 맞춤형 학습","avoid_topics":["topic_judicial","topic_defense","topic_diplomacy","topic_labor"]}
+{"source":"synthetic","ad_id":"ad_0479","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0480","advertiser":"컴플라이언스A","category":"compliance","content_summary":"규제 컴플라이언스 자동화 솔루션","avoid_topics":["topic_judicial","topic_market"]}
+{"source":"synthetic","ad_id":"ad_0481","advertiser":"은행B","category":"fintech","content_summary":"디지털 금융 서비스 - 자동화 간편 이용","avoid_topics":["topic_judicial","topic_finance"]}
+{"source":"synthetic","ad_id":"ad_0482","advertiser":"헬스케어A","category":"healthcare","content_summary":"헬스케어 플랫폼 - 맞춤형 건강 관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0483","advertiser":"클라우드인프라A","category":"cloud","content_summary":"엔터프라이즈 클라우드 인프라 - 실시간 최적화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0484","advertiser":"사이버보안A","category":"security","content_summary":"데이터 보안·암호화 통합 플랫폼","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0485","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 통합 효율화","avoid_topics":["topic_population"]}
+{"source":"synthetic","ad_id":"ad_0486","advertiser":"클라우드인프라A","category":"cloud","content_summary":"멀티 클라우드 관리 플랫폼","avoid_topics":["topic_data"]}
+{"source":"synthetic","ad_id":"ad_0487","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial","topic_data"]}
+{"source":"synthetic","ad_id":"ad_0488","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 실시간 연결성","avoid_topics":["topic_judicial","topic_finance"]}
+{"source":"synthetic","ad_id":"ad_0489","advertiser":"핀테크A","category":"fintech","content_summary":"디지털 금융 서비스 - 실시간 간편 이용","avoid_topics":["topic_judicial","topic_admin"]}
+{"source":"synthetic","ad_id":"ad_0490","advertiser":"통신사A","category":"telecom","content_summary":"기업용 5G·통신 서비스 - 자동화 연결성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0491","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0492","advertiser":"헬스케어A","category":"healthcare","content_summary":"의료 데이터 서비스","avoid_topics":["topic_judicial","topic_housing"]}
+{"source":"synthetic","ad_id":"ad_0493","advertiser":"데이터솔루션A","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":["topic_ai"]}
+{"source":"synthetic","ad_id":"ad_0494","advertiser":"컴플라이언스A","category":"compliance","content_summary":"RegTech 플랫폼 - 보고서 자동 생성","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0495","advertiser":"데이터솔루션B","category":"data_solutions","content_summary":"데이터 분석 플랫폼 - 실시간 인사이트 제공","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0496","advertiser":"광고대행A","category":"marketing","content_summary":"디지털 마케팅 자동화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0497","advertiser":"은행B","category":"fintech","content_summary":"핀테크 플랫폼 - 통합 자산관리","avoid_topics":["topic_judicial"]}
+{"source":"synthetic","ad_id":"ad_0498","advertiser":"광고대행A","category":"marketing","content_summary":"광고·마케팅 플랫폼 - 통합 효율화","avoid_topics":[]}
+{"source":"synthetic","ad_id":"ad_0499","advertiser":"자동차A","category":"automotive","content_summary":"전기차 충전 인프라 - 엔터프라이즈 네트워크","avoid_topics":["topic_defense","topic_labor"]}

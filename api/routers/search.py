@@ -159,72 +159,56 @@ def _adjust_top_k(persona_id: str, requested_top_k: int) -> int:
 
 
 def _build_subgraph(top_hit: opensearch.SearchHit) -> SubgraphModel:
-    """top hit 1-hop subgraph 추출.
+    """top hit 1-hop subgraph — objects.py의 합성 로직 재사용 (실제 값 채워짐).
 
-    노드 타입별 1-hop 패턴:
-    - Bill: 발의자(Person), 토픽(Topic), 표결(Vote)
-    - Person: 발의 법안(Bill), 위원회(Committee)
-    - 기타: 빈 subgraph (확장 가능)
+    사용자 신고: search top-hit subgraph에 실제 값 안 나옴 (Neptune mock이 빈 list 반환).
+    Fix: objects_catalog + member_directory의 실 데이터 + 합성 1-hop hop builder 사용.
+    Bill→Person(발의자)/Topic/Article/Committee, Person→Bill/Committee/Vote/Topic 등 풍부화.
     """
-    nodes: list[SubgraphNode] = []
-    edges: list[SubgraphEdge] = []
-    root_id = top_hit.id
+    from api.routers.objects import _try_build_subgraph  # lazy: 순환 import 회피
+    from api.services import objects_catalog, member_directory as md
 
-    # 루트 노드
-    nodes.append(SubgraphNode(
-        id=top_hit.id,
-        label=top_hit.node_type or "Unknown",
-        data={"title": top_hit.title, "source": top_hit.source},
-    ))
+    cls = top_hit.node_type or "Unknown"
 
-    if top_hit.node_type == "Bill":
-        # 발의자(Person)
-        person_rows = neptune.open_cypher(
-            "MATCH (b:Bill {bill_id: $id})<-[:PROPOSED]-(p:Person) RETURN p LIMIT 3",
-            parameters={"id": top_hit.id},
+    # objects_catalog에서 실 instance data 찾기
+    matched: dict = {}
+    if cls in ("Bill", "Person", "Vote", "Topic", "Article"):
+        items, _ = objects_catalog.list_instances(cls, limit=500)
+        meta = objects_catalog.get_class_meta(cls)
+        id_field = meta.get("display", {}).get("id", "id")
+        matched = next((it for it in items if str(it.get(id_field, "")) == top_hit.id), {})
+
+    # Person fallback: member_directory에서 lookup
+    if not matched and cls == "Person":
+        m = md.get_member(md.resolve_id(top_hit.id))
+        if m is not None:
+            matched = {
+                "source": "real",
+                "assembly_id": m.assembly_id, "name": m.name,
+                "party_id": m.party, "district_id": m.district,
+                "profile_image_url": m.profile_image_url,
+            }
+
+    if not matched:
+        # 최소 fallback — root node만
+        return SubgraphModel(
+            root_id=top_hit.id,
+            nodes=[SubgraphNode(id=top_hit.id, label=cls,
+                                data={"title": top_hit.title, "source": top_hit.source})],
+            edges=[],
         )
-        for row in person_rows:
-            person = row.get("p", {})
-            pid = person.get("assembly_id", "")
-            if pid:
-                nodes.append(SubgraphNode(
-                    id=pid, label="Person",
-                    data={"name": person.get("name", ""), "source": person.get("source", "real")},
-                ))
-                edges.append(SubgraphEdge(source=pid, target=top_hit.id, type="PROPOSED"))
 
-        # 표결(Vote)
-        vote_rows = neptune.open_cypher(
-            "MATCH (b:Bill {bill_id: $id})<-[:VOTE_ON]-(v:Vote) RETURN v LIMIT 3",
-            parameters={"id": top_hit.id},
-        )
-        for row in vote_rows:
-            v = row.get("v", {})
-            vid = v.get("vote_id", "")
-            if vid:
-                nodes.append(SubgraphNode(
-                    id=vid, label="Vote",
-                    data={"result": v.get("result", ""), "source": v.get("source", "real")},
-                ))
-                edges.append(SubgraphEdge(source=vid, target=top_hit.id, type="VOTE_ON"))
-
-    elif top_hit.node_type == "Person":
-        # 발의 법안(Bill) - 일반 mock 사용
-        bill_rows = neptune.open_cypher(
-            "MATCH (p:Person {assembly_id: $id})-[:PROPOSED]->(b:Bill) RETURN b LIMIT 3",
-            parameters={"id": top_hit.id},
-        )
-        for row in bill_rows:
-            b = row.get("b", {})
-            bid = b.get("bill_id", "")
-            if bid:
-                nodes.append(SubgraphNode(
-                    id=bid, label="Bill",
-                    data={"title": b.get("title", ""), "source": b.get("source", "real")},
-                ))
-                edges.append(SubgraphEdge(source=top_hit.id, target=bid, type="PROPOSED"))
-
-    return SubgraphModel(root_id=root_id, nodes=nodes, edges=edges)
+    # objects.py의 합성 builder 재사용 (Bill/Topic/Vote/Person 모두 풍부 1-hop)
+    sg = _try_build_subgraph(cls, top_hit.id, matched) or {
+        "root_id": top_hit.id, "nodes": [], "edges": [],
+    }
+    return SubgraphModel(
+        root_id=sg["root_id"],
+        nodes=[SubgraphNode(id=n["id"], label=n["label"], data=n.get("data") or {})
+               for n in sg["nodes"]],
+        edges=[SubgraphEdge(source=e["source"], target=e["target"], type=e["type"])
+               for e in sg["edges"]],
+    )
 
 
 def _persona_extras(persona_id: str, persona: dict, hits: list[opensearch.SearchHit]) -> dict:

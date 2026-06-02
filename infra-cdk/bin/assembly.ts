@@ -30,9 +30,12 @@ const tags = { Project: 'ontology-for-assembly', Env: envName, ManagedBy: 'cdk' 
 
 const network = new NetworkStack(app, `${projectPrefix}-network`, { env, tags });
 
+// crossRegionReferences: true 는 producer + consumer 양쪽 모두 필요.
+// Data는 b2bKeysTable, Compute는 alb를 us-east-1 EdgeStack에 export하므로 둘 다 활성화.
 const data = new DataStack(app, `${projectPrefix}-data`, {
   env,
   tags,
+  crossRegionReferences: true,
   vpc: network.vpc,
   appSg: network.appSg,
   neptuneSg: network.neptuneSg,
@@ -49,6 +52,7 @@ const ai = new AiStack(app, `${projectPrefix}-ai`, {
 const compute = new ComputeStack(app, `${projectPrefix}-compute`, {
   env,
   tags,
+  crossRegionReferences: true,
   vpc: network.vpc,
   appSg: network.appSg,
   albSg: network.albSg,
@@ -64,10 +68,12 @@ const compute = new ComputeStack(app, `${projectPrefix}-compute`, {
   agentCoreMemoryId: ai.memoryId,
 });
 
+// VPC Origin은 cross-region 미지원 - edge stack을 ap-northeast-2(ALB와 동일)로 이전.
+// us-east-1 요구사항(Lambda@Edge, ACM cert for CloudFront, WAFv2 CLOUDFRONT scope)은
+// 현재 PoC에서 미사용 (Phase 5 polish 도입 시 별도 EdgeUsEast1Stack 분리).
 const edge = new EdgeStack(app, `${projectPrefix}-edge`, {
-  env: { ...env, region: 'us-east-1' },
+  env,  // ap-northeast-2 - ALB와 동일 region (VPC Origin 요구사항)
   tags,
-  crossRegionReferences: true,
   alb: compute.alb,
   b2bKeysTable: data.b2bKeysTable,
   domainName: app.node.tryGetContext('domain') as string | undefined,

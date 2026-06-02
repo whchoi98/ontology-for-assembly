@@ -10,7 +10,7 @@
 
 import type { PersonaId } from './personas';
 
-const PUBLIC_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8080';
+const PUBLIC_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 const SERVER_BASE = process.env.INTERNAL_API_BASE_URL ?? PUBLIC_BASE;
 
 
@@ -153,32 +153,39 @@ export async function chat(
 export type StreamEvent =
   | { type: 'phase'; data: { stage: string; status: string; approach?: string } }
   | { type: 'log'; data: { stage: string; tool_called?: string; agent_invoked?: string } }
+  | { type: 'delta'; data: { stage: string; text: string } }
   | { type: 'result'; data: { stage: string } & StageResult }
-  | { type: 'done'; data: { total_ms: number; persona_id: string; query: string } };
+  | { type: 'error'; data: { message: string; trace?: string } }
+  | { type: 'done'; data: { total_ms: number; persona_id: string; query: string; aborted?: boolean } };
 
 export interface ChatStreamCallbacks {
   onEvent: (event: StreamEvent) => void;
   onError?: (error: Error) => void;
 }
 
+export interface ChatStreamOpts extends RequestOpts {
+  mode?: 'chatbot' | 'agent' | 'agentic' | 'compare';  // default = compare
+}
+
 /** POST /api/chat/stream SSE 소비. ReadableStream + manual parse. */
 export async function chatStream(
   query: string,
   callbacks: ChatStreamCallbacks,
-  opts: RequestOpts = {},
+  opts: ChatStreamOpts = {},
 ): Promise<void> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     Accept: 'text/event-stream',
   };
   if (opts.personaId) headers['X-Persona-Id'] = opts.personaId;
+  const mode = opts.mode ?? 'compare';
 
   let response: Response;
   try {
     response = await fetch(`${baseUrl()}/api/chat/stream`, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ query, mode: 'compare' }),
+      body: JSON.stringify({ query, mode }),
       signal: opts.signal,
     });
   } catch (e) {

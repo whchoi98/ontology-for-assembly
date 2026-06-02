@@ -44,7 +44,8 @@ os.environ.setdefault("DEMO_PUBLIC_MODE", "true")
 
 PERSONAS = ("editorial", "data_ai", "ad_sales", "general_reader", "paid_subscriber", "b2b")
 SCENARIOS_ALL = list("ABCDEFGHIJKLMN")
-SCENARIOS_IMPLEMENTED = ("A", "B", "L")  # Phase 3 + 5에서 구현
+# Phase 4 완료 - 14/14 시나리오 모두 구현.
+SCENARIOS_IMPLEMENTED = tuple(SCENARIOS_ALL)
 
 PASS_RATE_THRESHOLD = 0.85
 BALANCE_THRESHOLD = 0.8
@@ -74,36 +75,89 @@ class CaseResult:
 def build_cases() -> list[CaseDefinition]:
     """6 페르소나 × 14 시나리오 = 84 케이스 카탈로그.
 
-    Implemented 시나리오는 expected_substrings 명시.
-    Unimplemented는 implemented=False (skipped 처리).
+    Phase 4 완료 - 14 시나리오 모두 active. Implemented 시나리오는 expected_substrings로
+    응답 sanity check.
     """
     cases: list[CaseDefinition] = []
     for persona in PERSONAS:
-        # 시나리오 A — 의미 검색
+        # ─── 핵심 시나리오 (A·B·L) ─────────────────────────────────────
         cases.append(CaseDefinition(
             persona=persona, scenario="A",
             query="AI 입법",
             expected_substrings=("AI", "법"),
         ))
-        # 시나리오 B — 3-stage 챗봇
         cases.append(CaseDefinition(
             persona=persona, scenario="B",
             query="22대 국회 AI 입법 동향을 분석해주세요",
         ))
-        # 시나리오 L — 광고 매칭 (compare)
         cases.append(CaseDefinition(
             persona=persona, scenario="L",
             query="art_safe_normal",  # article_id
         ))
-        # 미구현 시나리오 11개 - skipped
-        for code in SCENARIOS_ALL:
-            if code in SCENARIOS_IMPLEMENTED:
-                continue
-            cases.append(CaseDefinition(
-                persona=persona, scenario=code,
-                query="(미구현)",
-                implemented=False,
-            ))
+
+        # ─── 핵심 PDF ★ (K·M) ──────────────────────────────────────────
+        cases.append(CaseDefinition(
+            persona=persona, scenario="K",
+            query="",  # GET /api/outlier (no path param)
+            expected_substrings=("outlier", "이탈"),
+        ))
+        cases.append(CaseDefinition(
+            persona=persona, scenario="M",
+            query="MONA_001",  # path param: person_id
+            expected_substrings=("events", "AI"),
+        ))
+
+        # ─── 거버넌스 (I) ──────────────────────────────────────────────
+        cases.append(CaseDefinition(
+            persona=persona, scenario="I",
+            query="더불어민주당과 국민의힘이 양당 협력으로 청년 주거 정책을 통과시켰다. (출처: 국회 OpenAPI 2026-04)",
+            expected_substrings=("score", "components"),
+        ))
+
+        # ─── 데이터·AI (E·F·J·N) ────────────────────────────────────
+        cases.append(CaseDefinition(
+            persona=persona, scenario="E",
+            query="",  # GET /api/cluster
+            expected_substrings=("cluster", "label"),
+        ))
+        cases.append(CaseDefinition(
+            persona=persona, scenario="F",
+            query="MONA_001",  # path param
+            expected_substrings=("candidates", "similarity"),
+        ))
+        cases.append(CaseDefinition(
+            persona=persona, scenario="J",
+            query="",  # GET /api/external-signal
+            expected_substrings=("fusions", "pattern"),
+        ))
+        cases.append(CaseDefinition(
+            persona=persona, scenario="N",
+            query="",  # GET /api/issue-legislation
+            expected_substrings=("rows", "intensity"),
+        ))
+
+        # ─── B2C·B2B (C·D·G·H) ─────────────────────────────────────────
+        cases.append(CaseDefinition(
+            persona=persona, scenario="C",
+            query="",  # GET /api/insights/articles
+            expected_substrings=("articles", "title"),
+        ))
+        cases.append(CaseDefinition(
+            persona=persona, scenario="D",
+            query="AI 산업 진흥 정책. 더불어민주당과 국민의힘이 협력 (출처: 국회 OpenAPI)",
+            expected_substrings=("scores", "top_persona_id"),
+        ))
+        cases.append(CaseDefinition(
+            persona=persona, scenario="G",
+            query="",  # GET /api/article-roi
+            expected_substrings=("entries", "roi_pct"),
+        ))
+        cases.append(CaseDefinition(
+            persona=persona, scenario="H",
+            query="seoul",  # path param
+            expected_substrings=("seoul", "서울"),
+        ))
+
     return cases
 
 
@@ -168,10 +222,132 @@ def call_ad_match(base_url: str, persona: str, article_id: str) -> tuple[bool, f
         return False, 0.0, f"error: {e}"
 
 
+def _get_json(base_url: str, path: str, persona: str) -> tuple[bool, str]:
+    """GET 헬퍼 - (ok, response_text). LLM 호출 없는 라우터는 balance=1.0."""
+    try:
+        import requests
+        r = requests.get(
+            f"{base_url}{path}",
+            headers={"X-Persona-Id": persona},
+            timeout=15,
+        )
+        r.raise_for_status()
+        return True, json.dumps(r.json(), ensure_ascii=False)
+    except Exception as e:
+        return False, f"error: {e}"
+
+
+def _post_json(
+    base_url: str, path: str, persona: str, payload: dict,
+) -> tuple[bool, str]:
+    """POST 헬퍼 - (ok, response_text)."""
+    try:
+        import requests
+        r = requests.post(
+            f"{base_url}{path}",
+            json=payload,
+            headers={"X-Persona-Id": persona},
+            timeout=15,
+        )
+        r.raise_for_status()
+        return True, json.dumps(r.json(), ensure_ascii=False)
+    except Exception as e:
+        return False, f"error: {e}"
+
+
+# Phase 4 신규 dispatchers (C·D·E·F·G·H·I·J·K·M·N).
+# LLM 호출 없는 결정적 시드 라우터들이므로 balance_score=1.0 처리.
+
+def call_outlier(base_url: str, persona: str, query: str) -> tuple[bool, float, str]:
+    """K - GET /api/outlier."""
+    ok, text = _get_json(base_url, "/api/outlier?limit=5", persona)
+    return ok, 1.0, text
+
+
+def call_journey(base_url: str, persona: str, query: str) -> tuple[bool, float, str]:
+    """M - GET /api/journey/{person_id}. query=person_id."""
+    ok, text = _get_json(base_url, f"/api/journey/{query}", persona)
+    return ok, 1.0, text
+
+
+def call_neutrality(base_url: str, persona: str, query: str) -> tuple[bool, float, str]:
+    """I - POST /api/neutrality/score. query=텍스트. balance는 응답 score 사용."""
+    ok, text = _post_json(base_url, "/api/neutrality/score", persona, {"text": query})
+    if not ok:
+        return False, 0.0, text
+    try:
+        body = json.loads(text)
+        score = float(body.get("score", 1.0))
+        return True, score, text
+    except Exception:
+        return True, 1.0, text
+
+
+def call_cluster(base_url: str, persona: str, query: str) -> tuple[bool, float, str]:
+    """E - GET /api/cluster."""
+    ok, text = _get_json(base_url, "/api/cluster", persona)
+    return ok, 1.0, text
+
+
+def call_lookalike(base_url: str, persona: str, query: str) -> tuple[bool, float, str]:
+    """F - GET /api/lookalike/{person_id}. query=person_id."""
+    ok, text = _get_json(base_url, f"/api/lookalike/{query}?top_k=3", persona)
+    return ok, 1.0, text
+
+
+def call_external_signal(base_url: str, persona: str, query: str) -> tuple[bool, float, str]:
+    """J - GET /api/external-signal."""
+    ok, text = _get_json(base_url, "/api/external-signal", persona)
+    return ok, 1.0, text
+
+
+def call_issue_legislation(base_url: str, persona: str, query: str) -> tuple[bool, float, str]:
+    """N - GET /api/issue-legislation."""
+    ok, text = _get_json(base_url, "/api/issue-legislation", persona)
+    return ok, 1.0, text
+
+
+def call_insights(base_url: str, persona: str, query: str) -> tuple[bool, float, str]:
+    """C - GET /api/insights/articles."""
+    ok, text = _get_json(base_url, "/api/insights/articles?limit=5", persona)
+    return ok, 1.0, text
+
+
+def call_persona_match(base_url: str, persona: str, query: str) -> tuple[bool, float, str]:
+    """D - POST /api/persona-match/text. query=text."""
+    ok, text = _post_json(
+        base_url, "/api/persona-match/text", persona, {"text": query},
+    )
+    return ok, 1.0, text
+
+
+def call_article_roi(base_url: str, persona: str, query: str) -> tuple[bool, float, str]:
+    """G - GET /api/article-roi."""
+    ok, text = _get_json(base_url, "/api/article-roi?limit=5", persona)
+    return ok, 1.0, text
+
+
+def call_district_map(base_url: str, persona: str, query: str) -> tuple[bool, float, str]:
+    """H - GET /api/district-map/{sido_key}. query=sido_key."""
+    ok, text = _get_json(base_url, f"/api/district-map/{query}", persona)
+    return ok, 1.0, text
+
+
 DISPATCHERS = {
     "A": call_search,
     "B": call_chat,
+    "C": call_insights,
+    "D": call_persona_match,
+    "E": call_cluster,
+    "F": call_lookalike,
+    "G": call_article_roi,
+    "H": call_district_map,
+    "I": call_neutrality,
+    "J": call_external_signal,
+    "K": call_outlier,
     "L": call_ad_match,
+    "M": call_journey,
+    "N": call_issue_legislation,
 }
 
 

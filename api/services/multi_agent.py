@@ -104,9 +104,114 @@ def run_agentic_pipeline(
     )
     tools_called.append("neptune_persons")
 
+    # Agentic mode는 자율적으로 *추가 real endpoint*까지 호출 (Stage 2보다 깊은 분석)
+    extra_context = ""
+    qlow = query.lower()
+    try:
+        # 의원 이름 lookup (예: "김은혜 의원의 의정활동 이력은?")
+        from api.services.three_stage import _detect_district_keyword, _detect_member_name
+        named_member = _detect_member_name(query)
+        if named_member:
+            tools_called.append("member_journey_lookup")
+            mid = getattr(named_member, "assembly_id", "")
+            name = getattr(named_member, "name", "—")
+            party = getattr(named_member, "party", "—")
+            district = getattr(named_member, "district", "—")
+            committee = getattr(named_member, "committee", None) or "—"
+            reelection = getattr(named_member, "reelection", None) or "—"
+            stats_line = ""
+            events_lines = ""
+            try:
+                from api.services import journey_builder
+                jr = journey_builder.build_journey(mid)
+                stats = (jr.stats if jr else None) or {}
+                stats_line = (
+                    f"발의 {stats.get('proposed', '?')}건 · 공동발의 {stats.get('co_proposed','?')}건 "
+                    f"· 표결 {stats.get('voted','?')}건 · 발언 {stats.get('statements','?')}건"
+                )
+                events = ((jr.events if jr else None) or [])[:5]
+                if events:
+                    events_lines = "\n".join(
+                        f"  - {getattr(e,'date','—')} | {getattr(e,'event_type','—')} | {(getattr(e,'title','') or '')[:60]}"
+                        for e in events
+                    )
+            except Exception:
+                pass
+            extra_context = (
+                f"\n\n[real /api/journey/{mid} · 의원 이력]\n"
+                f"- {name} ({party}) — {district}\n"
+                f"- 위원회: {committee} · {reelection}\n"
+                f"- 활동: {stats_line}\n"
+                f"- 최근 이벤트:\n{events_lines}\n"
+            )
+            sources_used.append({"id": mid, "title": f"{name} ({party})", "source": "real", "node_type": "Person"})
+        # 지역구 lookup (예: "분당갑 국회의원은?")
+        district_keyword = _detect_district_keyword(query)
+        if not extra_context and district_keyword and ("의원" in query or "대표" in query or "국회" in query or "지역구" in query):
+            from api.services import member_directory
+            matched = [m for m in member_directory.list_members() if district_keyword in (getattr(m, "district", "") or "")]
+            if matched:
+                tools_called.append("district_member_lookup")
+                lines = []
+                for m in matched[:5]:
+                    lines.append(
+                        f"- {getattr(m,'name','')} ({getattr(m,'party','')}) — {getattr(m,'district','')} · 위원회: {getattr(m,'committee',None) or '—'} · {getattr(m,'reelection',None) or '—'}"
+                    )
+                extra_context = (
+                    f"\n\n[real /api/members district='{district_keyword}' · {len(matched)}명]\n"
+                    + "\n".join(lines)
+                )
+                sources_used.extend([
+                    {"id": getattr(m,'assembly_id',''), "title": f"{getattr(m,'name','')} ({getattr(m,'party','')})", "source": "real", "node_type": "Person"}
+                    for m in matched[:5]
+                ])
+        if "영향력" in query or "influence" in qlow:
+            from api.routers.insights_advanced import get_influence_rank
+            ir = get_influence_rank(limit=5)
+            tools_called.append("get_influence_rank")
+            top = ir.members[:5]
+            extra_context = (
+                "\n\n[real Neptune /api/insights/influence-rank top 5]\n"
+                + "\n".join(
+                    f"#{i+1} {m.name} ({m.party}) 발의 {m.proposed_count} · 공동 {m.co_proposed_count} · cohort {m.cohort_weight_sum} · score {m.influence_score*100:.0f}"
+                    for i, m in enumerate(top)
+                )
+            )
+            sources_used.extend([
+                {"id": m.assembly_id, "title": f"{m.name} ({m.party})", "source": "real", "node_type": "Person"}
+                for m in top
+            ])
+        elif "응집도" in query or "cohesion" in qlow:
+            from api.routers.insights_advanced import get_party_cohesion
+            pc = get_party_cohesion()
+            tools_called.append("get_party_cohesion")
+            top = pc.parties[:5]
+            extra_context = (
+                f"\n\n[real Neptune /api/insights/party-cohesion overall {pc.overall_cohesion*100:.1f}%]\n"
+                + "\n".join(
+                    f"#{i+1} {p.party} ({p.member_count}명) — {p.majority_alignment_pct}%"
+                    for i, p in enumerate(top)
+                )
+            )
+        elif "swing" in qlow or "이탈" in query:
+            from api.routers.insights_advanced import get_swing_voters
+            sv = get_swing_voters(limit=5, threshold_pct=95)
+            tools_called.append("get_swing_voters")
+            top = sv.members[:5]
+            extra_context = (
+                f"\n\n[real Neptune /api/insights/swing-voters threshold 95% · {len(sv.members)}명]\n"
+                + "\n".join(
+                    f"#{i+1} {m.name} ({m.party}) 일치율 {m.party_majority_alignment_pct}% · 이탈 {m.deviation_count}/{m.total_active_votes}"
+                    for i, m in enumerate(top)
+                )
+            )
+    except Exception:
+        pass
+
     graph_summary = (
         f"OpenSearch: {len(hits)}건 hit. "
         f"Neptune: 의안 {len(bill_rows)}건, 의원 {len(person_rows)}명 조회."
+        + extra_context
     )
     graph_message = f"질문: {query}\n계획:\n{plan_text}\n\n조회 결과 요약: {graph_summary}"
     graph_result = _invoke_agent("graph", graph_message, persona_id)
@@ -122,11 +227,14 @@ def run_agentic_pipeline(
     agents_invoked.append("analyst")
 
     # ─── 4. Editor ──────────────────────────────────────────────────────────
+    # extra_context (real Neptune marker)도 editor message에 전달 →
+    # bedrock._mock_response의 marker 감지 branch에서 real-data 답변 생성
     editor_message = (
         f"원 질문: {query}\n\n"
         f"--- Planner ---\n{plan_text}\n\n"
         f"--- Graph 요약 ---\n{graph_result.text}\n\n"
-        f"--- Analyst 해석 ---\n{analyst_result.text}\n\n"
+        f"--- Analyst 해석 ---\n{analyst_result.text}\n"
+        f"{extra_context}\n\n"
         f"위 내용을 종합하여 기자가 바로 사용할 수 있는 기사 초안을 작성하세요."
     )
     editor_result = _invoke_agent("editor", editor_message, persona_id)

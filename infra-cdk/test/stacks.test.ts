@@ -76,17 +76,18 @@ function buildStacks() {
 
 
 describe('NetworkStack', () => {
-  it('VPC + 4 SGs 생성', () => {
+  it('공유 VPC import + 5 SGs 생성 (assembly 전용 신규)', () => {
     const { network } = buildStacks();
     const t = Template.fromStack(network);
-    t.resourceCountIs('AWS::EC2::VPC', 1);
+    // 공유 VPC는 fromVpcAttributes로 import - 새 VPC 리소스 생성 X.
+    t.resourceCountIs('AWS::EC2::VPC', 0);
     t.resourceCountIs('AWS::EC2::SecurityGroup', 5);  // alb + app + neptune + os + lambda
   });
 
-  it('VPC CIDR 10.30.0.0/16 (assembly 전용)', () => {
+  it('cc-on-bedrock-vpc 공유 (gcc·retail·mfg와 동일 VPC)', () => {
     const { network } = buildStacks();
-    const t = Template.fromStack(network);
-    t.hasResourceProperties('AWS::EC2::VPC', { CidrBlock: '10.30.0.0/16' });
+    // 모든 SG가 동일 공유 VPC ID를 참조해야 함.
+    expect(network.vpc.vpcId).toBe('vpc-0dfa5610180dfa628');
   });
 });
 

@@ -11,6 +11,8 @@ import { CytoscapeView } from '../../components/CytoscapeView';
 import { DataSourceBadge } from '../../components/DataSourceBadge';
 import { readPersonaIdSync } from '../../components/PersonaSwitch';
 import { search, type SearchResponse } from '../../lib/api-client';
+import { AIInsightPanel } from '../../components/AIInsightPanel';
+import ScenarioHero from '../../components/ScenarioHero';
 
 export default function SearchPage() {
   const [query, setQuery] = useState('AI 입법');
@@ -35,22 +37,14 @@ export default function SearchPage() {
 
   return (
     <div>
-      <header className="mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="font-mono text-sm text-gray-400">시나리오 A</span>
-        </div>
-        <h1 className="text-2xl font-bold mb-1">의안·의원 의미 검색</h1>
-        <p className="text-sm text-gray-600">
-          BM25(Nori) + Cohere embed-v4 KNN + RRF + rerank-v3. 페르소나에 따라 top_k 자동 조정.
-        </p>
-      </header>
+      <ScenarioHero code="A" />
 
-      <form onSubmit={runSearch} className="mb-6 flex gap-2">
+      <form onSubmit={runSearch} className="mb-3 flex gap-2">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="flex-1 bg-slate-900 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
           placeholder="검색어 입력 (예: AI 입법, 청년 주거지원)"
           maxLength={500}
         />
@@ -63,15 +57,51 @@ export default function SearchPage() {
         </button>
       </form>
 
+      {/* 추천 자연어 검색 (10개) — 시연 시 빠른 데모 진입점 */}
+      <div className="mb-6">
+        <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-2">
+          추천 검색어 — 시연 진입점 (click)
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {[
+            'AI 입법', 'AI 산업 진흥', '데이터·개인정보 보호', '청년 주거 지원',
+            '환경·기후 정책', '사회복지 확대', '교육 격차 해소', '디지털 전환',
+            '에너지 전환', '소상공인 지원',
+          ].map((q) => (
+            <button
+              key={q}
+              type="button"
+              onClick={() => {
+                setQuery(q);
+                // 검색 자동 실행 — async 호출은 form submit 모방
+                setLoading(true); setError(null);
+                import('../../components/PersonaSwitch').then(({ readPersonaIdSync }) => {
+                  const personaId = readPersonaIdSync();
+                  import('../../lib/api-client').then(({ search }) => {
+                    search(q, { personaId })
+                      .then(setResult)
+                      .catch((err) => setError(String(err)))
+                      .finally(() => setLoading(false));
+                  });
+                });
+              }}
+              className="px-2.5 py-1 text-xs rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 hover:bg-blue-500/15 hover:border-blue-500/50 hover:text-blue-200 transition-colors"
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {error && (
-        <div className="border border-red-200 bg-red-50 text-red-800 rounded-md p-3 text-sm mb-4">
+        <div className="border border-red-200 bg-red-500/15 text-red-300 rounded-md p-3 text-sm mb-4">
           {error}
         </div>
       )}
 
       {result && (
         <div>
-          <div className="mb-4 flex items-center gap-3 text-sm text-gray-600">
+          <div className="mb-4 flex items-center gap-3 text-sm text-slate-300">
             <span>페르소나: <strong>{result.persona_id}</strong></span>
             <span>cohort:</span>
             {result.cohort_used.map((s) => <DataSourceBadge key={s} source={s} size="xs" />)}
@@ -80,33 +110,33 @@ export default function SearchPage() {
 
           <ul className="space-y-3 mb-6">
             {result.hits.map((hit) => (
-              <li key={hit.id} className="border border-gray-200 rounded-lg p-4 bg-white">
+              <li key={hit.id} className="border border-slate-800 rounded-lg p-4 bg-slate-900/40">
                 <div className="flex items-start justify-between gap-3 mb-1.5">
-                  <h3 className="font-semibold text-gray-900">{hit.title}</h3>
+                  <h3 className="font-semibold text-white">{hit.title}</h3>
                   <div className="flex items-center gap-1.5 shrink-0">
                     <DataSourceBadge source={hit.source} size="xs" />
-                    <span className="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">
                       {hit.node_type}
                     </span>
-                    <span className="text-xs text-gray-400 font-mono">
+                    <span className="text-xs text-slate-500 font-mono">
                       {hit.score.toFixed(2)}
                     </span>
                   </div>
                 </div>
-                <p className="text-sm text-gray-600">{hit.snippet}</p>
+                <p className="text-sm text-slate-300">{hit.snippet}</p>
               </li>
             ))}
           </ul>
 
           {result.top_hit_subgraph && (
             <section className="space-y-2">
-              <h2 className="font-semibold text-gray-900">Top hit 1-hop subgraph</h2>
+              <h2 className="font-semibold text-white">Top hit 1-hop subgraph</h2>
               <CytoscapeView subgraph={result.top_hit_subgraph} height={400} />
               <details className="text-xs">
-                <summary className="text-gray-500 cursor-pointer hover:text-gray-700">
+                <summary className="text-slate-400 cursor-pointer hover:text-slate-200">
                   JSON raw 데이터 (디버깅)
                 </summary>
-                <pre className="text-xs mt-2 overflow-x-auto bg-white p-2 rounded border border-gray-200">
+                <pre className="text-xs mt-2 overflow-x-auto bg-slate-900/40 p-2 rounded border border-slate-800">
                   {JSON.stringify(result.top_hit_subgraph, null, 2)}
                 </pre>
               </details>
@@ -114,6 +144,7 @@ export default function SearchPage() {
           )}
         </div>
       )}
+      <AIInsightPanel scenarioCode="A" context={result} />
     </div>
   );
 }

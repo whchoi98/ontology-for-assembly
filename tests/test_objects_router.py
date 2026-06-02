@@ -25,10 +25,10 @@ def test_classes_meta_has_seven_groups(client):
 
 
 def test_implemented_count(client):
-    """현재 15 구현 - dispatcher 등록된 클래스 수."""
+    """Phase 5 polish 완료 - 31/31 dispatcher 모두 등록."""
     r = client.get("/api/ontology/classes").json()
-    assert r["implemented_count"] == 15
-    assert r["implemented_count"] < r["total_classes"]
+    assert r["implemented_count"] == 31
+    assert r["implemented_count"] == r["total_classes"]
 
 
 def test_class_meta_for_bill(client):
@@ -83,11 +83,15 @@ def test_list_implemented_flag_true(client):
     assert r["implemented"] is True
 
 
-def test_list_implemented_flag_false_for_missing(client):
-    """Staff·District 등 dispatcher 미등록 클래스는 implemented=False + 빈 items."""
-    r = client.get("/api/objects/Staff").json()
-    assert r["implemented"] is False
-    assert r["items"] == []
+def test_list_all_31_classes_have_items(client):
+    """Phase 5 polish - 31 클래스 모두 dispatcher 등록 + 1+ 인스턴스 반환."""
+    all_classes = client.get("/api/ontology/classes").json()
+    for group_classes in all_classes["groups"].values():
+        for cls_meta in group_classes:
+            cls_name = cls_meta["name"]
+            r = client.get(f"/api/objects/{cls_name}?limit=2").json()
+            assert r["implemented"] is True, f"{cls_name}: implemented=False"
+            assert len(r["items"]) >= 1, f"{cls_name}: 0 items returned"
 
 
 # ─── 단일 객체 디테일 ───────────────────────────────────────────────────────
@@ -124,12 +128,23 @@ def test_get_unknown_instance_returns_404(client):
 # ─── 다양한 클래스 통합 ─────────────────────────────────────────────────────
 
 @pytest.mark.parametrize("cls", [
-    "Person", "Party", "Bill", "Vote", "Committee", "Session", "Statement",
-    "Agency", "Topic", "Article", "Reader", "Advertisement", "AdInventory",
-    "SocialSignal", "PollResult",
+    # 인물·조직 (6)
+    "Person", "Party", "Staff", "Committee", "District", "Term",
+    # 입법 (7)
+    "Bill", "Law", "Amendment", "Vote", "Statement", "Session", "Budget",
+    # 주제·외부 (6)
+    "Topic", "Policy", "Agency", "ElectionResult", "PollResult", "SocialSignal",
+    # 미디어 (2)
+    "Article", "Tag",
+    # 독자 측 (5)
+    "Reader", "ReaderProfile", "SubscriptionTier", "ReadingEvent", "Bookmark",
+    # 광고 (4)
+    "Advertisement", "AdInventory", "AdImpression", "AdMatchDecision",
+    # 분석 메타 (1)
+    "Cluster",
 ])
 def test_list_each_implemented_class_returns_items(client, cls):
-    """15 구현 클래스 모두 인스턴스 조회 가능."""
+    """31 클래스 모두 인스턴스 조회 가능 (Phase 5 polish 완료)."""
     r = client.get(f"/api/objects/{cls}?limit=3").json()
     assert r["type"] == cls
     assert r["implemented"] is True

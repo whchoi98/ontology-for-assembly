@@ -27,7 +27,7 @@ from data.schemas import Vote, VoteResult
 __all__ = ["fetch_votes", "VOTE_ENDPOINT", "RESULT_MAP"]
 
 
-VOTE_ENDPOINT = os.environ.get("ASSEMBLY_API_VOTE_ENDPOINT", "nojepdqqaweusdfbi")
+VOTE_ENDPOINT = os.environ.get("ASSEMBLY_API_VOTE_ENDPOINT", "ncocpgfiaoituanbr")  # 의안별 표결 집계 (더 많은 데이터)
 
 
 # 처리 결과 → VoteResult 정규화.
@@ -69,19 +69,45 @@ def _safe_int(value, default: int = 0) -> int:
 def _row_to_vote(row: dict) -> Vote:
     """국회 API row → Pydantic Vote.
 
-    vote_id는 BILL_ID + VOTE_DATE 조합으로 deterministic.
+    실 endpoint nkalemivaqmoibxro (본회의 처리안건 법률안):
+    - BILL_ID, BILL_NO, BILL_NAME, BILL_KIND, PROC_RESULT_CD
+    - VOTE_TCNT, YES_TCNT, NO_TCNT, BLANK_TCNT (집계 표결)
+    - RGS_PROC_DT (본회의 처리일), CURR_TRANS_DT
+    - LINK_URL, COMMITTEE_NM
     """
     bill_id = str(row.get("BILL_ID", "")).strip()
-    vote_date_str = str(row.get("VOTE_DATE", "")).strip()
-    vote_date = _parse_date(vote_date_str)
-    # vote_id: 한 의안에 여러 표결이 있을 수 있으므로 BILL_ID + DATE 조합
+    # 우선순위: PROC_DT (의안별 표결 처리일) > RGS_PROC_DT > BDG_PROC_DT > PROPOSE_DT
+    date_str = (str(row.get("PROC_DT") or "").strip()
+                or str(row.get("RGS_PROC_DT") or "").strip()
+                or str(row.get("BDG_PROC_DT") or "").strip()
+                or str(row.get("PROPOSE_DT") or "").strip())
+    vote_date = _parse_date(date_str)
     vote_id = f"V_{bill_id}_{vote_date.isoformat()}"
+    yes = _safe_int(row.get("YES_TCNT"))
+    no = _safe_int(row.get("NO_TCNT"))
+    blank = _safe_int(row.get("BLANK_TCNT"))
+    attend = _safe_int(row.get("VOTE_TCNT"), default=yes + no + blank)
+    # CURR_COMMITTEE (ncocpgfiaoituanbr) 또는 COMMITTEE_NM (nkalemivaqmoibxro)
+    committee = (str(row.get("CURR_COMMITTEE") or "").strip()
+                 or str(row.get("COMMITTEE_NM") or "").strip()
+                 or None)
     return Vote(
         vote_id=vote_id,
         bill_id=bill_id,
         date=vote_date,
-        result=_normalize_result(str(row.get("PROC_RESULT_CD", ""))),
-        attendance_count=_safe_int(row.get("ATTEND_NUM"), default=0),
+        result=_normalize_result(str(row.get("PROC_RESULT_CD") or "")),
+        attendance_count=attend,
+        bill_no=str(row.get("BILL_NO") or "").strip() or None,
+        bill_name=str(row.get("BILL_NAME") or "").strip() or None,
+        # BILL_KIND_CD (ncocpgfiaoituanbr) 또는 BILL_KIND (nkalemivaqmoibxro)
+        bill_kind=(str(row.get("BILL_KIND_CD") or "").strip()
+                   or str(row.get("BILL_KIND") or "").strip()
+                   or None),
+        committee_name=committee,
+        yes_count=yes,
+        no_count=no,
+        blank_count=blank,
+        link_url=str(row.get("LINK_URL") or "").strip() or None,
         source="real",
     )
 

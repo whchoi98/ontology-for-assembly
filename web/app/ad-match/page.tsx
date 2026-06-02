@@ -10,6 +10,8 @@
 import React, { useState } from 'react';
 import { readPersonaIdSync } from '../../components/PersonaSwitch';
 import { adMatch, type AdMatchDecision, type AdMatchResponse } from '../../lib/api-client';
+import { AIInsightPanel } from '../../components/AIInsightPanel';
+import ScenarioHero from '../../components/ScenarioHero';
 
 const SAMPLE_ARTICLES = [
   {
@@ -54,22 +56,10 @@ export default function AdMatchPage() {
 
   return (
     <div>
-      <header className="mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="font-mono text-sm text-gray-400">시나리오 L</span>
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-medium">
-            AI 거버넌스
-          </span>
-        </div>
-        <h1 className="text-2xl font-bold mb-1">광고 매칭 매트릭스 - 3-way 비교</h1>
-        <p className="text-sm text-gray-600">
-          keyword vs embedding vs Agent. 같은 콘텐츠·후보에 대해 세 모드가 어떻게 다르게
-          결정하는지 시연.
-        </p>
-      </header>
+      <ScenarioHero code="L" subtitle="AI 거버넌스 · 3-way" />
 
       <div className="mb-6 space-y-3">
-        <div className="text-xs uppercase text-gray-500">시연 콘텐츠 선택</div>
+        <div className="text-xs uppercase text-slate-400">시연 콘텐츠 선택</div>
         <div className="flex flex-wrap gap-2">
           {SAMPLE_ARTICLES.map((a) => {
             const active = articleId === a.id;
@@ -80,12 +70,12 @@ export default function AdMatchPage() {
                 className={
                   'border rounded-md px-3 py-2 text-left text-sm ' +
                   (active
-                    ? 'border-blue-500 bg-blue-50 text-blue-900'
-                    : 'border-gray-200 bg-white hover:bg-gray-50')
+                    ? 'border-blue-500 bg-blue-500/15 text-blue-100'
+                    : 'border-slate-800 bg-slate-900/40 hover:bg-slate-800/40')
                 }
               >
                 <div className="font-semibold">{a.label}</div>
-                <div className="text-xs text-gray-500 mt-0.5">{a.description}</div>
+                <div className="text-xs text-slate-400 mt-0.5">{a.description}</div>
               </button>
             );
           })}
@@ -100,17 +90,17 @@ export default function AdMatchPage() {
       </div>
 
       {error && (
-        <div className="border border-red-200 bg-red-50 text-red-800 rounded-md p-3 text-sm mb-4">
+        <div className="border border-red-200 bg-red-500/15 text-red-300 rounded-md p-3 text-sm mb-4">
           {error}
         </div>
       )}
 
       {result && (
         <>
-          <div className="mb-4 border-l-4 border-amber-400 bg-amber-50 p-3 text-sm">
+          <div className="mb-4 border border-amber-500/30 bg-amber-500/10 p-3 text-sm">
             <strong>거버넌스 요약:</strong> {result.governance_summary.key_message}
             {result.governance_summary.modes_skipped_ads.length > 0 && (
-              <span className="ml-2 text-amber-900">
+              <span className="ml-2 text-amber-100">
                 (거절: {result.governance_summary.modes_skipped_ads.join(', ')})
               </span>
             )}
@@ -124,6 +114,7 @@ export default function AdMatchPage() {
           </div>
         </>
       )}
+      <AIInsightPanel scenarioCode="L" context={result} />
     </div>
   );
 }
@@ -136,22 +127,22 @@ function DecisionCard({ mode, decision }: { mode: string; decision: AdMatchDecis
       className={
         'border rounded-lg p-4 ' +
         (skipped
-          ? 'border-red-300 bg-red-50'
-          : 'border-gray-200 bg-white')
+          ? 'border-red-300 bg-red-500/15'
+          : 'border-slate-800 bg-slate-900/40')
       }
     >
-      <header className="mb-3 pb-3 border-b border-gray-100">
-        <h2 className="font-semibold text-gray-900">{MODE_LABEL[mode]}</h2>
+      <header className="mb-3 pb-3 border-b border-slate-800">
+        <h2 className="font-semibold text-white">{MODE_LABEL[mode]}</h2>
       </header>
 
       <div className="mb-3">
-        <div className="text-xs text-gray-500 mb-1">결정</div>
+        <div className="text-xs text-slate-400 mb-1">결정</div>
         {skipped ? (
-          <div className="text-base font-bold text-red-700">★ 광고 노출 생략</div>
+          <div className="text-base font-bold text-red-300">★ 광고 노출 생략</div>
         ) : (
           <div>
             <span className="font-mono text-sm">{decision.chosen_ad_id}</span>
-            <span className="ml-2 text-xs text-gray-500">
+            <span className="ml-2 text-xs text-slate-400">
               score {decision.score.toFixed(2)}
             </span>
           </div>
@@ -159,13 +150,13 @@ function DecisionCard({ mode, decision }: { mode: string; decision: AdMatchDecis
       </div>
 
       <div>
-        <div className="text-xs text-gray-500 mb-1">근거 (audit trace)</div>
-        <p className="text-xs text-gray-700 whitespace-pre-wrap leading-relaxed">
+        <div className="text-xs text-slate-400 mb-1">근거 (audit trace)</div>
+        <p className="text-xs text-slate-200 whitespace-pre-wrap leading-relaxed">
           {decision.reason_text}
         </p>
       </div>
 
-      <div className="text-[11px] text-gray-400 mt-3 pt-2 border-t border-gray-100">
+      <div className="text-[11px] text-slate-500 mt-3 pt-2 border-t border-slate-800">
         후보 {decision.candidate_ad_ids.length}개 · decision_id={decision.decision_id.slice(0, 16)}…
       </div>
     </section>

@@ -1,0 +1,25 @@
+{"source":"synthetic","topic_id":"topic_ai","name":"AI 산업 진흥","category":"산업","embedding":null}
+{"source":"synthetic","topic_id":"topic_data","name":"데이터·개인정보 보호","category":"법무","embedding":null}
+{"source":"synthetic","topic_id":"topic_digital","name":"디지털 콘텐츠 정책","category":"문화","embedding":null}
+{"source":"synthetic","topic_id":"topic_telecom","name":"통신·방송 정책","category":"산업","embedding":null}
+{"source":"synthetic","topic_id":"topic_science","name":"과학기술 혁신","category":"산업","embedding":null}
+{"source":"synthetic","topic_id":"topic_finance","name":"금융 정책","category":"경제","embedding":null}
+{"source":"synthetic","topic_id":"topic_tax","name":"세제·재정","category":"경제","embedding":null}
+{"source":"synthetic","topic_id":"topic_market","name":"공정거래·시장","category":"경제","embedding":null}
+{"source":"synthetic","topic_id":"topic_smb","name":"중소기업·창업","category":"경제","embedding":null}
+{"source":"synthetic","topic_id":"topic_welfare","name":"사회복지","category":"사회","embedding":null}
+{"source":"synthetic","topic_id":"topic_health","name":"보건의료","category":"사회","embedding":null}
+{"source":"synthetic","topic_id":"topic_youth","name":"청년 정책","category":"사회","embedding":null}
+{"source":"synthetic","topic_id":"topic_housing","name":"주거 정책","category":"사회","embedding":null}
+{"source":"synthetic","topic_id":"topic_population","name":"인구·저출생","category":"사회","embedding":null}
+{"source":"synthetic","topic_id":"topic_environment","name":"환경·기후","category":"환경","embedding":null}
+{"source":"synthetic","topic_id":"topic_energy","name":"에너지 전환","category":"산업","embedding":null}
+{"source":"synthetic","topic_id":"topic_transport","name":"교통·인프라","category":"사회","embedding":null}
+{"source":"synthetic","topic_id":"topic_labor","name":"노동·고용","category":"사회","embedding":null}
+{"source":"synthetic","topic_id":"topic_education","name":"교육 정책","category":"사회","embedding":null}
+{"source":"synthetic","topic_id":"topic_culture","name":"문화·체육","category":"문화","embedding":null}
+{"source":"synthetic","topic_id":"topic_admin","name":"행정 개혁","category":"법무","embedding":null}
+{"source":"synthetic","topic_id":"topic_judicial","name":"사법 개혁","category":"법무","embedding":null}
+{"source":"synthetic","topic_id":"topic_local","name":"지방자치·균형발전","category":"사회","embedding":null}
+{"source":"synthetic","topic_id":"topic_defense","name":"국방·안보","category":"외교안보","embedding":null}
+{"source":"synthetic","topic_id":"topic_diplomacy","name":"외교","category":"외교안보","embedding":null}

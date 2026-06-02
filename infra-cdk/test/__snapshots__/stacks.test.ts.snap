@@ -192,15 +192,8 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
             },
           ],
           "SubnetIds": [
-            {
-              "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet1SubnetCEAD37168693D373",
-            },
-            {
-              "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet2Subnet2DE7549CDF5ACE3D",
-            },
-            {
-              "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet3SubnetA5AC68D907737EDC",
-            },
+            "subnet-07b1e65682847dce9",
+            "subnet-095297380cd45e1eb",
           ],
         },
       },
@@ -337,15 +330,8 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
           },
         ],
         "Subnets": [
-          {
-            "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet1SubnetCEAD37168693D373",
-          },
-          {
-            "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet2Subnet2DE7549CDF5ACE3D",
-          },
-          {
-            "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet3SubnetA5AC68D907737EDC",
-          },
+          "subnet-07b1e65682847dce9",
+          "subnet-095297380cd45e1eb",
         ],
         "Type": "application",
       },
@@ -386,9 +372,7 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
           },
         ],
         "TargetType": "ip",
-        "VpcId": {
-          "Fn::ImportValue": "test-network:ExportsOutputRefVpc8378EB38272D6E3A",
-        },
+        "VpcId": "vpc-0dfa5610180dfa628",
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
@@ -434,9 +418,7 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
           },
         ],
         "TargetType": "ip",
-        "VpcId": {
-          "Fn::ImportValue": "test-network:ExportsOutputRefVpc8378EB38272D6E3A",
-        },
+        "VpcId": "vpc-0dfa5610180dfa628",
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
@@ -508,15 +490,8 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
               },
             ],
             "Subnets": [
-              {
-                "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet1SubnetCEAD37168693D373",
-              },
-              {
-                "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet2Subnet2DE7549CDF5ACE3D",
-              },
-              {
-                "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet3SubnetA5AC68D907737EDC",
-              },
+              "subnet-07b1e65682847dce9",
+              "subnet-095297380cd45e1eb",
             ],
           },
         },
@@ -586,7 +561,18 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
               },
             ],
             "Essential": true,
-            "Image": "public.ecr.aws/docker/library/nginx:alpine",
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  "111111111111.dkr.ecr.ap-northeast-2.",
+                  {
+                    "Ref": "AWS::URLSuffix",
+                  },
+                  "/ontology-assembly-dev-api:latest",
+                ],
+              ],
+            },
             "LogConfiguration": {
               "LogDriver": "awslogs",
               "Options": {
@@ -637,6 +623,31 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
       "Properties": {
         "PolicyDocument": {
           "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:ap-northeast-2:111111111111:repository/ontology-assembly-dev-api",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
             {
               "Action": [
                 "logs:CreateLogStream",
@@ -972,15 +983,8 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
               },
             ],
             "Subnets": [
-              {
-                "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet1SubnetCEAD37168693D373",
-              },
-              {
-                "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet2Subnet2DE7549CDF5ACE3D",
-              },
-              {
-                "Fn::ImportValue": "test-network:ExportsOutputRefVpcprivateSubnet3SubnetA5AC68D907737EDC",
-              },
+              "subnet-07b1e65682847dce9",
+              "subnet-095297380cd45e1eb",
             ],
           },
         },
@@ -995,8 +999,25 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
       "Properties": {
         "ContainerDefinitions": [
           {
+            "Environment": [
+              {
+                "Name": "NEXT_PUBLIC_API_BASE_URL",
+                "Value": "",
+              },
+            ],
             "Essential": true,
-            "Image": "public.ecr.aws/docker/library/nginx:alpine",
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  "111111111111.dkr.ecr.ap-northeast-2.",
+                  {
+                    "Ref": "AWS::URLSuffix",
+                  },
+                  "/ontology-assembly-dev-web:latest",
+                ],
+              ],
+            },
             "LogConfiguration": {
               "LogDriver": "awslogs",
               "Options": {
@@ -1064,6 +1085,31 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
       "Properties": {
         "PolicyDocument": {
           "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:ap-northeast-2:111111111111:repository/ontology-assembly-dev-web",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
             {
               "Action": [
                 "logs:CreateLogStream",
@@ -1378,15 +1424,8 @@ exports[`스냅샷 (drift 감지) data 스택 스냅샷 1`] = `
         "DBSubnetGroupDescription": "Assembly Neptune isolated subnets",
         "DBSubnetGroupName": "assembly-neptune-subnet-group",
         "SubnetIds": [
-          {
-            "Fn::ImportValue": "test-network:ExportsOutputRefVpcisolatedSubnet1SubnetE62B1B9BEE029908",
-          },
-          {
-            "Fn::ImportValue": "test-network:ExportsOutputRefVpcisolatedSubnet2Subnet392170557C27A199",
-          },
-          {
-            "Fn::ImportValue": "test-network:ExportsOutputRefVpcisolatedSubnet3Subnet44F2537DD839D481",
-          },
+          "subnet-022000a208af56aae",
+          "subnet-01b8fb3c462210113",
         ],
       },
       "Type": "AWS::Neptune::DBSubnetGroup",
@@ -2275,66 +2314,13 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
         ],
       },
     },
-    "ExportsOutputRefVpc8378EB38272D6E3A": {
-      "Export": {
-        "Name": "test-network:ExportsOutputRefVpc8378EB38272D6E3A",
-      },
-      "Value": {
-        "Ref": "Vpc8378EB38",
-      },
-    },
-    "ExportsOutputRefVpcisolatedSubnet1SubnetE62B1B9BEE029908": {
-      "Export": {
-        "Name": "test-network:ExportsOutputRefVpcisolatedSubnet1SubnetE62B1B9BEE029908",
-      },
-      "Value": {
-        "Ref": "VpcisolatedSubnet1SubnetE62B1B9B",
-      },
-    },
-    "ExportsOutputRefVpcisolatedSubnet2Subnet392170557C27A199": {
-      "Export": {
-        "Name": "test-network:ExportsOutputRefVpcisolatedSubnet2Subnet392170557C27A199",
-      },
-      "Value": {
-        "Ref": "VpcisolatedSubnet2Subnet39217055",
-      },
-    },
-    "ExportsOutputRefVpcisolatedSubnet3Subnet44F2537DD839D481": {
-      "Export": {
-        "Name": "test-network:ExportsOutputRefVpcisolatedSubnet3Subnet44F2537DD839D481",
-      },
-      "Value": {
-        "Ref": "VpcisolatedSubnet3Subnet44F2537D",
-      },
-    },
-    "ExportsOutputRefVpcprivateSubnet1SubnetCEAD37168693D373": {
-      "Export": {
-        "Name": "test-network:ExportsOutputRefVpcprivateSubnet1SubnetCEAD37168693D373",
-      },
-      "Value": {
-        "Ref": "VpcprivateSubnet1SubnetCEAD3716",
-      },
-    },
-    "ExportsOutputRefVpcprivateSubnet2Subnet2DE7549CDF5ACE3D": {
-      "Export": {
-        "Name": "test-network:ExportsOutputRefVpcprivateSubnet2Subnet2DE7549CDF5ACE3D",
-      },
-      "Value": {
-        "Ref": "VpcprivateSubnet2Subnet2DE7549C",
-      },
-    },
-    "ExportsOutputRefVpcprivateSubnet3SubnetA5AC68D907737EDC": {
-      "Export": {
-        "Name": "test-network:ExportsOutputRefVpcprivateSubnet3SubnetA5AC68D907737EDC",
-      },
-      "Value": {
-        "Ref": "VpcprivateSubnet3SubnetA5AC68D9",
-      },
+    "SharedNatGateways": {
+      "Description": "gcc·retail·mfg와 공유",
+      "Value": "nat-00b8a70dc184a4d0c (AZ-a), nat-08379e076e2e6e234 (AZ-b)",
     },
     "VpcId": {
-      "Value": {
-        "Ref": "Vpc8378EB38",
-      },
+      "Description": "공유 VPC ID (cc-on-bedrock-vpc)",
+      "Value": "vpc-0dfa5610180dfa628",
     },
   },
   "Parameters": {
@@ -2365,9 +2351,7 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
             "ToPort": 80,
           },
         ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
+        "VpcId": "vpc-0dfa5610180dfa628",
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
@@ -2398,9 +2382,7 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
             "IpProtocol": "-1",
           },
         ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
+        "VpcId": "vpc-0dfa5610180dfa628",
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
@@ -2457,15 +2439,13 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
             "IpProtocol": "-1",
           },
         ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
+        "VpcId": "vpc-0dfa5610180dfa628",
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
     "NeptuneSg69803EEE": {
       "Properties": {
-        "GroupDescription": "Assembly Neptune - private, ECS/Lambda ingress only",
+        "GroupDescription": "Assembly Neptune - isolated, ECS/Lambda ingress only",
         "GroupName": "assembly-neptune-sg",
         "SecurityGroupEgress": [
           {
@@ -2474,9 +2454,7 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
             "IpProtocol": "-1",
           },
         ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
+        "VpcId": "vpc-0dfa5610180dfa628",
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
@@ -2533,9 +2511,7 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
             "IpProtocol": "-1",
           },
         ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
+        "VpcId": "vpc-0dfa5610180dfa628",
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
@@ -2580,610 +2556,6 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
         "ToPort": 443,
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "Vpc8378EB38": {
-      "Properties": {
-        "CidrBlock": "10.30.0.0/16",
-        "EnableDnsHostnames": true,
-        "EnableDnsSupport": true,
-        "InstanceTenancy": "default",
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "assembly-vpc",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::VPC",
-    },
-    "VpcIGWD7BA715C": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "assembly-vpc",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::InternetGateway",
-    },
-    "VpcVPCGWBF912B6E": {
-      "Properties": {
-        "InternetGatewayId": {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::VPCGatewayAttachment",
-    },
-    "VpcisolatedSubnet1RouteTableAssociationD259E31A": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcisolatedSubnet1RouteTableE442650B",
-        },
-        "SubnetId": {
-          "Ref": "VpcisolatedSubnet1SubnetE62B1B9B",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcisolatedSubnet1RouteTableE442650B": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/isolatedSubnet1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcisolatedSubnet1SubnetE62B1B9B": {
-      "Properties": {
-        "AvailabilityZone": "ap-northeast-2a",
-        "CidrBlock": "10.30.6.0/24",
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "isolated",
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/isolatedSubnet1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcisolatedSubnet2RouteTable334F9764": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/isolatedSubnet2",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcisolatedSubnet2RouteTableAssociation25A4716F": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcisolatedSubnet2RouteTable334F9764",
-        },
-        "SubnetId": {
-          "Ref": "VpcisolatedSubnet2Subnet39217055",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcisolatedSubnet2Subnet39217055": {
-      "Properties": {
-        "AvailabilityZone": "ap-northeast-2b",
-        "CidrBlock": "10.30.7.0/24",
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "isolated",
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/isolatedSubnet2",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcisolatedSubnet3RouteTableA2F6BBC0": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/isolatedSubnet3",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcisolatedSubnet3RouteTableAssociationDC010BEB": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcisolatedSubnet3RouteTableA2F6BBC0",
-        },
-        "SubnetId": {
-          "Ref": "VpcisolatedSubnet3Subnet44F2537D",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcisolatedSubnet3Subnet44F2537D": {
-      "Properties": {
-        "AvailabilityZone": "ap-northeast-2c",
-        "CidrBlock": "10.30.8.0/24",
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "isolated",
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/isolatedSubnet3",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcprivateSubnet1DefaultRouteB506891A": {
-      "Properties": {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": {
-          "Ref": "VpcpublicSubnet1NATGatewayA036E8A6",
-        },
-        "RouteTableId": {
-          "Ref": "VpcprivateSubnet1RouteTable1979EACB",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcprivateSubnet1RouteTable1979EACB": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/privateSubnet1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcprivateSubnet1RouteTableAssociationEEBD93CE": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcprivateSubnet1RouteTable1979EACB",
-        },
-        "SubnetId": {
-          "Ref": "VpcprivateSubnet1SubnetCEAD3716",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcprivateSubnet1SubnetCEAD3716": {
-      "Properties": {
-        "AvailabilityZone": "ap-northeast-2a",
-        "CidrBlock": "10.30.3.0/24",
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "private",
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Private",
-          },
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/privateSubnet1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcprivateSubnet2DefaultRouteBAC3C1C3": {
-      "Properties": {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": {
-          "Ref": "VpcpublicSubnet1NATGatewayA036E8A6",
-        },
-        "RouteTableId": {
-          "Ref": "VpcprivateSubnet2RouteTable4D0FFC8C",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcprivateSubnet2RouteTable4D0FFC8C": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/privateSubnet2",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcprivateSubnet2RouteTableAssociationB691E645": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcprivateSubnet2RouteTable4D0FFC8C",
-        },
-        "SubnetId": {
-          "Ref": "VpcprivateSubnet2Subnet2DE7549C",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcprivateSubnet2Subnet2DE7549C": {
-      "Properties": {
-        "AvailabilityZone": "ap-northeast-2b",
-        "CidrBlock": "10.30.4.0/24",
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "private",
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Private",
-          },
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/privateSubnet2",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcprivateSubnet3DefaultRoute5028F7A1": {
-      "Properties": {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": {
-          "Ref": "VpcpublicSubnet1NATGatewayA036E8A6",
-        },
-        "RouteTableId": {
-          "Ref": "VpcprivateSubnet3RouteTableAF0D9985",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcprivateSubnet3RouteTableAF0D9985": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/privateSubnet3",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcprivateSubnet3RouteTableAssociation88A12983": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcprivateSubnet3RouteTableAF0D9985",
-        },
-        "SubnetId": {
-          "Ref": "VpcprivateSubnet3SubnetA5AC68D9",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcprivateSubnet3SubnetA5AC68D9": {
-      "Properties": {
-        "AvailabilityZone": "ap-northeast-2c",
-        "CidrBlock": "10.30.5.0/24",
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "private",
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Private",
-          },
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/privateSubnet3",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcpublicSubnet1DefaultRouteB88F9E93": {
-      "DependsOn": [
-        "VpcVPCGWBF912B6E",
-      ],
-      "Properties": {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "RouteTableId": {
-          "Ref": "VpcpublicSubnet1RouteTable15C15F8E",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcpublicSubnet1EIP411541E6": {
-      "Properties": {
-        "Domain": "vpc",
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/publicSubnet1",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::EIP",
-    },
-    "VpcpublicSubnet1NATGatewayA036E8A6": {
-      "DependsOn": [
-        "VpcpublicSubnet1DefaultRouteB88F9E93",
-        "VpcpublicSubnet1RouteTableAssociation4E83B6E4",
-      ],
-      "Properties": {
-        "AllocationId": {
-          "Fn::GetAtt": [
-            "VpcpublicSubnet1EIP411541E6",
-            "AllocationId",
-          ],
-        },
-        "SubnetId": {
-          "Ref": "VpcpublicSubnet1Subnet2BB74ED7",
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/publicSubnet1",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::NatGateway",
-    },
-    "VpcpublicSubnet1RouteTable15C15F8E": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/publicSubnet1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcpublicSubnet1RouteTableAssociation4E83B6E4": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcpublicSubnet1RouteTable15C15F8E",
-        },
-        "SubnetId": {
-          "Ref": "VpcpublicSubnet1Subnet2BB74ED7",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcpublicSubnet1Subnet2BB74ED7": {
-      "Properties": {
-        "AvailabilityZone": "ap-northeast-2a",
-        "CidrBlock": "10.30.0.0/24",
-        "MapPublicIpOnLaunch": true,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "public",
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public",
-          },
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/publicSubnet1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcpublicSubnet2DefaultRoute732F0BEB": {
-      "DependsOn": [
-        "VpcVPCGWBF912B6E",
-      ],
-      "Properties": {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "RouteTableId": {
-          "Ref": "VpcpublicSubnet2RouteTableC5A6DF77",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcpublicSubnet2RouteTableAssociationCCE257FF": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcpublicSubnet2RouteTableC5A6DF77",
-        },
-        "SubnetId": {
-          "Ref": "VpcpublicSubnet2SubnetE34B022A",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcpublicSubnet2RouteTableC5A6DF77": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/publicSubnet2",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcpublicSubnet2SubnetE34B022A": {
-      "Properties": {
-        "AvailabilityZone": "ap-northeast-2b",
-        "CidrBlock": "10.30.1.0/24",
-        "MapPublicIpOnLaunch": true,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "public",
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public",
-          },
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/publicSubnet2",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcpublicSubnet3DefaultRouteA3904BF0": {
-      "DependsOn": [
-        "VpcVPCGWBF912B6E",
-      ],
-      "Properties": {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "RouteTableId": {
-          "Ref": "VpcpublicSubnet3RouteTable80517A9C",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcpublicSubnet3RouteTable80517A9C": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/publicSubnet3",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcpublicSubnet3RouteTableAssociation61C43F88": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcpublicSubnet3RouteTable80517A9C",
-        },
-        "SubnetId": {
-          "Ref": "VpcpublicSubnet3SubnetDFEF064A",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcpublicSubnet3SubnetDFEF064A": {
-      "Properties": {
-        "AvailabilityZone": "ap-northeast-2c",
-        "CidrBlock": "10.30.2.0/24",
-        "MapPublicIpOnLaunch": true,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "public",
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public",
-          },
-          {
-            "Key": "Name",
-            "Value": "test-network/Vpc/publicSubnet3",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
     },
   },
   "Rules": {

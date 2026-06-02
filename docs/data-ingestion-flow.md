@@ -30,7 +30,7 @@ aws ecs run-task \
   --overrides '{
     "containerOverrides": [{
       "name": "api",
-      "command": ["python", "-m", "data.load", "--neptune", "--opensearch", "--from-s3"]
+      "command": ["python", "-m", "data.load", "--source", "all", "--to", "s3", "--bucket", "<bucket>", "--neptune", "--opensearch"]
     }]
   }'
 ```
@@ -71,12 +71,12 @@ CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 # data/load.py:main (argparse)
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser("data.load")
-    parser.add_argument("--source", choices=["synthetic", "real", "external", "all"], default="all")
+    parser.add_argument("--source", choices=["synthetic", "real", "external", "all"], default="synthetic")  # Phase 2 = synthetic만
     parser.add_argument("--to", choices=["local", "s3"], default="local")
     parser.add_argument("--bucket", help="S3 bucket (--to=s3 필수)")
     parser.add_argument("--neptune", action="store_true", help="S3 → Neptune Bulk Load")
     parser.add_argument("--opensearch", action="store_true", help="NDJSON → OpenSearch bulk")
-    parser.add_argument("--from-s3", action="store_true", help="S3에서 NDJSON download")
+    # 실제 코드엔 --neptune-mode·--neptune-endpoint·--opensearch-index 등 Phase 3 플래그가 추가로 존재 (총 28개). --from-s3 플래그는 없음.
     args = parser.parse_args(argv)
 
     # 1. fetch (real OpenAPI / synthetic generate / external ETL)
@@ -308,42 +308,42 @@ def _flush_batch(client, label: str, pk: str, items: list[dict]):
 ## 8. NDJSON → OpenSearch Serverless 적재
 
 ```python
-# data/load_aws.py:load_opensearch_bulk
-def load_opensearch_bulk(*, host: str, ndjson_dir: Path, index_map: dict[str, str]):
-    """OpenSearch Serverless _bulk API.
+# data/load_aws.py:load_opensearch_bulk (단순화)
+def load_opensearch_bulk(
+    *,
+    endpoint: str,
+    index_name: str = "assembly-dev-kb-index",
+    ndjson_path: Path,                 # 단일 NDJSON 파일 (articles.ndjson)
+    region: str = "ap-northeast-2",
+    batch_size: int = 500,
+    verbose: bool = True,
+):
+    """OpenSearch Serverless _bulk API — 단일 NDJSON 파일을 단일 인덱스로 적재.
 
-    NDJSON → bulk 형식 변환 → POST /_bulk (SigV4 auth)
+    NDJSON → bulk 형식 변환 → POST /_bulk (SigV4 auth, service=aoss)
     """
     from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
     import boto3
 
     creds = boto3.Session().get_credentials()
-    auth = AWSV4SignerAuth(creds, "ap-northeast-2", "aoss")  # service=aoss
-
+    auth = AWSV4SignerAuth(creds, region, "aoss")
     client = OpenSearch(
-        hosts=[{"host": host, "port": 443}],
-        http_auth=auth,
-        use_ssl=True,
-        verify_certs=True,
+        hosts=[{"host": endpoint, "port": 443}],
+        http_auth=auth, use_ssl=True, verify_certs=True,
         connection_class=RequestsHttpConnection,
     )
 
-    for ndjson_path in ndjson_dir.glob("*.ndjson"):
-        index_name = index_map.get(ndjson_path.name)
-        if not index_name:
-            continue
+    # NDJSON → bulk 명령 형식 (action line + doc line 페어)
+    bulk_lines = []
+    for line in ndjson_path.read_text(encoding="utf-8").splitlines():
+        bulk_lines.append({"index": {"_index": index_name}})
+        bulk_lines.append(json.loads(line))
 
-        # NDJSON → bulk 명령 형식 (action line + doc line 페어)
-        bulk_lines = []
-        for line in ndjson_path.read_text(encoding="utf-8").splitlines():
-            doc = json.loads(line)
-            bulk_lines.append({"index": {"_index": index_name}})
-            bulk_lines.append(doc)
-
-        # 배치 단위 split
-        for chunk in _chunks(bulk_lines, 500):
-            client.bulk(body=chunk)
+    for chunk in _chunks(bulk_lines, batch_size):  # 배치 단위 split
+        client.bulk(body=chunk)
 ```
+
+> 참고: 멀티 클래스를 인덱스별로 적재하는 디렉토리 glob 루프는 Neptune 경로(`load_neptune_opencypher`)에 해당. OpenSearch는 현재 단일 `articles.ndjson` → 단일 KB 인덱스(`load.py`가 `ndjson_path=articles_ndjson`로 호출).
 
 → **Cohere embed-v4 enrichment**: bulk 전에 `enrich_articles_with_embedding`이 각 row에 `embedding` 벡터 첨부 → KNN 검색용
 

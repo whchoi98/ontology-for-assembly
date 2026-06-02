@@ -1,6 +1,6 @@
 # 데이터 참조 매트릭스 — ontology-for-assembly PoC
 
-**문서 목적**: 14 시나리오 + 4 신규 (T·U·V·W) 시나리오의 데이터 출처·적재 경로·real/synthetic/external 라벨 매핑을 한 곳에 정리.
+**문서 목적**: 23 시나리오(A–N 14 base + O–S 5 확장 + T–W 4 고급 = 14+5+4)의 데이터 출처·적재 경로·real/synthetic/external 라벨 매핑을 한 곳에 정리.
 
 **관련 문서**:
 - ADR-0004 (정치 중립성 가드레일)
@@ -31,9 +31,9 @@
 
 ```
 National Assembly OpenAPI
-    ↓ data/real/*.py 어댑터 (assembly_api.py)
-S3 (assembly-dev-bucket)
-    ↓ ECS one-shot task: python -m data.load --neptune --opensearch --from-s3
+    ↓ data/real/ 어댑터 (_client·bill·member·vote·committee·session·party·agency)
+S3 (assembly-dev-synthetic-data)
+    ↓ ECS one-shot task: python -m data.load --source all --to s3 --bucket <bucket> --neptune --opensearch
 Neptune (graph)  +  OpenSearch (text/vector)
 ```
 
@@ -51,9 +51,9 @@ Neptune (graph)  +  OpenSearch (text/vector)
 | 데이터 | 생성 로직 | 결정적 seed | 용도 |
 |---|---|---|---|
 | **의원 활동 메트릭** | `_synth_analytics()` | `SHA256(assembly_id)[:8]` | 출석률·발의·발언·정당 일치율·composite_score |
-| **합성 기사 풀** | `data/synthetic/articles.py` | 페르소나·토픽 cross-tab | C·G·D |
-| **합성 광고 (AdInventory)** | `data/synthetic/ads.py` | 광고주 cohort 시드 | L (광고 매칭 3-way) |
-| **합성 독자 (Reader)** | `data/synthetic/readers.py` | persona_id 결정적 | D·H·L |
+| **합성 기사 풀** | `data/synthetic/article.py` | 페르소나·토픽 cross-tab | C·G·D |
+| **합성 광고 (AdInventory)** | `data/synthetic/advertisement.py` | 광고주 cohort 시드 | L (광고 매칭 3-way) |
+| **합성 독자 (Reader)** | `data/synthetic/reader.py` | persona_id 결정적 | D·H·L |
 | **17 시도 응집도 분포** | `_PARTY_DISTRIBUTION` dict | 공식 22대 결과 근사 | H choropleth (member_count, parties) |
 | **AI 인사이트 fixture** | `bedrock.py:_mock_response` | 시나리오 label + persona_id 매핑 | 전 시나리오 (DEMO_PUBLIC_MODE=true) |
 
@@ -116,7 +116,7 @@ Neptune (graph)  +  OpenSearch (text/vector)
        │ data/real/*.py 어댑터 (BILL_NM→BILL_NAME, RST_PROPOSER, PUBL_PROPOSER)
        ▼
    S3 (assembly-dev)
-       │ python -m data.load --neptune --opensearch --from-s3
+       │ python -m data.load --source all --to s3 --bucket <bucket> --neptune --opensearch
        ▼
 ┌─ Neptune (74,249 real edges) ─┐  ┌─ OpenSearch (BM25+KNN) ──┐
 │  PROPOSED, CO_PROPOSED,        │  │  Nori tokenizer (BM25)    │
@@ -164,21 +164,24 @@ Neptune (graph)  +  OpenSearch (text/vector)
 
 ```
 data/
-├── real/
-│   ├── members_22.json           # 286명 22대 의원 (OpenAPI nwvrqwxyaytdsfvhu fetch 결과)
-│   ├── members_22_photos.json    # 의원 사진 위키피디아 캐시
-│   ├── bills_22.json             # 2,098건 의안 (ALLBILL)
-│   └── votes_22_partial.json     # 표결 28K (의안별 fetch)
+├── real/                         # 어댑터(.py) + 캐시된 의원 fixture만; 의안·표결은 라이브 fetch
+│   ├── _client.py                # 공통 HTTP 클라이언트 (retry + rate limit + UA)
+│   ├── member.py / bill.py / vote.py / committee.py / session.py / party.py / agency.py
+│   ├── members_22.json           # 286명 22대 의원 캐시 (OpenAPI nwvrqwxyaytdsfvhu)
+│   └── members_22_photos.json    # 의원 사진 위키피디아 캐시
+│                                 #   (bills/votes는 정적 JSON 없음 — bill.py/vote.py가 OpenAPI에서 fetch)
 ├── synthetic/
-│   ├── articles.py               # 합성 기사 풀 (페르소나 × 토픽)
-│   ├── ads.py                    # AdInventory
-│   ├── readers.py                # Reader 합성 (political_leaning 금지)
-│   └── seed.py                   # SHA256 결정적 seed
+│   ├── article.py                # 합성 기사 풀 (페르소나 × 토픽)
+│   ├── advertisement.py          # Advertisement + AdInventory
+│   ├── reader.py                 # Reader 합성 (political_leaning 금지)
+│   ├── topics.py                 # Topic 시드
+│   ├── placeholders.py           # 미구현 클래스 placeholder 인스턴스
+│   └── seeds.py                  # PDF 시그니처 시연 시드 (결정적 SHA256)
 ├── external/
-│   ├── naver_news.py             # 네이버 뉴스 RSS 어댑터
-│   ├── polls.py                  # 리얼미터·NBS 어댑터
-│   └── sns.py                    # 카카오톡·X mock layer
-└── schemas.py                    # 31 Pydantic 노드 클래스 + 22 관계 정의
+│   ├── naver_news.py             # 네이버 뉴스 검색 어댑터
+│   └── poll_result.py            # 여론조사 (real 가능 시) / synthetic
+│                                 #   (SNS는 미구현 — Phase 5 polish 예정)
+└── schemas.py                    # 31 Pydantic 노드 클래스 + 관계 정의
 ```
 
 ---
@@ -195,7 +198,7 @@ data/
 | Phase 4e | 2026-05 중 | A·F·K·M·O 5 시나리오 100% real 전환 |
 | **Phase 4f** | 2026-05 후 | T·U·V·W 4 신규 시나리오 (모두 real 100%) |
 
-**현재 (2026-05-28) 상태**: 14 시나리오 + 4 신규 = **18 시나리오 중 9 시나리오가 100% real** (50%+)
+**현재 (2026-06-02) 상태**: **23 시나리오 중 9개(A·F·K·M·O·T·U·V·W)가 100% real** (≈39%). 나머지는 hybrid(real + synthetic) 또는 synthetic.
 
 ---
 

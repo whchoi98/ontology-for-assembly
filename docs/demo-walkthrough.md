@@ -17,7 +17,7 @@
 |------|------|----------|
 | 환경 변수 | `echo $DEMO_PUBLIC_MODE` | `true` (라이브 시연 안전 모드) |
 | 풀 테스트 | `make test` | `975 passed` |
-| 풀 빌드 | `cd web && npx next build` | `19 routes 정적 생성` |
+| 풀 빌드 | `cd web && npx next build` | 23 시나리오 + objects·ops·members·mindmap 라우트 생성 |
 | wow-eval | `python scripts/eval_wow_queries.py --quiet` | `pass_rate: 1.0, active: 84` |
 | 가드레일 ID | `grep guardrail_id .env` | 실 Bedrock Guardrail ID 존재 |
 | CloudFront | `curl -I https://<dist>/healthz` | 200 OK |
@@ -33,7 +33,7 @@
 
 | 시간 | 페르소나 | 페이지 | Hot point |
 |------|---------|--------|-----------|
-| 0-3 | (intro) | 홈 (`/`) | 14 시나리오 × 6 페르소나 매트릭스. "한 화면에 모든 시연" |
+| 0-3 | (intro) | 홈 (`/`) | 23 시나리오 × 6 페르소나 매트릭스 (데모는 핵심 14개 A–N 집중). "한 화면에 모든 시연" |
 | 3-8 | 편집국 | `/chat` → `/journey` → `/outlier` | 3-stage 비교 + PDF 시그니처 2개 |
 | 8-13 | 광고·세일즈 | `/ad-match` | **데모 메인** - AI 거버넌스 3-way 광고 매칭 |
 | 13-18 | 데이터·AI | `/cluster` → `/external-signal` | cross-party 협력 + 외부 신호 lead |
@@ -42,7 +42,7 @@
 | 28-30 | (closing) | `/neutrality` + `/ops` | ADR-0004 4-layer "보이는 거버넌스" + 운영 콘솔 |
 
 핵심 클로징 메시지:
-> "30분 안에 본 것은 14개 시나리오 중 7개. 데모로 보이지 않은 7개도 모두 작동합니다. 좌측 사이드바로 직접 확인 가능합니다."
+> "30분 안에 본 것은 핵심 14개(A–N) 시나리오 중 7개. 남은 7개와 추가 9개 확장 시나리오(O–W)까지 총 23개 모두 작동합니다. 좌측 사이드바로 직접 확인 가능합니다."
 
 ---
 
@@ -52,7 +52,7 @@
 
 홈페이지(`/`) 진입.
 
-- **"14 시나리오 모두 활성. 6 페르소나가 같은 데이터를 자기 KPI로 봅니다."**
+- **"23 시나리오 모두 활성(핵심 14 + 확장 9). 6 페르소나가 같은 데이터를 자기 KPI로 봅니다."**
 - 카테고리 4개 그룹 가리키기: 핵심 wow / AI 거버넌스 / 데이터·AI / B2C·B2B.
 - 상단 stats badge: `14/14`, `6 페르소나`, `ADR-0004 4-layer 모두 적용`.
 
@@ -167,13 +167,13 @@ A.
 
 **Q. 6 페르소나 인증 분기?**
 
-A. 3중 분기 (`api/middleware_auth.py`):
+A. 인증은 **Lambda@Edge + API Gateway(edge 계층)**에서 강제 — FastAPI 계층엔 인증 미들웨어가 없고 유효한 `X-Persona-Id` 헤더만 수신(ADR-0003):
 - staff (editorial·data_ai·ad_sales): Cognito user pool JWT + IAM staff group.
 - subscriber (paid_subscriber): Cognito JWT + subscriber group.
 - general_reader: Cognito Guest Identity Pool + 게스트 쿠키.
 - b2b: API Gateway Usage Plan + API Key (DynamoDB lookup + Secrets Manager).
 
-각 페르소나가 fail-closed — 인증 실패 시 default `editorial` fallback 금지.
+edge에서 fail-closed — 인증 실패 시 차단. (API는 헤더 누락 시에만 `editorial` fallback.)
 
 **Q. B2B 클라이언트가 API 사용 시 정치 균형 점수도 받습니까?**
 
@@ -194,11 +194,11 @@ A. 3-tier source 태깅:
 
 **Q. 우리 언론사 기존 CMS·DMP와 통합 가능?**
 
-A. 14 시나리오 모두 REST/SSE 표준 API. 응답 schema는 `docs/api-reference.md`. 헤더 `X-Persona-Id` 추가 외에는 일반 fetch + JSON parse. SSE는 `EventSource` 또는 fetch + ReadableStream(`web/lib/api-client.ts:chatStream` 참조).
+A. 23 시나리오 모두 REST/SSE 표준 API (응답 schema는 핵심 14개가 `docs/api-reference.md`에 정리). 헤더 `X-Persona-Id` 추가 외에는 일반 fetch + JSON parse. SSE는 `EventSource` 또는 fetch + ReadableStream(`web/lib/api-client.ts` 참조).
 
 **Q. Bedrock 외 다른 LLM(GPT·Gemini)로 swap 가능?**
 
-A. `api/services/bedrock.py:invoke()` 단일 진입점 (ADR-0001). swap 시 이 함수 + AgentCore Memory wrapper만 변경. 14 시나리오 라우터는 영향 없음.
+A. `api/services/bedrock.py:invoke()/invoke_stream()` 단일 진입점 (ADR-0001). swap 시 이 함수만 변경. 21 라우터는 영향 없음.
 
 ---
 

@@ -182,7 +182,7 @@ make wow-eval
 - **Imports**: prefer relative imports inside `api/` (`from api.services import neptune`). 순환 회피용 lazy import는 함수 body 안에서 `from api.routers import district_map as _dm`.
 - **Cypher**: 파라미터는 항상 `parameters={...}` keyword로 전달. 사용자 입력 f-string interpolate 금지.
 - **boto3**: `from api.aws_clients import session as boto_session` — factory 호출 후 `.client(...)`.
-- **SSE 이벤트**: 모든 스트리밍 endpoint는 `{"type": "phase|delta|log|final|result", "data": {...}}` 통일.
+- **SSE 이벤트**: 모든 스트리밍 endpoint는 `{"type": "phase|delta|log|result|error|done", "data": {...}}` 통일. (`api/routers/chat.py` docstring이 어휘 SSOT.)
 - **F-strings**: `{}` 안에서 quote 이스케이프 금지 (`f"...{d[\"k\"]}..."`는 SyntaxError). 로컬 변수 추출.
 - **마크다운 렌더링**: `react-markdown` v10 + `remark-gfm`, `.chat-markdown` 스타일.
 - **시나리오 B 3-stage**: stage 분기는 `api/services/three_stage.py`, Stage 3 자율 에이전트(Planner→Graph→Analyst→Editor)는 `api/services/multi_agent.py:run_agentic_pipeline` + `AGENT_PROMPTS`. 모든 LLM 호출은 `api/services/bedrock.py:invoke()/invoke_stream()` 단일 진입점 경유 (AWS 자격증명 없으면 결정적 demo mock fallback).

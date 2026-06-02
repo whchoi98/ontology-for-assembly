@@ -26,7 +26,7 @@ OpenSearch BM25(Nori) + Cohere KNN + RRF fusion + Cohere rerank-v3.
 | Method | Path | 입력 | 응답 |
 |--------|------|------|------|
 | POST | `/api/chat` | `{"query":"...","mode":"compare"}` | `{"results":{"chatbot":{...},"agent":{...},"agentic":{...}}}` |
-| POST | `/api/chat/stream` | 동일 | SSE stream — events: `phase`/`log`/`result`/`done` (15 이벤트 sequence) |
+| POST | `/api/chat/stream` | 동일 | SSE stream — events: `phase`/`delta`/`log`/`result`/`error`/`done` (control 15개 + delta 텍스트 chunk) |
 
 3 stage(Chatbot RAG / Agent Tool Use / Agentic 4 에이전트) 사이드바이사이드 비교. 모든 stage 응답에 `political_balance_score` 자동 첨부.
 
@@ -216,10 +216,12 @@ curl -H "X-Persona-Id: editorial" http://localhost:8080/api/cluster
 ### SSE 이벤트 스키마
 
 ```
-{"type":"phase","data":{"stage":"chatbot","start_ms":12}}
-{"type":"log","data":{"tool":"search","args":{...}}}
-{"type":"result","data":{"text":"...","political_balance_score":0.92}}
-{"type":"done","data":{"total_ms":1543}}
+{"type":"phase","data":{"stage":"chatbot","status":"starting"}}
+{"type":"delta","data":{"stage":"chatbot","text":"...토큰 chunk (keep-alive)..."}}
+{"type":"log","data":{"stage":"agent","tool_called":"search_bills"}}
+{"type":"result","data":{"stage":"chatbot","political_balance_score":0.92}}
+{"type":"error","data":{"message":"internal error","error_id":"a1b2c3"}}
+{"type":"done","data":{"total_ms":1543,"persona_id":"editorial"}}
 ```
 
 ### 정치 균형 점수

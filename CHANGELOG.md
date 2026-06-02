@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Docs — narrative docs 정합화 (라운드 2, 2026-06-02)
+- `docs/data-ingestion-flow.md`: 가상 `--from-s3` 플래그 제거(실제 CLI는 `--source`/`--to`/`--bucket`/`--neptune`/`--opensearch`), `load_opensearch_bulk` 시그니처·코드 예시 정정(endpoint/index_name/ndjson_path 단일 파일), `--source` 기본값 synthetic 명시.
+- `docs/data-sources.md`: 시나리오 14→23 정정, 어댑터 참조 `assembly_api.py`→실제 `data/real/` 모듈, 미존재 `bills_22.json`/`votes_22_partial.json` 제거, synthetic/external 파일명 정정(article·advertisement·reader·seeds·topics·placeholders·poll_result).
+- `docs/demo-walkthrough.md`: 가상 `api/middleware_auth.py`→Lambda@Edge 인증 설명, 시나리오 카운트 14→23(핵심 14 + 확장 9) 정합화.
+- `CLAUDE.md` + `docs/api-reference.md`: SSE 어휘 `final`→`done` + `delta`/`error` 추가(실제 `chat.py` 구현 반영).
+- `infra-cdk/lib/data-stack.ts`: S3 버킷 주석 4개→3개(demo-recordings 미생성).
+
+### Docs — ADR-0002 6-페르소나 설계 구현 동기화 (2026-06-02)
+- ADR-0002 확장: `PersonaDef` 8 필드, 4-tier 그룹핑(tier별 ad_policy), 5-layer system_prompt 합성, web UI 전용 필드(emoji/icon/description), 헬퍼 API surface, `scenario_priority` A–N 14개 한정 갭 명시.
+
+### Fixed — chat SSE 정보 노출 차단 + 어휘 문서화 (2026-06-02)
+- `/api/chat/stream` 오류 경로가 클라이언트에 traceback 노출 안 함(정보 공개 방지). 전체 trace는 서버 로그(`logging.exception` + correlation `error_id`), 클라이언트는 `{message, error_id}` 수신.
+- module docstring SSE 어휘에 `delta`·`error` 명시. 테스트 `test_stream_emits_15_control_events`로 정정(delta chunk 제외 control 15개 검증).
+
+### Changed — Phase 4/5 working-tree 체크포인트 (2026-06-02)
+- 실 데이터 마이그레이션 + 시나리오 O–W 확장 156파일 통합 커밋(api 39·web 58·data 14·infra 7·tests 18·harness). `make ast` 통과, 시크릿 미포함. 알려진 상태: `make test` 41 failures(synthetic→real fixture 이관 중).
+
 ### Docs — 문서·코드 정합화 sync (2026-05-31)
 - 시나리오 카운트 정정 14(A–N) → **23(A–W)**: `CLAUDE.md` 시나리오 표에 O–W 9개(O 인물관계·P 청원→입법·Q 위원회 heatmap·R 공약추적·S 토픽 burst·T 정당응집도·U 영향력랭킹·V 표결 cluster·W swing voter) 추가, `README.md`(EN/KR) overview·features·구조 갱신, `docs/api-reference.md`에 relations(O)·insight_generic(P–S)·insights_advanced(T–W)·members 라우터 섹션 추가.
 - 클래스 카운트 25+ → **31** 정정. 카탈로그 SSOT를 `api/services/objects_catalog.py`로 명시 (`ontology/` yaml 디렉토리는 현재 미사용 스캐폴드임을 문서화).

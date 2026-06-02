@@ -9,8 +9,10 @@
 
 SSE 이벤트 어휘:
 - phase   stage 시작 알림 ({stage, status})
+- delta   stage 텍스트 chunk 스트리밍 ({stage, text}) — keep-alive·점진적 렌더
 - log     도구·에이전트 호출 trace ({stage, tool_called|agent_invoked})
 - result  한 stage 완료 결과 ({stage, ...StageResult})
+- error   스트림 중 예외 ({message, error_id}) — 트레이스백은 서버 로그에만
 - done    전체 완료 ({total_ms})
 """
 from __future__ import annotations
@@ -115,7 +117,6 @@ def chat_stream(
 
     async def event_gen() -> AsyncIterator[dict]:
         import time
-        import traceback
         t0 = time.monotonic()
         # mode 분기: compare(default 3-stage) | chatbot | agent | agentic (single stage)
         run_chatbot = req.mode in ("chatbot", "compare")
@@ -158,12 +159,13 @@ def chat_stream(
 
             yield _sse("done", {"total_ms": int((time.monotonic() - t0) * 1000),
                                 "persona_id": pid, "query": req.query})
-        except Exception as exc:  # final emit try/except: mid-stream 예외 → connection close 모호성 제거
-            tb = traceback.format_exc()
-            # CloudWatch 로그 + 클라이언트 final 동시 보장
+        except Exception:  # final emit try/except: mid-stream 예외 → connection close 모호성 제거
+            # 트레이스백은 서버(CloudWatch)에만 기록 — 클라이언트에는 generic error + 상관 ID만 노출 (정보 노출 방지).
             import logging
-            logging.exception("chat_stream failed: %s", exc)
-            yield _sse("error", {"message": str(exc), "trace": tb[-2000:]})
+            import uuid
+            error_id = uuid.uuid4().hex
+            logging.exception("chat_stream failed error_id=%s persona=%s", error_id, pid)
+            yield _sse("error", {"message": "internal error", "error_id": error_id})
             yield _sse("done", {"total_ms": int((time.monotonic() - t0) * 1000),
                                 "persona_id": pid, "query": req.query, "aborted": True})
 

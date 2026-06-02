@@ -60,14 +60,20 @@ def test_stream_returns_event_stream(client):
         assert "text/event-stream" in resp.headers.get("content-type", "")
 
 
-def test_stream_emits_15_events(client):
-    """3 phase + 4 agent log + 4 tool log + 3 result + 1 done = 15."""
+def test_stream_emits_15_control_events(client):
+    """3 phase + 4 agent log + 4 tool log + 3 result + 1 done = 15 control events.
+
+    delta 이벤트(stage 텍스트 chunk)는 keep-alive·점진적 렌더용 스트리밍이므로
+    control 이벤트 카운트에서 제외한다 (SSE 어휘: phase/delta/log/result/done).
+    """
     events = _collect_events(
         client,
         json={"query": "AI", "mode": "compare"},
         headers={"X-Persona-Id": "editorial"},
     )
-    assert len(events) == 15
+    control = [(n, d) for n, d in events if n != "delta"]
+    assert len(control) == 15
+    assert any(n == "delta" for n, _ in events)  # 텍스트는 chunk로 스트리밍됨
 
 
 def test_stream_event_types_in_order(client):

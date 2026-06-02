@@ -4,7 +4,7 @@
  * 리소스:
  * - Neptune cluster (isolated subnet, t3.medium for PoC)
  * - OpenSearch Serverless collection (Nori + KNN hybrid 인덱스)
- * - S3 4개 버킷: raw-docs, uploads, synthetic-data, demo-recordings
+ * - S3 3개 버킷: raw-docs, uploads, synthetic-data
  * - DynamoDB 4개: b2b-keys, ad-inventory, ad-impression, reader-profile
  *   (TTL: ad-impression 14일 - ADR-0003 익명성)
  */
@@ -42,7 +42,7 @@ export class DataStack extends cdk.Stack {
     const { vpc, neptuneSg } = props;
     const account = cdk.Stack.of(this).account;
 
-    // ─── S3 4개 ────────────────────────────────────────────────────────────
+    // ─── S3 3개 ────────────────────────────────────────────────────────────
     this.rawDocsBucket = new s3.Bucket(this, 'RawDocsBucket', {
       bucketName: `ontology-assembly-dev-raw-docs-${account}`,
       encryption: s3.BucketEncryption.S3_MANAGED,

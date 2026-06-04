@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — 시나리오 L 광고 매칭 시연 콘텐츠 확대 (2026-06-04)
+- 데모 샘플 기사 2 → 6개: skip 3종(scandal·tragedy·minor_victim) + safe 3종(AI·핀테크·탄소중립). `data/synthetic/seeds.py:DEMO_AD_ARTICLES` 단일 카탈로그.
+- 신규 `GET /api/ad-match/samples` — 셀렉터 단일 진실원. 웹 `ad-match/page.tsx`가 하드코딩 대신 fetch + 거버넌스 배지(Agent 거절 예상/안전 매칭).
+- keyword/embedding은 광고 매칭, Agent만 민감 3종 skip하는 3-way 대비 완성. 전 기사 ADR-0004 준수(○○○ 익명).
+
 ### Docs — narrative docs 정합화 (라운드 2, 2026-06-02)
 - `docs/data-ingestion-flow.md`: 가상 `--from-s3` 플래그 제거(실제 CLI는 `--source`/`--to`/`--bucket`/`--neptune`/`--opensearch`), `load_opensearch_bulk` 시그니처·코드 예시 정정(endpoint/index_name/ndjson_path 단일 파일), `--source` 기본값 synthetic 명시.
 - `docs/data-sources.md`: 시나리오 14→23 정정, 어댑터 참조 `assembly_api.py`→실제 `data/real/` 모듈, 미존재 `bills_22.json`/`votes_22_partial.json` 제거, synthetic/external 파일명 정정(article·advertisement·reader·seeds·topics·placeholders·poll_result).

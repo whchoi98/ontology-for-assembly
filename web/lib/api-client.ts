@@ -293,9 +293,10 @@ export interface AdMatchSample {
 }
 
 export async function fetchAdMatchSamples(): Promise<AdMatchSample[]> {
-  const res = await fetch(`${PUBLIC_BASE}/api/ad-match/samples`, { cache: 'no-store' });
-  if (!res.ok) throw new Error(`ad-match samples ${res.status}`);
-  const data = (await res.json()) as { samples: AdMatchSample[] };
+  const data = await jsonFetch<{ samples: AdMatchSample[] }>(
+    '/api/ad-match/samples',
+    { method: 'GET' },
+  );
   return data.samples;
 }
 

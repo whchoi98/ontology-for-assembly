@@ -7,24 +7,12 @@
  * 비위 의혹 콘텐츠(DEMO_TRAGIC_ARTICLE_ID)에서 Agent만 광고 거절 → 청중에게
  * AI 거버넌스 메시지 직관 전달.
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { readPersonaIdSync } from '../../components/PersonaSwitch';
-import { adMatch, type AdMatchDecision, type AdMatchResponse } from '../../lib/api-client';
+import { adMatch, fetchAdMatchSamples, type AdMatchDecision, type AdMatchResponse, type AdMatchSample } from '../../lib/api-client';
 import { AIInsightPanel } from '../../components/AIInsightPanel';
 import ScenarioHero from '../../components/ScenarioHero';
 
-const SAMPLE_ARTICLES = [
-  {
-    id: 'art_safe_AI',
-    label: '안전: AI 산업 진흥 분석',
-    description: '정책 정보성 - 모든 모드가 광고 매칭',
-  },
-  {
-    id: 'art_DEMO_TRAGIC_001',
-    label: '★ 비위 의혹: 검찰 수사 진행 중',
-    description: 'AI 거버넌스 시연 - Agent만 거절',
-  },
-];
 
 const MODE_ORDER: Array<'keyword' | 'embedding' | 'agent'> = ['keyword', 'embedding', 'agent'];
 
@@ -35,12 +23,24 @@ const MODE_LABEL: Record<string, string> = {
 };
 
 export default function AdMatchPage() {
-  const [articleId, setArticleId] = useState(SAMPLE_ARTICLES[1].id);  // ★ 비위 의혹 기본
+  const [samples, setSamples] = useState<AdMatchSample[]>([]);
+  const [articleId, setArticleId] = useState<string>('');
   const [result, setResult] = useState<AdMatchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    fetchAdMatchSamples()
+      .then((rows) => {
+        setSamples(rows);
+        const firstSkip = rows.find((r) => r.expected_governance.startsWith('skip'));
+        setArticleId(firstSkip?.article_id ?? rows[0]?.article_id ?? '');
+      })
+      .catch(() => setSamples([]));
+  }, []);
+
   async function runMatch() {
+    if (!articleId) return;
     setLoading(true);
     setError(null);
     try {
@@ -61,12 +61,13 @@ export default function AdMatchPage() {
       <div className="mb-6 space-y-3">
         <div className="text-xs uppercase text-slate-400">시연 콘텐츠 선택</div>
         <div className="flex flex-wrap gap-2">
-          {SAMPLE_ARTICLES.map((a) => {
-            const active = articleId === a.id;
+          {samples.map((a) => {
+            const active = articleId === a.article_id;
+            const isSkip = a.expected_governance.startsWith('skip');
             return (
               <button
-                key={a.id}
-                onClick={() => setArticleId(a.id)}
+                key={a.article_id}
+                onClick={() => setArticleId(a.article_id)}
                 className={
                   'border rounded-md px-3 py-2 text-left text-sm ' +
                   (active
@@ -74,8 +75,14 @@ export default function AdMatchPage() {
                     : 'border-slate-800 bg-slate-900/40 hover:bg-slate-800/40')
                 }
               >
-                <div className="font-semibold">{a.label}</div>
-                <div className="text-xs text-slate-400 mt-0.5">{a.description}</div>
+                <div className="font-semibold">{a.title}</div>
+                <div className="mt-1">
+                  {isSkip ? (
+                    <span className="text-xs text-amber-400">Agent 거절 예상</span>
+                  ) : (
+                    <span className="text-xs text-emerald-400">안전 매칭</span>
+                  )}
+                </div>
               </button>
             );
           })}

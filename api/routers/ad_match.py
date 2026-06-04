@@ -90,13 +90,12 @@ def ad_match(
 @router.get("/samples")
 def list_samples() -> dict:
     """시연 콘텐츠 셀렉터 메타 (단일 진실원). 웹이 fetch해 동적 구성."""
-    from api.services.ad_matcher import TOPIC_TO_CATEGORY_HINTS
     out = []
     for a in list_demo_ad_articles():
         category_hint = None
         if a["expected_governance"] == "match":
             for tid in a["topic_ids"]:
-                cats = TOPIC_TO_CATEGORY_HINTS.get(tid)
+                cats = ad_matcher.TOPIC_TO_CATEGORY_HINTS.get(tid)
                 if cats:
                     category_hint = cats[0]
                     break

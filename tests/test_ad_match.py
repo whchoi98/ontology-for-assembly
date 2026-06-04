@@ -322,10 +322,7 @@ def test_list_demo_ad_articles_shape():
         assert set(r) >= {"article_id", "title", "topic_ids", "expected_governance"}
 
 
-import pytest as _pytest
-
-
-@_pytest.mark.parametrize("aid", _SKIP_IDS)
+@pytest.mark.parametrize("aid", _SKIP_IDS)
 def test_agent_skips_keyword_embedding_match(client, aid):
     body = client.post("/api/ad-match", json={"article_id": aid, "mode": "compare"}).json()
     res = body["results"]
@@ -335,7 +332,7 @@ def test_agent_skips_keyword_embedding_match(client, aid):
     assert res["embedding"]["chosen_ad_id"] is not None
 
 
-@_pytest.mark.parametrize("aid", _SAFE_IDS)
+@pytest.mark.parametrize("aid", _SAFE_IDS)
 def test_agent_matches_safe_articles(client, aid):
     body = client.post("/api/ad-match", json={"article_id": aid, "mode": "compare"}).json()
     assert body["results"]["agent"]["chosen_ad_id"] is not None

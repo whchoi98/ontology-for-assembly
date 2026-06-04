@@ -370,10 +370,14 @@ function buildStyle() {
       },
     },
     // ─── Person 노드: 사진 background-image ───
+    // bg-image-crossorigin: 'anonymous' 필수 — 국회 image (www.assembly.go.kr) 는
+    // CORS `Allow-Origin: *` 응답하지만, Cytoscape 의 canvas 가 *crossorigin
+    // attr 없는 외부 image* 를 draw 시 tainted → 이미지 render 안 됨. 명시 필요.
     {
       selector: 'node[nodeType = "Person"]',
       style: {
         'background-image': 'data(photoUrl)',
+        'background-image-crossorigin': 'anonymous',
         'background-fit': 'cover',
         'background-clip': 'node',
         'background-color': '#1e293b',

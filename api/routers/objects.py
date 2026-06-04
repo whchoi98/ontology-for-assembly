@@ -284,6 +284,16 @@ def get_object(
     if matched is None:
         raise HTTPException(404, f"{class_name}/{instance_id} 인스턴스 없음")
 
+    # Person 상세 카드 사진 enrich: objects_catalog 경로(_list_persons → fetch_members)는
+    # profile_image_url=None이므로, subgraph(_try_build_subgraph)와 동일하게 member_directory의
+    # 국회 공식 사진 URL로 채운다. 누락 시 상단 detail-card가 이니셜 글자 placeholder만 노출
+    # (ADR-0004 "회색 placeholder 금지" 위반 — 사용자 신고 2026-06-04 "초"/"조" 텍스트).
+    if class_name == "Person" and not matched.get("profile_image_url"):
+        from api.services import member_directory as _md
+        _m = _md.get_member(_md.resolve_id(instance_id))
+        if _m is not None and _m.profile_image_url:
+            matched["profile_image_url"] = _m.profile_image_url
+
     if depth == 1:
         subgraph = _try_build_subgraph(class_name, instance_id, matched)
     else:

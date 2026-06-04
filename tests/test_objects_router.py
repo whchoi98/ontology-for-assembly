@@ -106,6 +106,25 @@ def test_get_single_bill(client):
     assert r["data"]["bill_id"] == bill_id
 
 
+def test_get_single_person_detail_has_photo(client):
+    """Person 상세 data.profile_image_url 이 채워져야 함 (상단 detail-card 사진).
+
+    회귀 방지: objects_catalog 경로(_list_persons → fetch_members)는
+    profile_image_url=None이므로, 핸들러가 subgraph(_try_build_subgraph)와 동일하게
+    member_directory(국회 공식 사진 URL)로 enrich해야 한다. 누락 시 상단 detail-card가
+    이니셜 글자 placeholder만 노출 — ADR-0004 "회색 placeholder 금지" 위반 (사용자 신고
+    2026-06-04: /objects/Person/{id} 상단 박스 "초"/"조" 텍스트만 출력).
+    """
+    lst = client.get("/api/objects/Person?limit=1").json()
+    assert lst["items"], "Person 인스턴스 없음"
+    pid = lst["items"][0]["assembly_id"]
+    r = client.get(f"/api/objects/Person/{pid}").json()
+    photo = r["data"].get("profile_image_url")
+    assert isinstance(photo, str) and photo.startswith("https://"), (
+        f"profile_image_url 누락 → 상단 detail-card 이니셜 placeholder 노출: {photo!r}"
+    )
+
+
 def test_get_single_person_subgraph_when_party_id_exists(client):
     """Person에 party_id가 있으면 subgraph에 Party 노드 추가."""
     list_resp = client.get("/api/objects/Person?limit=10").json()

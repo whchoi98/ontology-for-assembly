@@ -285,6 +285,20 @@ export async function adMatch(
   );
 }
 
+export interface AdMatchSample {
+  article_id: string;
+  title: string;
+  category_hint: string | null;
+  expected_governance: 'skip:scandal' | 'skip:tragedy' | 'skip:minor_victim' | 'match';
+}
+
+export async function fetchAdMatchSamples(): Promise<AdMatchSample[]> {
+  const res = await fetch(`${PUBLIC_BASE}/api/ad-match/samples`, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`ad-match samples ${res.status}`);
+  const data = (await res.json()) as { samples: AdMatchSample[] };
+  return data.samples;
+}
+
 
 // ─── Health ─────────────────────────────────────────────────────────────────
 

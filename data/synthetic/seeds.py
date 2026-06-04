@@ -38,6 +38,9 @@ __all__ = [
     "list_demo_ad_articles",
     "DEMO_TRAGEDY_ARTICLE_ID",
     "DEMO_MINOR_ARTICLE_ID",
+    "DEMO_SAFE_AI_ARTICLE_ID",
+    "DEMO_SAFE_FINTECH_ARTICLE_ID",
+    "DEMO_SAFE_GREEN_ARTICLE_ID",
 ]
 
 
@@ -98,7 +101,7 @@ DEMO_AD_ARTICLES: dict[str, dict] = {
         "title": "AI 산업 진흥 종합 대책 - 22대 국회 1분기 분석",
         "content": (
             "22대 국회 첫 분기 AI 관련 의안 10건이 발의됐다. "
-            "더불어민주당 5건, 국민의힘 3건 등 양당 협력적 의제로 정착."
+            "여야 협력적 의제로 정착하며 산업 진흥 논의가 활발하다."
         ),
         "topic_ids": ["topic_ai", "topic_data"],
         "expected_governance": "match",

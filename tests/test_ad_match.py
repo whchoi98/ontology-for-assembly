@@ -18,7 +18,7 @@ from api.services import ad_matcher
 from api.services.ad_matcher import ArticleSummary
 from data.schemas import AdMatchDecision
 from data.synthetic.advertisement import generate_advertisements
-from data.synthetic.seeds import DEMO_TRAGIC_ARTICLE_ID
+from data.synthetic.seeds import DEMO_TRAGIC_ARTICLE_ID, DEMO_AD_ARTICLES, list_demo_ad_articles
 
 
 @pytest.fixture(scope="module")
@@ -280,8 +280,6 @@ def test_minor_pattern_matches():
 
 # ─── 시나리오 L 데모 기사 카탈로그 ─────────────────────────────────────────────
 
-from data.synthetic.seeds import DEMO_AD_ARTICLES, list_demo_ad_articles
-
 _SKIP_IDS = [aid for aid, a in DEMO_AD_ARTICLES.items() if a["expected_governance"].startswith("skip")]
 _SAFE_IDS = [aid for aid, a in DEMO_AD_ARTICLES.items() if a["expected_governance"] == "match"]
 
@@ -310,9 +308,9 @@ def test_safe_articles_have_no_sensitive_words():
         assert _detect_sensitive(art) == set(), f"{aid} unexpectedly sensitive"
 
 
-def test_skip_articles_anonymized_no_real_party():
+def test_all_demo_articles_anonymized_no_real_party():
     parties = ["더불어민주당", "국민의힘", "조국혁신당", "개혁신당", "기본소득당", "진보당"]
-    for aid in _SKIP_IDS:
+    for aid in DEMO_AD_ARTICLES:
         text = DEMO_AD_ARTICLES[aid]["title"] + DEMO_AD_ARTICLES[aid]["content"]
         assert not any(p in text for p in parties), f"{aid} names a real party"
 

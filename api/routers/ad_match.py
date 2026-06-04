@@ -29,7 +29,7 @@ from api.services import ad_matcher
 from api.services.persona import get as get_persona
 from data.schemas import AdMatchDecision, AdMatchMode, Advertisement
 from data.synthetic.advertisement import generate_advertisements
-from data.synthetic.seeds import DEMO_TRAGIC_ARTICLE_ID
+from data.synthetic.seeds import DEMO_TRAGIC_ARTICLE_ID, DEMO_AD_ARTICLES, list_demo_ad_articles
 
 router = APIRouter(prefix="/api/ad-match", tags=["ad-match"])
 
@@ -87,6 +87,28 @@ def ad_match(
     )
 
 
+@router.get("/samples")
+def list_samples() -> dict:
+    """시연 콘텐츠 셀렉터 메타 (단일 진실원). 웹이 fetch해 동적 구성."""
+    from api.services.ad_matcher import TOPIC_TO_CATEGORY_HINTS
+    out = []
+    for a in list_demo_ad_articles():
+        category_hint = None
+        if a["expected_governance"] == "match":
+            for tid in a["topic_ids"]:
+                cats = TOPIC_TO_CATEGORY_HINTS.get(tid)
+                if cats:
+                    category_hint = cats[0]
+                    break
+        out.append({
+            "article_id": a["article_id"],
+            "title": a["title"],
+            "category_hint": category_hint,
+            "expected_governance": a["expected_governance"],
+        })
+    return {"samples": out}
+
+
 @router.get("/modes")
 def list_modes() -> dict:
     """3 모드 + compare 메타."""
@@ -123,30 +145,19 @@ def list_modes() -> dict:
 # ─── 헬퍼 ───────────────────────────────────────────────────────────────────
 
 def _load_article(article_id: str) -> ad_matcher.ArticleSummary:
-    """article fetch - PoC는 mock fixtures, production은 Neptune lookup.
-
-    DEMO_TRAGIC_ARTICLE_ID로 호출하면 비위 의혹 콘텐츠 시드 반환 (Agent가 거절해야 함).
-    그 외는 무난한 정책 정보성 콘텐츠.
-    """
-    if article_id == DEMO_TRAGIC_ARTICLE_ID:
+    """데모 기사 카탈로그(DEMO_AD_ARTICLES) 조회. 미등록 id는 generic 정책 콘텐츠 fallback."""
+    a = DEMO_AD_ARTICLES.get(article_id)
+    if a is not None:
         return ad_matcher.ArticleSummary(
-            article_id=DEMO_TRAGIC_ARTICLE_ID,
-            title="○○○ 의원 위증 의혹 - 검찰 수사 진행 중",
-            content=(
-                "○○○ 의원에 대한 위증 의혹이 제기된 가운데 검찰 수사가 진행 중이다. "
-                "관련 사실관계는 아직 확정되지 않았으며 의혹 단계임을 명시한다."
-            ),
-            topic_ids=["topic_judicial"],
+            article_id=article_id,
+            title=a["title"],
+            content=a["content"],
+            topic_ids=list(a["topic_ids"]),
         )
-
-    # 일반 정책 정보성 콘텐츠 (Agent가 광고 허용)
     return ad_matcher.ArticleSummary(
         article_id=article_id,
         title="AI 산업 진흥 종합 대책 - 22대 국회 1분기 분석",
-        content=(
-            "22대 국회 첫 분기 AI 관련 의안 10건이 발의됐다. "
-            "더불어민주당 5건, 국민의힘 3건 등 양당 협력적 의제로 정착."
-        ),
+        content="22대 국회 첫 분기 AI 관련 의안 10건이 발의됐다. 여야 협력적 의제로 정착.",
         topic_ids=["topic_ai", "topic_data"],
     )
 

@@ -320,3 +320,33 @@ def test_list_demo_ad_articles_shape():
     assert len(rows) == 6
     for r in rows:
         assert set(r) >= {"article_id", "title", "topic_ids", "expected_governance"}
+
+
+import pytest as _pytest
+
+
+@_pytest.mark.parametrize("aid", _SKIP_IDS)
+def test_agent_skips_keyword_embedding_match(client, aid):
+    body = client.post("/api/ad-match", json={"article_id": aid, "mode": "compare"}).json()
+    res = body["results"]
+    assert res["agent"]["chosen_ad_id"] is None
+    assert res["agent"]["reason_text"].startswith("skip")
+    assert res["keyword"]["chosen_ad_id"] is not None
+    assert res["embedding"]["chosen_ad_id"] is not None
+
+
+@_pytest.mark.parametrize("aid", _SAFE_IDS)
+def test_agent_matches_safe_articles(client, aid):
+    body = client.post("/api/ad-match", json={"article_id": aid, "mode": "compare"}).json()
+    assert body["results"]["agent"]["chosen_ad_id"] is not None
+
+
+def test_samples_endpoint_returns_six(client):
+    body = client.get("/api/ad-match/samples").json()
+    samples = body["samples"]
+    assert len(samples) == 6
+    gov = [s["expected_governance"] for s in samples]
+    assert sum(g.startswith("skip") for g in gov) == 3
+    assert gov.count("match") == 3
+    for s in samples:
+        assert set(s) >= {"article_id", "title", "category_hint", "expected_governance"}

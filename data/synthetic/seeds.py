@@ -34,6 +34,10 @@ __all__ = [
     "DEMO_TRAGIC_ARTICLE_ID",
     "DEMO_SWING_VOTE_ID",
     "seed_demo_nodes",
+    "DEMO_AD_ARTICLES",
+    "list_demo_ad_articles",
+    "DEMO_TRAGEDY_ARTICLE_ID",
+    "DEMO_MINOR_ARTICLE_ID",
 ]
 
 
@@ -50,6 +54,87 @@ DEMO_TRAGIC_ARTICLE_ID = "art_DEMO_TRAGIC_001"
 
 # 시나리오 K 당론 이탈 표결 (이상치 탐지 데모)
 DEMO_SWING_VOTE_ID = "V_DEMO_SWING_2026-04-22"
+
+
+# ─── 시나리오 L (광고 매칭) 데모 기사 카탈로그 ────────────────────────────────
+# Agent 모드만 민감 콘텐츠(scandal/tragedy/minor_victim)에서 광고 노출 생략(skip);
+# keyword/embedding은 항상 매칭 → 3-way 대비. 트리거는 ad_matcher.SENSITIVE_PATTERNS 정규식.
+# ADR-0004: skip 케이스 주체는 ○○○ 익명, 가치판단·실존 정당 귀속 없음.
+DEMO_TRAGEDY_ARTICLE_ID = "art_DEMO_TRAGEDY_001"
+DEMO_MINOR_ARTICLE_ID = "art_DEMO_MINOR_001"
+DEMO_SAFE_AI_ARTICLE_ID = "art_safe_AI"
+DEMO_SAFE_FINTECH_ARTICLE_ID = "art_safe_FINTECH_001"
+DEMO_SAFE_GREEN_ARTICLE_ID = "art_safe_GREEN_001"
+
+DEMO_AD_ARTICLES: dict[str, dict] = {
+    DEMO_TRAGIC_ARTICLE_ID: {
+        "title": "○○○ 의원 위증 의혹 - 검찰 수사 진행 중",
+        "content": (
+            "○○○ 의원에 대한 위증 의혹이 제기된 가운데 검찰 수사가 진행 중이다. "
+            "관련 사실관계는 아직 확정되지 않았으며 의혹 단계임을 명시한다."
+        ),
+        "topic_ids": ["topic_judicial"],
+        "expected_governance": "skip:scandal",
+    },
+    DEMO_TRAGEDY_ARTICLE_ID: {
+        "title": "○○ 산업단지 폭발 참사 - 피해 규모 조사",
+        "content": (
+            "○○ 산업단지에서 발생한 폭발 참사로 다수의 사망·피해자가 확인됐다. "
+            "당국이 희생 규모와 원인을 조사하고 있다."
+        ),
+        "topic_ids": ["topic_safety"],
+        "expected_governance": "skip:tragedy",
+    },
+    DEMO_MINOR_ARTICLE_ID: {
+        "title": "미성년 대상 사건 후속 - 청소년 보호 강화 입법 논의",
+        "content": (
+            "미성년 대상 사건을 계기로 청소년 보호를 강화하는 입법이 논의되고 있다. "
+            "보호 절차 개선이 핵심 쟁점이다."
+        ),
+        "topic_ids": ["topic_welfare"],
+        "expected_governance": "skip:minor_victim",
+    },
+    DEMO_SAFE_AI_ARTICLE_ID: {
+        "title": "AI 산업 진흥 종합 대책 - 22대 국회 1분기 분석",
+        "content": (
+            "22대 국회 첫 분기 AI 관련 의안 10건이 발의됐다. "
+            "더불어민주당 5건, 국민의힘 3건 등 양당 협력적 의제로 정착."
+        ),
+        "topic_ids": ["topic_ai", "topic_data"],
+        "expected_governance": "match",
+    },
+    DEMO_SAFE_FINTECH_ARTICLE_ID: {
+        "title": "핀테크 규제 샌드박스 확대 - 금융 혁신 입법 동향",
+        "content": (
+            "핀테크 규제 샌드박스 확대와 금융 혁신 관련 입법 동향을 정리한다. "
+            "디지털 금융 인프라 투자가 확대되고 있다."
+        ),
+        "topic_ids": ["topic_finance"],
+        "expected_governance": "match",
+    },
+    DEMO_SAFE_GREEN_ARTICLE_ID: {
+        "title": "탄소중립 산업 전환 로드맵 - 친환경 투자 분석",
+        "content": (
+            "탄소중립 산업 전환 로드맵과 친환경 투자 흐름을 분석한다. "
+            "재생에너지 확대가 핵심 동력으로 꼽힌다."
+        ),
+        "topic_ids": ["topic_environment"],
+        "expected_governance": "match",
+    },
+}
+
+
+def list_demo_ad_articles() -> list[dict]:
+    """샘플 셀렉터 메타 (GET /api/ad-match/samples가 사용)."""
+    return [
+        {
+            "article_id": aid,
+            "title": a["title"],
+            "topic_ids": list(a["topic_ids"]),
+            "expected_governance": a["expected_governance"],
+        }
+        for aid, a in DEMO_AD_ARTICLES.items()
+    ]
 
 
 # ─── 시드 노드 정의 ────────────────────────────────────────────────────────

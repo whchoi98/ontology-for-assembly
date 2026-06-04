@@ -276,3 +276,49 @@ def test_minor_pattern_matches():
     )
     found = ad_matcher._detect_sensitive(article)
     assert "minor_victim" in found
+
+
+# ─── 시나리오 L 데모 기사 카탈로그 ─────────────────────────────────────────────
+
+from data.synthetic.seeds import DEMO_AD_ARTICLES, list_demo_ad_articles
+
+_SKIP_IDS = [aid for aid, a in DEMO_AD_ARTICLES.items() if a["expected_governance"].startswith("skip")]
+_SAFE_IDS = [aid for aid, a in DEMO_AD_ARTICLES.items() if a["expected_governance"] == "match"]
+
+
+def test_catalog_has_six_three_skip_three_safe():
+    assert len(DEMO_AD_ARTICLES) == 6
+    assert len(_SKIP_IDS) == 3
+    assert len(_SAFE_IDS) == 3
+
+
+def test_skip_articles_trigger_their_sensitive_pattern():
+    from api.services.ad_matcher import _detect_sensitive, ArticleSummary
+    expect = {"skip:scandal": "scandal", "skip:tragedy": "tragedy", "skip:minor_victim": "minor_victim"}
+    for aid in _SKIP_IDS:
+        a = DEMO_AD_ARTICLES[aid]
+        art = ArticleSummary(article_id=aid, title=a["title"], content=a["content"], topic_ids=list(a["topic_ids"]))
+        cats = _detect_sensitive(art)
+        assert expect[a["expected_governance"]] in cats, f"{aid}: {cats}"
+
+
+def test_safe_articles_have_no_sensitive_words():
+    from api.services.ad_matcher import _detect_sensitive, ArticleSummary
+    for aid in _SAFE_IDS:
+        a = DEMO_AD_ARTICLES[aid]
+        art = ArticleSummary(article_id=aid, title=a["title"], content=a["content"], topic_ids=list(a["topic_ids"]))
+        assert _detect_sensitive(art) == set(), f"{aid} unexpectedly sensitive"
+
+
+def test_skip_articles_anonymized_no_real_party():
+    parties = ["더불어민주당", "국민의힘", "조국혁신당", "개혁신당", "기본소득당", "진보당"]
+    for aid in _SKIP_IDS:
+        text = DEMO_AD_ARTICLES[aid]["title"] + DEMO_AD_ARTICLES[aid]["content"]
+        assert not any(p in text for p in parties), f"{aid} names a real party"
+
+
+def test_list_demo_ad_articles_shape():
+    rows = list_demo_ad_articles()
+    assert len(rows) == 6
+    for r in rows:
+        assert set(r) >= {"article_id", "title", "topic_ids", "expected_governance"}

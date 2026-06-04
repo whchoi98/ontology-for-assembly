@@ -13,7 +13,6 @@ import { adMatch, fetchAdMatchSamples, type AdMatchDecision, type AdMatchRespons
 import { AIInsightPanel } from '../../components/AIInsightPanel';
 import ScenarioHero from '../../components/ScenarioHero';
 
-
 const MODE_ORDER: Array<'keyword' | 'embedding' | 'agent'> = ['keyword', 'embedding', 'agent'];
 
 const MODE_LABEL: Record<string, string> = {
@@ -36,7 +35,7 @@ export default function AdMatchPage() {
         const firstSkip = rows.find((r) => r.expected_governance.startsWith('skip'));
         setArticleId(firstSkip?.article_id ?? rows[0]?.article_id ?? '');
       })
-      .catch(() => setSamples([]));
+      .catch(() => { setSamples([]); setError('시연 콘텐츠 목록을 불러오지 못했습니다.'); });
   }, []);
 
   async function runMatch() {
@@ -89,7 +88,7 @@ export default function AdMatchPage() {
         </div>
         <button
           onClick={runMatch}
-          disabled={loading}
+          disabled={loading || !articleId}
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
         >
           {loading ? '매칭 실행 중…' : '3 모드 매칭 비교'}

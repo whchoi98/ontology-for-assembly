@@ -211,3 +211,39 @@ def test_search_info_per_persona(client):
     assert e_info["default_top_k"] == 10
     assert g_info["default_top_k"] == 5
     assert p_info["default_top_k"] == 10
+
+
+def test_search_top_hit_subgraph_enriched(client):
+    """top hit 1-hop subgraph가 풍부해야 함 (singleton 아님).
+
+    회귀 방지: mock hit이 실 id(objects_catalog Bill / member assembly_id)를 써야
+    _build_subgraph가 매칭에 성공해 _add_synthetic_hop으로 풍부한 1-hop을 만든다.
+    (이전: 합성 id → 매칭 실패 → singleton subgraph edges=0. 사용자 신고 2026-06-06.)
+    """
+    body = client.post(
+        "/api/search", json={"q": "AI 입법", "top_k": 10, "include_subgraph": True}
+    ).json()
+    sg = body.get("top_hit_subgraph") or {}
+    assert len(sg.get("edges", [])) >= 3, f"top-hit subgraph too sparse: {sg}"
+
+
+def test_search_results_vary_by_query(client):
+    """질의마다 다른 의원이 노출돼야 함 (이전: 항상 composite top-3 고정)."""
+    def persons(q: str) -> set:
+        b = client.post("/api/search", json={"q": q, "top_k": 10}).json()
+        return {h["id"] for h in b["hits"] if h["node_type"] == "Person"}
+    a = persons("AI 입법")
+    b = persons("부동산 정책")
+    assert a and b
+    assert a != b, "서로 다른 질의가 동일 의원 집합 반환 (다양성 없음)"
+
+
+def test_search_person_hits_party_diverse(client):
+    """한 질의의 의원 hit은 ≥2 정당 (ADR-0004 정치 중립성 — 한 정당 쏠림 방지)."""
+    body = client.post("/api/search", json={"q": "AI 입법", "top_k": 10}).json()
+    parties = {
+        h.get("metadata", {}).get("party")
+        for h in body["hits"] if h["node_type"] == "Person"
+    }
+    parties.discard(None)
+    assert len(parties) >= 2, f"의원 hit이 단일 정당 쏠림: {parties}"

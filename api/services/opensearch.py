@@ -159,82 +159,113 @@ def _mock_search(
     top_k: int,
     source_filter: Optional[list[str]],
 ) -> list[SearchHit]:
-    """결정적 mock 결과. 균형 잡힌 정당 분포 + 다양한 node_type.
+    """결정적 mock 결과. 질의-시드 다양화 + 실 id (subgraph 매칭) + 다양한 node_type.
 
-    Person hit은 member_directory의 실 22대 의원 (composite_score top 3) 사용.
+    - Person/Bill hit은 query 해시로 시드된 window에서 선택 → 질의마다 다른 결과
+      (이전: 항상 composite_score top-3 고정이라 같은 3명만 노출되던 issue).
+    - hit id는 member_directory(실 assembly_id)·objects_catalog(실 bill_id)에서 가져와
+      search.py:_build_subgraph가 매칭에 성공 → 풍부한 1-hop subgraph 생성
+      (이전: 합성 id라 매칭 실패 → singleton subgraph만 나오던 issue).
     """
-    # 실 의원 top 3 - 양당 균형 분포 (정치 중립성: 점수순)
+    import hashlib
     from api.services import member_directory as md
-    top_members = md.list_top_by_metric("composite_score", top_n=3)
-    person_hits: list[SearchHit] = []
-    for i, m in enumerate(top_members):
-        person_hits.append(SearchHit(
-            id=m.assembly_id,
-            score=0.90 - i * 0.02,
-            source="real",
-            title=f"{m.name} 의원 ({m.party})",
-            snippet=(
-                f"{m.district} · {m.reelection} · {m.committee or '미배정 위원회'} · "
-                f"22대 활동 점수 {m.analytics.composite_score:.1f}/100 "
-                f"(발의 {m.analytics.bills_proposed}건, 출처: 국회 OpenAPI)"
-            ),
-            node_type="Person",
-            metadata={
-                "term": m.term,
-                "district_id": m.district,
-                "party": m.party,
-                "profile_image_url": m.profile_image_url,
-                "composite_score": m.analytics.composite_score,
-            },
-        ))
+    from api.services import objects_catalog
 
-    # 균형: 정당 언급 없거나 양쪽 균형 (정치 중립성 가드 통과)
-    base_hits = [
+    seed = int(hashlib.sha1((query or "_").encode("utf-8")).hexdigest()[:8], 16)
+
+    # ─── Person hits: 질의-시드 window (실 assembly_id, composite_score 풀에서 회전) ───
+    pool = md.list_top_by_metric("composite_score", top_n=30) or []
+    person_hits: list[SearchHit] = []
+    if pool:
+        off = seed % len(pool)
+        window = (pool[off:] + pool[:off])[:10]  # 질의-시드 회전 window (wrap-around)
+        # 정당 다양성 우선 선택 (ADR-0004: 한 정당 쏠림 방지 — 점수순 window가 동일
+        # 정당에 안착하는 것을 막고 ≥2 정당이 노출되도록 보강).
+        picked: list = []
+        seen_parties: set[str] = set()
+        for m in window:  # pass 1: 새 정당 우선
+            if len(picked) >= 3:
+                break
+            if m.party not in seen_parties:
+                picked.append(m)
+                seen_parties.add(m.party)
+        picked_ids = {m.assembly_id for m in picked}
+        for m in window:  # pass 2: 남은 슬롯 채우기
+            if len(picked) >= 3:
+                break
+            if m.assembly_id not in picked_ids:
+                picked.append(m)
+                picked_ids.add(m.assembly_id)
+        for i, m in enumerate(picked):
+            person_hits.append(SearchHit(
+                id=m.assembly_id,
+                score=0.90 - i * 0.02,
+                source="real",
+                title=f"{m.name} 의원 ({m.party})",
+                snippet=(
+                    f"{m.district} · {m.reelection} · {m.committee or '미배정 위원회'} · "
+                    f"22대 활동 점수 {m.analytics.composite_score:.1f}/100 "
+                    f"(발의 {m.analytics.bills_proposed}건, 출처: 국회 OpenAPI)"
+                ),
+                node_type="Person",
+                metadata={
+                    "term": m.term,
+                    "district_id": m.district,
+                    "party": m.party,
+                    "profile_image_url": m.profile_image_url,
+                    "composite_score": m.analytics.composite_score,
+                },
+            ))
+
+    # ─── Bill hits: objects_catalog 실 Bill (실 bill_id → subgraph 매칭/풍부화) ───
+    try:
+        bills, _ = objects_catalog.list_instances("Bill", limit=50)
+    except Exception:
+        bills = []
+    bill_hits: list[SearchHit] = []
+    if bills:
+        boff = seed % max(1, len(bills) - 1)
+        for i, b in enumerate(bills[boff:boff + 2]):
+            bid = str(b.get("bill_id") or "")
+            if not bid:
+                continue
+            cat = str(b.get("category") or "")
+            bill_hits.append(SearchHit(
+                id=bid,
+                score=0.95 - i * 0.03,
+                source=str(b.get("source") or "real"),
+                title=str(b.get("title") or b.get("bill_no") or "의안"),
+                snippet=f"{cat + ' · ' if cat else ''}22대 의안 (출처: 국회 OpenAPI)",
+                node_type="Bill",
+                metadata={"category": cat, "proposed_date": str(b.get("proposed_date") or "")},
+            ))
+
+    # ─── 기타 node_type 다양성 (top hit 아님 — 합성 id 유지) ───
+    other_hits = [
         SearchHit(
-            id="B2206001", score=0.95, source="real",
-            title="AI 산업 진흥 및 활용 촉진법안",
-            snippet="인공지능 산업의 진흥과 활용 촉진을 위한 종합 대책 (출처: 국회 OpenAPI)",
-            node_type="Bill",
-            metadata={"category": "산업", "proposed_date": "2026-04-15"},
-        ),
-        SearchHit(
-            id="B2206002", score=0.92, source="real",
-            title="개인정보 보호법 일부개정법률안",
-            snippet="데이터 활용 확대와 개인정보 보호의 균형 (출처: 국회 OpenAPI)",
-            node_type="Bill",
-            metadata={"category": "법무", "proposed_date": "2026-04-20"},
-        ),
-        # placeholder Person hit 제거 - 실 의원 person_hits로 교체
-        SearchHit(
-            id="ART001", score=0.85, source="synthetic",
+            id="ART001", score=0.83, source="synthetic",
             title="AI 입법 동향 분석 - 1분기 리뷰",
             snippet="22대 국회 첫 분기 AI 관련 법안 51건 발의 (출처: 합성)",
-            node_type="Article",
-            metadata={"published_at": "2026-05-10"},
+            node_type="Article", metadata={"published_at": "2026-05-10"},
         ),
         SearchHit(
             id="SS001", score=0.80, source="external",
             title="AI 입법 화제 - 네이버 뉴스",
             snippet="AI 산업 진흥법 관련 사회적 관심 증가 (출처: 네이버 뉴스 RSS)",
-            node_type="SocialSignal",
-            metadata={"source_type": "news"},
+            node_type="SocialSignal", metadata={"source_type": "news"},
         ),
         SearchHit(
             id="ST001", score=0.78, source="real",
             title="AI 관련 본회의 발언",
             snippet="기술 혁신과 규제 균형에 대한 논의 (출처: 국회 회의록)",
-            node_type="Statement",
-            metadata={"date": "2026-04-25"},
+            node_type="Statement", metadata={"date": "2026-04-25"},
         ),
     ]
 
-    # 실 의원 hit를 적절한 위치에 삽입 (점수순 자연 정렬)
-    all_hits = sorted(base_hits + person_hits, key=lambda h: -h.score)
-
-    # source_filter 적용
+    # 점수순 정렬 (Bill 0.95~ > Person 0.90~ > 기타) → top hit은 실 id Bill
+    all_hits = sorted(bill_hits + person_hits + other_hits, key=lambda h: -h.score)
     if source_filter and "*" not in source_filter:
         all_hits = [h for h in all_hits if h.source in source_filter]
-
     return all_hits[:top_k]
 
 

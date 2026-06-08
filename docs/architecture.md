@@ -59,7 +59,7 @@
 
 | Component | Location | Role |
 |---|---|---|
-| Next.js 14 app | `web/app/` | 23 scenario pages + members + mindmap + Object Explorer + ops |
+| Next.js 14 app | `web/app/` | 23 scenario pages + members + mindmap + Object Explorer + ops + codegraph (graphify static asset, no backend) |
 | API clients | `web/lib/api-client.ts`, `scenario-clients.ts` | Typed SSE + REST, X-Persona-Id auto-attach |
 | Sidebar SSOT | `web/components/Sidebar.tsx` | `SCENARIOS` array drives nav, icons, badges |
 
@@ -204,7 +204,7 @@ See `docs/runbooks/01-deployment.md` for the deployment runbook. Recommended add
 
 | 컴포넌트 | 위치 | 역할 |
 |---|---|---|
-| Next.js 14 앱 | `web/app/` | 23 시나리오 페이지 + members + mindmap + Object Explorer + ops |
+| Next.js 14 앱 | `web/app/` | 23 시나리오 페이지 + members + mindmap + Object Explorer + ops + codegraph (graphify 정적 자산, 백엔드 없음) |
 | API 클라이언트 | `web/lib/api-client.ts`, `scenario-clients.ts` | 타입드 SSE + REST, X-Persona-Id 자동 첨부 |
 | Sidebar SSOT | `web/components/Sidebar.tsx` | `SCENARIOS` 배열이 내비·아이콘·배지 구동 |
 

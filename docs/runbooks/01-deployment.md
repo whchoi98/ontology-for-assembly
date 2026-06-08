@@ -87,6 +87,8 @@ docker push "$ECR_BASE/assembly-dev-web:$SHA"
 docker push "$ECR_BASE/assembly-dev-web:latest"
 ```
 
+> **코드 그래프 갱신** (선택, 코드 변경 후): `bash scripts/refresh_codegraph.sh` → graphify AST 재추출 + `web/public/codegraph/` 번들 + Bedrock 커뮤니티 한글 라벨링 + graph.html 패치. 자산은 web 이미지에 번들되므로 web 이미지 재빌드만 하면 반영(별도 배포 단계 불필요). `assembly-dev/naver-news-api` 시크릿이 있으면 의원 연관기사는 실 네이버 뉴스로 동작(없으면 mock).
+
 ## Step 6 — 데이터 적재 (one-shot ECS task)
 
 ```bash

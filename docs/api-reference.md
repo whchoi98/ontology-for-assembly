@@ -174,7 +174,7 @@ Phase 4f — 74K real Neptune edges 기반 Cypher 집계.
 | GET | `/api/members` | 의원 리스트 (286명 · 9 지표) |
 | GET | `/api/members/ranking/{metric}` | 지표별 랭킹 |
 | GET | `/api/members/{assembly_id}` | 의원 단일 정보 |
-| GET | `/api/members/{assembly_id}/news` | 의원 관련 뉴스 |
+| GET | `/api/members/{assembly_id}/news` | 의원 관련 뉴스 — Naver 키 있으면 실 기사(`source=naver_news`), 없거나 placeholder/실패/0건이면 결정적 mock(`source=mock_naver_news`). DEMO_PUBLIC_MODE와 독립 |
 
 ## Object Explorer + Ontology 메타
 

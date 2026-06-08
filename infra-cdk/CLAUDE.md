@@ -68,6 +68,7 @@ observability → 모든 스택의 메트릭 구독
 - ECS Fargate ARM64 (Graviton). api/web 각 2 replica. 
 - Ad Matcher Lambda는 Python 3.12 ARM64.
 - 로더용 task definition도 같은 이미지 다른 command.
+- 네이버 뉴스 시크릿 `assembly-dev/naver-news-api` → api task env `NAVER_NEWS_API_CLIENT_ID/SECRET` (`ecs.Secret.fromSecretsManager`, CDK가 실행역할 `GetSecretValue` 자동 grant). `members.py` 실 연관기사용 — 유효 키 주입 시 DEMO_PUBLIC_MODE와 독립 동작.
 
 ### ai-stack.ts
 - Bedrock Guardrails: 차단 토픽 룰 인라인 정의.

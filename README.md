@@ -49,7 +49,7 @@ Expansion scenarios (O–W):
 - **Petition → Legislation (P)**, **Committee Influence Heatmap (Q)**, **Promise Tracker (R)**, **Topic Burst (S)** — frontend pages backed by member directory data + the generic `/api/insight` LLM narrative.
 - **Party Cohesion (T)**, **Influence Ranking (U)**, **Voting Cluster (V)**, **Swing Voter (W)** — Phase 4f advanced insights over real Neptune edges (`/api/insights/*`).
 
-Plus: **31-class object explorer** (search · pagination · 1-hop subgraph), **ontology mindmap** (1–3 hop relations graph), **member directory** (286 members · 9 metrics), **operational console** (5 panels — ingest · guardrail · memory · eval · trace), and **GuidedTour** (6 personas × scenario recommendation cards).
+Plus: **31-class object explorer** (search · pagination · 1-hop subgraph), **ontology mindmap** (1–3 hop relations graph), **member directory** (286 members · 9 metrics), **operational console** (5 panels — ingest · guardrail · memory · eval · trace), **code knowledge graph** (graphify AST · Bedrock community labels), and **GuidedTour** (6 personas × scenario recommendation cards).
 
 ## Prerequisites
 
@@ -189,7 +189,7 @@ MIT — see [LICENSE](LICENSE).
 - **청원→입법 (P)**, **위원회 영향력 heatmap (Q)**, **공약 이행 추적 (R)**, **토픽 burst (S)** — 의원 디렉토리 데이터 + 범용 `/api/insight` LLM narrative 기반 프론트 페이지.
 - **정당 응집도 (T)**, **의원 영향력 랭킹 (U)**, **표결 cluster (V)**, **swing voter (W)** — Phase 4f 고급 인사이트, real Neptune edges Cypher (`/api/insights/*`).
 
-추가: **31-class 객체 탐색기**, **온톨로지 관계 그래프**(1–3 hop), **의원 디렉토리**(286명·9 지표), **운영 콘솔** (5 패널), **GuidedTour** (6 페르소나 × 시나리오 추천).
+추가: **31-class 객체 탐색기**, **온톨로지 관계 그래프**(1–3 hop), **의원 디렉토리**(286명·9 지표), **운영 콘솔** (5 패널), **코드 지식 그래프**(graphify AST · Bedrock 커뮤니티 라벨), **GuidedTour** (6 페르소나 × 시나리오 추천).
 
 ## 사전 요구 사항
 

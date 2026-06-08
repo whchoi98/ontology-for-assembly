@@ -1,6 +1,6 @@
 # web/ — Next.js 14 Frontend (TypeScript, ARM64)
 
-`web/`은 23 시나리오 페이지(A–W) + 의원 디렉토리 + 온톨로지 관계 그래프 + Object Explorer + 운영 콘솔을 담은 프론트. 6 페르소나 컨텍스트가 모든 화면에 일관 적용된다.
+`web/`은 23 시나리오 페이지(A–W) + 의원 디렉토리 + 온톨로지 관계 그래프 + Object Explorer + 운영 콘솔 + 코드 지식 그래프(codegraph)를 담은 프론트. 6 페르소나 컨텍스트가 모든 화면에 일관 적용된다.
 
 ## Structure
 
@@ -36,7 +36,8 @@ web/
 │   ├── objects/page.tsx          # Object Explorer 31 클래스 인덱스
 │   ├── objects/[type]/page.tsx   # 클래스별 인스턴스 리스트
 │   ├── objects/[type]/[id]/page.tsx # 1-hop subgraph 디테일
-│   └── ops/page.tsx              # 운영 콘솔 5 패널
+│   ├── ops/page.tsx              # 운영 콘솔 5 패널
+│   └── codegraph/page.tsx        # 코드 지식 그래프 (graphify 정적 자산 임베드 — public/codegraph/, Sidebar OPS_LINKS, staff)
 ├── components/
 │   ├── AppShell.tsx              # 레이아웃 셸 (Sidebar + TopBar)
 │   ├── Sidebar.tsx               # 좌측 — 페르소나 priority 자동 정렬 (SCENARIOS SSOT)

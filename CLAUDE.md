@@ -124,11 +124,12 @@ ontology-for-assembly/
 │   └── Dockerfile                # API + 일회성 데이터 로더 겸용
 │   # 인증은 API 계층에 없음 — edge(Lambda@Edge JWT + API Gateway API Key)에서 강제
 ├── web/                          Next.js 14 App Router
-│   ├── app/                      # 23 시나리오 페이지 + objects + ops + members + mindmap
+│   ├── app/                      # 23 시나리오 페이지 + objects + ops + members + mindmap + codegraph
 │   ├── components/               # AppShell, Sidebar, TopBar, PersonaSwitch, GuidedTour,
 │   │                             # CytoscapeView, KoreaChoropleth, ChatThread, ToolCallPanel,
 │   │                             # AIInsightPanel, DataSourceBadge, BiasScoreIndicator
-│   └── lib/api-client.ts         # 타입 안전 SSE + REST
+│   ├── lib/api-client.ts         # 타입 안전 SSE + REST
+│   └── public/codegraph/         # graphify 코드 그래프 정적 자산 (커밋됨, scripts/refresh_codegraph.sh로 갱신)
 ├── infra-cdk/                    AWS CDK v2 (TypeScript) — 6 stacks
 │   ├── bin/assembly.ts
 │   └── lib/{network,data,compute,ai,edge,observability}-stack.ts
@@ -142,7 +143,8 @@ ontology-for-assembly/
 ├── ontology/                     adapters/ (활성) + classes·relations·mappings·standards (현재 미채움 — 카탈로그 SSOT는 api/services/objects_catalog.py)
 ├── tests/                        pytest smoke + 라우터별 통합 (httpx + boto3 mock)
 ├── docs/                         api-reference, narrative docs, ADRs (0001–0010), runbooks
-├── scripts/                      eval_wow_queries, verify_demo_dataset, cognito 프로비저닝
+├── scripts/                      eval_wow_queries, verify_demo_dataset, cognito 프로비저닝,
+│                                 #   refresh_codegraph + label_codegraph_communities (graphify 코드 그래프)
 ├── .claude/                      agents, skills, hooks, commands, settings
 ├── .github/workflows/ci.yml      4-job CI
 └── .harness-eval/                점수 history → README 배지

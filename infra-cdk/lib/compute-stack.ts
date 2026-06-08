@@ -14,6 +14,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 
 
@@ -119,6 +120,11 @@ export class ComputeStack extends cdk.Stack {
     // ECR 리포 reference - lookup으로 이미지 권한 자동 grant.
     const apiRepo = ecr.Repository.fromRepositoryName(this, 'ApiRepo', API_REPO_NAME);
 
+    // 네이버 뉴스 API 시크릿 (실 연관기사 — members.py:get_member_news). secrets:로 task env 주입.
+    // CDK가 task 실행 역할에 GetSecretValue를 자동 grant. DEMO_PUBLIC_MODE와 독립 동작.
+    const naverSecret = secretsmanager.Secret.fromSecretNameV2(
+      this, 'NaverNewsSecret', 'assembly-dev/naver-news-api');
+
     apiTaskDef.addContainer('api', {
       image: ecs.ContainerImage.fromEcrRepository(apiRepo, IMAGE_TAG),
       memoryLimitMiB: 1024,
@@ -143,14 +149,19 @@ export class ComputeStack extends cdk.Stack {
         SYNTHETIC_DATA_BUCKET: syntheticDataBucket.bucketName,
         // 외부 API key - DEMO_PUBLIC_MODE=true에선 미사용, 실 호출 시만 boto3로 fetch.
         ASSEMBLY_OPENAPI_KEY: 'demo-mode-via-secrets-manager',
-        NAVER_NEWS_API_CLIENT_ID: 'demo-mode',
-        NAVER_NEWS_API_CLIENT_SECRET: 'demo-mode',
+        // NAVER_NEWS_API_CLIENT_ID/SECRET은 아래 secrets:로 Secrets Manager에서 주입
+        // (실 네이버 연관기사 — members.py. 유효 키 주입 시 DEMO_PUBLIC_MODE와 무관하게 실 호출).
         // Cognito - DEMO_PUBLIC_MODE에서 우회됨
         COGNITO_USER_POOL_ID: 'demo-mode',
         COGNITO_GUEST_IDENTITY_POOL_ID: 'demo-mode',
         COGNITO_APP_CLIENT_ID: 'demo-mode',
         ORIGIN_AUTH_SECRET_ARN: 'demo-mode',
         PUBLIC_DOMAIN: 'demo.cloudfront.net',
+      },
+      secrets: {
+        // 실 네이버 뉴스 API creds (Secrets Manager → task env). members.py가 읽어 실 연관기사 호출.
+        NAVER_NEWS_API_CLIENT_ID: ecs.Secret.fromSecretsManager(naverSecret, 'client_id'),
+        NAVER_NEWS_API_CLIENT_SECRET: ecs.Secret.fromSecretsManager(naverSecret, 'client_secret'),
       },
       logging: ecs.LogDriver.awsLogs({
         streamPrefix: 'assembly-api',

@@ -322,7 +322,6 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
             "Value": "false",
           },
         ],
-        "Name": "assembly-dev-alb",
         "Scheme": "internal",
         "SecurityGroups": [
           {
@@ -405,9 +404,9 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
     },
     "AlbListenerWebTargetGroup22979144": {
       "Properties": {
-        "HealthCheckPath": "/healthz",
+        "HealthCheckPath": "/",
         "Matcher": {
-          "HttpCode": "200,307",
+          "HttpCode": "200-399",
         },
         "Port": 3000,
         "Protocol": "HTTP",
@@ -516,6 +515,14 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
                 "Value": "dev",
               },
               {
+                "Name": "DEMO_PUBLIC_MODE",
+                "Value": "true",
+              },
+              {
+                "Name": "REQUIRE_ORIGIN_AUTH",
+                "Value": "false",
+              },
+              {
                 "Name": "NEPTUNE_ENDPOINT",
                 "Value": "neptune.test.local",
               },
@@ -524,12 +531,24 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
                 "Value": "https://os.test.local",
               },
               {
+                "Name": "OPENSEARCH_INDEX",
+                "Value": "assembly-dev-kb-index",
+              },
+              {
                 "Name": "BEDROCK_CHAT_MODEL_ID",
                 "Value": "global.anthropic.claude-sonnet-4-6",
               },
               {
                 "Name": "BEDROCK_EMBED_MODEL_ID",
                 "Value": "global.cohere.embed-v4:0",
+              },
+              {
+                "Name": "BEDROCK_RERANKER_INFERENCE_PROFILE_ARN",
+                "Value": "arn:aws:bedrock:ap-northeast-2::reranker",
+              },
+              {
+                "Name": "BEDROCK_KB_ID",
+                "Value": "kb-not-configured",
               },
               {
                 "Name": "BEDROCK_GUARDRAIL_ID",
@@ -558,6 +577,30 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
                 "Value": {
                   "Fn::ImportValue": "test-data:ExportsOutputRefSyntheticDataBucket9ECD2751DA70A5C4",
                 },
+              },
+              {
+                "Name": "ASSEMBLY_OPENAPI_KEY",
+                "Value": "demo-mode-via-secrets-manager",
+              },
+              {
+                "Name": "COGNITO_USER_POOL_ID",
+                "Value": "demo-mode",
+              },
+              {
+                "Name": "COGNITO_GUEST_IDENTITY_POOL_ID",
+                "Value": "demo-mode",
+              },
+              {
+                "Name": "COGNITO_APP_CLIENT_ID",
+                "Value": "demo-mode",
+              },
+              {
+                "Name": "ORIGIN_AUTH_SECRET_ARN",
+                "Value": "demo-mode",
+              },
+              {
+                "Name": "PUBLIC_DOMAIN",
+                "Value": "demo.cloudfront.net",
               },
             ],
             "Essential": true,
@@ -589,6 +632,38 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
               {
                 "ContainerPort": 8080,
                 "Protocol": "tcp",
+              },
+            ],
+            "Secrets": [
+              {
+                "Name": "NAVER_NEWS_API_CLIENT_ID",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":secretsmanager:ap-northeast-2:111111111111:secret:assembly-dev/naver-news-api:client_id::",
+                    ],
+                  ],
+                },
+              },
+              {
+                "Name": "NAVER_NEWS_API_CLIENT_SECRET",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":secretsmanager:ap-northeast-2:111111111111:secret:assembly-dev/naver-news-api:client_secret::",
+                    ],
+                  ],
+                },
               },
             ],
           },
@@ -658,6 +733,25 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
                 "Fn::GetAtt": [
                   "ApiTaskDefapiLogGroup9FDF1262",
                   "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":secretsmanager:ap-northeast-2:111111111111:secret:assembly-dev/naver-news-api-??????",
+                  ],
                 ],
               },
             },
@@ -935,6 +1029,9 @@ exports[`스냅샷 (drift 감지) compute 스택 스냅샷 1`] = `
                 "Alb16C2F182",
                 "DNSName",
               ],
+            },
+            "/cdk/exports/test-edge/testcomputeapnortheast2RefAlb16C2F18251BE79FF": {
+              "Ref": "Alb16C2F182",
             },
           },
           "region": "us-east-1",
@@ -1431,12 +1528,43 @@ exports[`스냅샷 (drift 감지) data 스택 스냅샷 1`] = `
       "Type": "AWS::Neptune::DBSubnetGroup",
     },
     "OsCollection": {
+      "DependsOn": [
+        "OsEncryptionPolicy",
+        "OsNetworkPolicy",
+      ],
       "Properties": {
         "Description": "Assembly hybrid BM25(Nori) + KNN(Cohere embed-v4)",
         "Name": "assembly-dev-collection",
         "Type": "VECTORSEARCH",
       },
       "Type": "AWS::OpenSearchServerless::Collection",
+    },
+    "OsDataAccessPolicy": {
+      "Properties": {
+        "Description": "Dev only: account root - Production은 명시적 task role ARN 사용 권장",
+        "Name": "assembly-dev-access",
+        "Policy": "[{"Rules":[{"ResourceType":"collection","Resource":["collection/assembly-dev-collection"],"Permission":["aoss:DescribeCollectionItems","aoss:CreateCollectionItems","aoss:UpdateCollectionItems"]},{"ResourceType":"index","Resource":["index/assembly-dev-collection/*"],"Permission":["aoss:CreateIndex","aoss:DescribeIndex","aoss:ReadDocument","aoss:WriteDocument","aoss:UpdateIndex","aoss:DeleteIndex"]}],"Principal":["arn:aws:iam::111111111111:root"]}]",
+        "Type": "data",
+      },
+      "Type": "AWS::OpenSearchServerless::AccessPolicy",
+    },
+    "OsEncryptionPolicy": {
+      "Properties": {
+        "Description": "AWS-managed KMS for assembly-dev-collection",
+        "Name": "assembly-dev-encrypt",
+        "Policy": "{"Rules":[{"ResourceType":"collection","Resource":["collection/assembly-dev-collection"]}],"AWSOwnedKey":true}",
+        "Type": "encryption",
+      },
+      "Type": "AWS::OpenSearchServerless::SecurityPolicy",
+    },
+    "OsNetworkPolicy": {
+      "Properties": {
+        "Description": "Public dashboard + collection endpoint (dev). Production: VPC endpoint only.",
+        "Name": "assembly-dev-network",
+        "Policy": "[{"Rules":[{"ResourceType":"collection","Resource":["collection/assembly-dev-collection"]},{"ResourceType":"dashboard","Resource":["collection/assembly-dev-collection"]}],"AllowFromPublic":true}]",
+        "Type": "network",
+      },
+      "Type": "AWS::OpenSearchServerless::SecurityPolicy",
     },
     "RawDocsBucketA4EEA902": {
       "DeletionPolicy": "Retain",
@@ -2041,7 +2169,7 @@ exports[`스냅샷 (drift 감지) edge 스택 스냅샷 1`] = `
     "Distribution830FAC52": {
       "Properties": {
         "DistributionConfig": {
-          "Comment": "Assembly B2C/staff distribution",
+          "Comment": "Assembly B2C/staff distribution (VPC origin)",
           "DefaultCacheBehavior": {
             "AllowedMethods": [
               "GET",
@@ -2063,12 +2191,6 @@ exports[`스냅샷 (drift 감지) edge 스택 스냅샷 1`] = `
           "IPV6Enabled": true,
           "Origins": [
             {
-              "CustomOriginConfig": {
-                "OriginProtocolPolicy": "http-only",
-                "OriginSSLProtocols": [
-                  "TLSv1.2",
-                ],
-              },
               "DomainName": {
                 "Fn::GetAtt": [
                   "ExportsReader8B249524",
@@ -2076,12 +2198,39 @@ exports[`스냅샷 (drift 감지) edge 스택 스냅샷 1`] = `
                 ],
               },
               "Id": "testedgeDistributionOrigin1B5F8982F",
+              "VpcOriginConfig": {
+                "VpcOriginId": {
+                  "Fn::GetAtt": [
+                    "DistributionOrigin1VpcOrigin1389D846",
+                    "Id",
+                  ],
+                },
+              },
             },
           ],
           "PriceClass": "PriceClass_200",
         },
       },
       "Type": "AWS::CloudFront::Distribution",
+    },
+    "DistributionOrigin1VpcOrigin1389D846": {
+      "Properties": {
+        "VpcOriginEndpointConfig": {
+          "Arn": {
+            "Fn::GetAtt": [
+              "ExportsReader8B249524",
+              "/cdk/exports/test-edge/testcomputeapnortheast2RefAlb16C2F18251BE79FF",
+            ],
+          },
+          "HTTPPort": 80,
+          "Name": "testedgeDistributionOrigin1VpcOriginEF77A2F0",
+          "OriginProtocolPolicy": "http-only",
+          "OriginSSLProtocols": [
+            "TLSv1.2",
+          ],
+        },
+      },
+      "Type": "AWS::CloudFront::VpcOrigin",
     },
     "EditorialGroup": {
       "Properties": {
@@ -2098,6 +2247,7 @@ exports[`스냅샷 (drift 감지) edge 스택 스냅샷 1`] = `
         "ReaderProps": {
           "imports": {
             "/cdk/exports/test-edge/testcomputeapnortheast2FnGetAttAlb16C2F182DNSNameB10086F9": "{{resolve:ssm:/cdk/exports/test-edge/testcomputeapnortheast2FnGetAttAlb16C2F182DNSNameB10086F9}}",
+            "/cdk/exports/test-edge/testcomputeapnortheast2RefAlb16C2F18251BE79FF": "{{resolve:ssm:/cdk/exports/test-edge/testcomputeapnortheast2RefAlb16C2F18251BE79FF}}",
           },
           "prefix": "test-edge",
           "region": "us-east-1",
@@ -2344,6 +2494,13 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
         ],
         "SecurityGroupIngress": [
           {
+            "CidrIp": "10.100.0.0/16",
+            "Description": "CloudFront VPC Origin ENI (private)",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow from anyone on port 80",
             "FromPort": 80,
@@ -2354,22 +2511,6 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
         "VpcId": "vpc-0dfa5610180dfa628",
       },
       "Type": "AWS::EC2::SecurityGroup",
-    },
-    "AlbSgfromplxxxxxxxx8039F4074C": {
-      "Properties": {
-        "Description": "CloudFront origins HTTP",
-        "FromPort": 80,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "AlbSg1155C1BE",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourcePrefixListId": "pl-xxxxxxxx",
-        "ToPort": 80,
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
     },
     "AppSg898BCA4E": {
       "Properties": {
@@ -2388,7 +2529,7 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
     },
     "AppSgfromtestnetworkAlbSg6469F8223000396C3175": {
       "Properties": {
-        "Description": "ALB → Web",
+        "Description": "ALB to Web",
         "FromPort": 3000,
         "GroupId": {
           "Fn::GetAtt": [
@@ -2409,7 +2550,7 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
     },
     "AppSgfromtestnetworkAlbSg6469F8228080451F6BD5": {
       "Properties": {
-        "Description": "ALB → API",
+        "Description": "ALB to API",
         "FromPort": 8080,
         "GroupId": {
           "Fn::GetAtt": [
@@ -2460,7 +2601,7 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
     },
     "NeptuneSgfromtestnetworkAppSgF38D62738182FD525F3A": {
       "Properties": {
-        "Description": "API → Neptune",
+        "Description": "API to Neptune",
         "FromPort": 8182,
         "GroupId": {
           "Fn::GetAtt": [
@@ -2481,7 +2622,7 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
     },
     "NeptuneSgfromtestnetworkLambdaSgB05D7ECF818272BF10DB": {
       "Properties": {
-        "Description": "Lambda → Neptune",
+        "Description": "Lambda to Neptune",
         "FromPort": 8182,
         "GroupId": {
           "Fn::GetAtt": [
@@ -2517,7 +2658,7 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
     },
     "OsSgfromtestnetworkAppSgF38D6273443837191C7": {
       "Properties": {
-        "Description": "API → OpenSearch",
+        "Description": "API to OpenSearch",
         "FromPort": 443,
         "GroupId": {
           "Fn::GetAtt": [
@@ -2538,7 +2679,7 @@ exports[`스냅샷 (drift 감지) network 스택 스냅샷 1`] = `
     },
     "OsSgfromtestnetworkLambdaSgB05D7ECF443C809D002": {
       "Properties": {
-        "Description": "Lambda → OpenSearch",
+        "Description": "Lambda to OpenSearch",
         "FromPort": 443,
         "GroupId": {
           "Fn::GetAtt": [

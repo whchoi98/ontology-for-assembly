@@ -29,3 +29,7 @@ cdk.out/
 # Claude Code harness: personal/runtime files
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+
+# graphify code-graph build artifacts — served copy lives in web/public/codegraph/
+graphify-out/*
+!graphify-out/.gitkeep

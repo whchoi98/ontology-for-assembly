@@ -199,44 +199,52 @@ class MemberNewsResponse(BaseModel):
 def get_member_news(assembly_id: str, limit: int = 5) -> MemberNewsResponse:
     """의원 이름 기반 네이버 뉴스 검색 (인물 페이지 연관 기사 섹션).
 
-    DEMO_PUBLIC_MODE에서는 mock 5개. Production은 NAVER_NEWS_API_CLIENT_ID/SECRET 사용.
+    실 네이버 뉴스는 글로벌 DEMO_PUBLIC_MODE와 **독립** — 유효한 키가 주입돼 있으면
+    (Secrets Manager → task env NAVER_NEWS_API_CLIENT_ID/SECRET) 데모 모드여도 실 기사를
+    우선 사용한다. 'demo-mode' placeholder·미설정·호출 실패·결과 0건이면 결정적 mock으로
+    fallback (출처 배지 mock_naver_news로 구분).
+    (사용자 신고 2026-06-08: 데모 mock 기사가 실 기사처럼 보이고 링크가 무관 결과로 이동.)
     """
     import os
     import re
+    import logging
     real_id = member_directory.resolve_id(assembly_id)
     m = member_directory.get_member(real_id)
     if m is None:
         raise HTTPException(404, f"의원 '{assembly_id}' 없음")
 
     items: list[NewsItemModel] = []
-    if os.environ.get("DEMO_PUBLIC_MODE", "false").lower() == "true":
-        # Mock 네이버 뉴스 - 의원 이름 + 정당·지역구 결합으로 차별화
-        items = _mock_news_for(m.name, m.party, m.district, limit)
-    else:
-        # 실 네이버 검색 API
+    client_id = os.environ.get("NAVER_NEWS_API_CLIENT_ID", "")
+    client_secret = os.environ.get("NAVER_NEWS_API_CLIENT_SECRET", "")
+    has_real_creds = (
+        bool(client_id) and bool(client_secret)
+        and client_id != "demo-mode" and client_secret != "demo-mode"
+    )
+    if has_real_creds:
+        # 실 네이버 검색 API (DEMO_PUBLIC_MODE와 무관 — 키만 있으면 실 호출)
         try:
-            from data.external import naver_news
-            # naver_news.fetch_news는 SocialSignal generator라 직접 raw payload 필요
-            client_id = os.environ.get("NAVER_NEWS_API_CLIENT_ID", "")
-            client_secret = os.environ.get("NAVER_NEWS_API_CLIENT_SECRET", "")
-            if client_id and client_secret:
-                import requests
-                resp = requests.get(
-                    "https://openapi.naver.com/v1/search/news.json",
-                    headers={"X-Naver-Client-Id": client_id, "X-Naver-Client-Secret": client_secret},
-                    params={"query": f"{m.name} 의원", "display": limit, "sort": "date"},
-                    timeout=10,
-                )
-                resp.raise_for_status()
-                for it in resp.json().get("items", []):
-                    items.append(NewsItemModel(
-                        title=re.sub(r"<[^>]+>", "", it.get("title", "")),
-                        link=it.get("link", ""),
-                        description=re.sub(r"<[^>]+>", "", it.get("description", "")),
-                        pub_date=it.get("pubDate", ""),
-                    ))
+            import requests
+            resp = requests.get(
+                "https://openapi.naver.com/v1/search/news.json",
+                headers={"X-Naver-Client-Id": client_id, "X-Naver-Client-Secret": client_secret},
+                params={"query": f"{m.name} 의원", "display": limit, "sort": "date"},
+                timeout=10,
+            )
+            resp.raise_for_status()
+            for it in resp.json().get("items", []):
+                items.append(NewsItemModel(
+                    title=re.sub(r"<[^>]+>", "", it.get("title", "")),
+                    link=it.get("link", ""),
+                    description=re.sub(r"<[^>]+>", "", it.get("description", "")),
+                    pub_date=it.get("pubDate", ""),
+                ))
         except Exception:
-            items = _mock_news_for(m.name, m.party, m.district, limit)
+            logging.getLogger("api.routers.members").warning(
+                "naver news fetch failed for %s; falling back to mock", real_id, exc_info=True)
+            items = []
+    if not items:
+        # 키 미설정 / placeholder / 실 호출 실패 / 결과 0건 → 결정적 mock fallback
+        items = _mock_news_for(m.name, m.party, m.district, limit)
 
     return MemberNewsResponse(
         member_id=real_id, name=m.name, query=f"{m.name} 의원",

@@ -1,0 +1,902 @@
+{
+  "/home/ec2-user/my-project/ontology-for-assembly/api/__init__.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/main.py": {
+    "mtime": 1779371752.1749594,
+    "hash": "92c13dfb0c23620feb9c796aafafacde"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/aws_clients.py": {
+    "mtime": 1779287979.9481626,
+    "hash": "8a95520c3e84727a142310f164367777"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/__init__.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/search.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "4d0aab99fe7d20a237b3ca0ac4b19dad"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/ad_match.py": {
+    "mtime": 1780607464.1947308,
+    "hash": "f6a00a2a6a2fff697dc2e734041aca97"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/ops.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "c3fe9fdb7df9634e44ce757db9773589"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/objects.py": {
+    "mtime": 1780601346.8520875,
+    "hash": "7ac6a09339d83049599fb0c285be8c2a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/outlier.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "16a67180e7e684fa9b61f8d55863d931"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/journey.py": {
+    "mtime": 1779329690.3319123,
+    "hash": "3582c9973c13e6bed6f33e1423687464"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/neutrality.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "bc4dea371dfdcca04e86525bdd76c127"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/district_map.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "92f285473c18664b17871c0a14bd43ae"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/insights.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "0598a38eec409568c743916c7fb5bf27"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/external_signal.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "8309a54fc96e911edda4d6c798af170a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/persona_match.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "92d59aae907fd370f027348696f6698b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/cluster.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "0fc1535daf2ac8481b1c72e9e24ccfae"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/lookalike.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "9caf3284dddd11e4e667f0823f0d4929"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/issue_legislation.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "8e98a7efedd069d2d63d8469d66af792"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/article_roi.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "de2483c7f208ae7887208ac5c45dfc91"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/personas.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "0bc418af20ca6c945d6645b6a5cc81d3"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/members.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "8952117eea9983c6678c9e3691856477"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/insight_generic.py": {
+    "mtime": 1779374384.2268648,
+    "hash": "9066bed499fedff9c18c70f5fa9b54d1"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/relations.py": {
+    "mtime": 1779869140.875363,
+    "hash": "c7de0b70c2a9c1ffa57dc0bec6c845af"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/insights_advanced.py": {
+    "mtime": 1779372870.7960043,
+    "hash": "e4f7410cb4300530dbd25bb2f2020e19"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/routers/chat.py": {
+    "mtime": 1780364143.5584214,
+    "hash": "4c7da1b2f53f134a0899da2cd53f6537"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/__init__.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/persona.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "32cbb1ad92b78307738d6bf0b05c57ea"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/guardrails.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "1db9c493c3bf70fa4872e859eb3f91aa"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/cohort.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "4e3d7ae5b9fb4370a805be7b1a67aa4d"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/bedrock.py": {
+    "mtime": 1779868684.5671196,
+    "hash": "405a75e4b42d823a6de3620f06b28c5c"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/neptune.py": {
+    "mtime": 1779330115.6209393,
+    "hash": "7224fe01589817de5c188ab60033a9d5"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/opensearch.py": {
+    "mtime": 1780726569.1732323,
+    "hash": "fdfa7827a3169043420adb4b169146a5"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/multi_agent.py": {
+    "mtime": 1779862908.275916,
+    "hash": "f197cd0c3e071b118a432a0213157229"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/three_stage.py": {
+    "mtime": 1779862898.2861733,
+    "hash": "2c4e9012493276e9108ad442b8d3c616"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/ad_matcher.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "6f651621bfcd88e52306fabb94edc6f8"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/ops_metrics.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "89ac0ba9f774d176ed952a5557073790"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/objects_catalog.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "8b76ff7d1c6821ed165677683ded61ef"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/outlier_detect.py": {
+    "mtime": 1779326106.7743378,
+    "hash": "5cb884315cf240979772dadaeb0cf6be"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/journey_builder.py": {
+    "mtime": 1779326096.3146079,
+    "hash": "f6ff3ce915f3b15ff448f0194f16b822"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/district_map_builder.py": {
+    "mtime": 1779864488.4852018,
+    "hash": "eb3173aac611f056f01c2a2f3e1f64db"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/insights_builder.py": {
+    "mtime": 1779278303.2978904,
+    "hash": "abec70fe913a2d8092d3c992c9626057"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/signal_fusion_builder.py": {
+    "mtime": 1779278303.3078902,
+    "hash": "1aee6ca803fe5674b7284789fdcb446b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/persona_match_builder.py": {
+    "mtime": 1779278303.3078902,
+    "hash": "ccba823f2dc7b6e8e21057df4982188a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/cluster_builder.py": {
+    "mtime": 1779278303.3078902,
+    "hash": "7b2d43021f4b08fa3dd7a86104253704"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/lookalike_builder.py": {
+    "mtime": 1779326100.4845002,
+    "hash": "c582ad88235f8082bdf265f2c8c70010"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/issue_legislation_builder.py": {
+    "mtime": 1779278303.3078902,
+    "hash": "db7831c3a49673366b8ba7a7810a5210"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/article_roi_builder.py": {
+    "mtime": 1779278303.3078902,
+    "hash": "baba378be4553d6a2ab29e31e45f1182"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/member_directory.py": {
+    "mtime": 1779870672.405896,
+    "hash": "0fc9b88eba31336cb2f38ef5809c46c5"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/services/tools/__init__.py": {
+    "mtime": 1779278303.3078902,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/models/__init__.py": {
+    "mtime": 1779278303.3078902,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/next.config.js": {
+    "mtime": 1779144254.8732986,
+    "hash": "914692a70ee5919f9077d84437487767"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/tailwind.config.ts": {
+    "mtime": 1779278303.2978904,
+    "hash": "c9587ad2dbb506e2e3ea237b9f3252cf"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/postcss.config.js": {
+    "mtime": 1778689050.0098557,
+    "hash": "f25138ae21a7fea13cb86a59efcbdfde"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/next-env.d.ts": {
+    "mtime": 1779278303.2978904,
+    "hash": "b5ed9dd8b4c5ba8e5ab8e6a379c15838"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/layout.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "4be452547ab7d05608bceb42959ad2ba"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/page.tsx": {
+    "mtime": 1780892250.559156,
+    "hash": "876d5cdeee83c1f4759f560929c583fc"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/search/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "0d40378d9ee9196a3ed537cd41b30513"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/chat/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "ee73fad2cd9512543d36800b6b4b494b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/chat/popup/page.tsx": {
+    "mtime": 1779278303.3578887,
+    "hash": "926f11cdb55fb89c5ffb93490187a918"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/chat/compare/page.tsx": {
+    "mtime": 1779278303.3578887,
+    "hash": "7552b50eaccff71c2c310fa896d4e430"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/ad-match/page.tsx": {
+    "mtime": 1780607983.0013845,
+    "hash": "66e54774bc20adce6727cb5f996b0410"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/ops/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "33ff852bc8792dada5d38053c37590f7"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/objects/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "79ad52ae8bba0e7474d7744522fe15d6"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/objects/[type]/page.tsx": {
+    "mtime": 1779278303.3578887,
+    "hash": "aee32f3b5079ca166ab022db2d3cc7d8"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/objects/[type]/[id]/page.tsx": {
+    "mtime": 1779278303.4178872,
+    "hash": "b166a7f18989b566165bd133af04c426"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/outlier/page.tsx": {
+    "mtime": 1779314195.2316647,
+    "hash": "3c0db0107993f1e304337987600976da"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/journey/page.tsx": {
+    "mtime": 1779400534.4101608,
+    "hash": "2e045900c7b2d009ccc0207e416e1016"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/neutrality/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "b00af11b3df7c9df933315db8a7cbd2d"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/district-map/page.tsx": {
+    "mtime": 1779864511.2346203,
+    "hash": "0e7ddfc947be13312d522a4ea6205eaa"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/insights/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "0c5d98e8101fd6feaf3ec404a0c9ffef"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/external-signal/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "bf3b6b8cb4d7d8b110c9946dab179b31"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/persona-match/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "a3774b43b968242ce9fd734bbb6b1188"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/cluster/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "d03c1616b6758baa4450a00950c4be0c"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/lookalike/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "e8abb3a1115c3e143a419eadbc6de481"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/issue-legislation/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "3df6c9af9d0e649fd42805129343d595"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/article-roi/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "76e490d5af61c4167fda2841abe4b80b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/members/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "f103ab262151f88ed5a79f9a156ba10a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/mindmap/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "8de0c1adc0174f1d8b3cc155cb90289b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/relations/page.tsx": {
+    "mtime": 1779869399.3186939,
+    "hash": "5cec0af2e6a78afc08549a432fbdd852"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/petition-map/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "530225b65bdbf32420692431b63c5125"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/committee-heatmap/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "cb1a1867adf7a4e2f30a3772690dd8ad"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/promise-tracker/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "0f403738a305e8323a0b9a757fd299d8"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/topic-burst/page.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "fa5c077f7ac63a595d7ee11cafa7e08c"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/party-cohesion/page.tsx": {
+    "mtime": 1779374482.0743349,
+    "hash": "d9fad6a7c17871d48f642e99a2da28fd"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/influence-rank/page.tsx": {
+    "mtime": 1779374435.1755474,
+    "hash": "2b1b0157509138069fac760242bc7cd7"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/voting-cluster/page.tsx": {
+    "mtime": 1779374449.815169,
+    "hash": "bdfbab6e380e5da2491fcbfca658b72d"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/app/swing-voters/page.tsx": {
+    "mtime": 1779377286.6217628,
+    "hash": "bdba836b9a49671e4dbcd1b44a9e624b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/PersonaSwitch.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "489f3900f69ec9472335cd35494299cd"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/DataSourceBadge.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "09d1596388f210fafd8b8258b2821092"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/Sidebar.tsx": {
+    "mtime": 1779373251.7461505,
+    "hash": "49cb87b47c6c6f9141befc31b29f1c49"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/CytoscapeView.tsx": {
+    "mtime": 1780599115.8894243,
+    "hash": "e4559e010c63a6cf40d0c0063a81c740"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/GuidedTour.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "a54d604aa0deb4a1d95e88778bbcd2d3"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/BiasScoreIndicator.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "bb8f517e55980e574f7f91eee59a7355"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/KoreaChoropleth.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "598a5272f6bc99670e50018b2f9b5b29"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/FloatingChat.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "51436293953a367fcdd1f69f3c47fe05"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/AppShell.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "988f594da57b9a2e6dc48a7b7fe4c00b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/AIInsightPanel.tsx": {
+    "mtime": 1779861309.3971105,
+    "hash": "41c8e01ca53de0c55c613a281b15e988"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/ChatThread.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "f106e55357bfd8729b36b8d0df1f4050"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/ToolCallPanel.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "506b00e3ab3a7742ebba67209d1edda5"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/TopBar.tsx": {
+    "mtime": 1779278303.3078902,
+    "hash": "de73a1e7f5456ba3a1e5761cb3708ab3"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/components/ScenarioHero.tsx": {
+    "mtime": 1779370487.8576622,
+    "hash": "419543c25a4845000f9b0b543e747316"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/lib/personas.ts": {
+    "mtime": 1779278303.3078902,
+    "hash": "4c3032fba3855cf03e99b386db991c19"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/lib/api-client.ts": {
+    "mtime": 1780607693.388832,
+    "hash": "ca9cd66bb858bc3df68974cf8e87a068"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/lib/ops-client.ts": {
+    "mtime": 1779278303.3078902,
+    "hash": "fa0f7fba33a5670b1b922113529100c9"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/lib/scenario-clients.ts": {
+    "mtime": 1779278303.3078902,
+    "hash": "78ffe59a8f85613b0d377c901e52f630"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/lib/scenario-meta.ts": {
+    "mtime": 1779278303.3078902,
+    "hash": "b65e9218dd3a042c2099238f5c07c411"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/types/cytoscape-fcose.d.ts": {
+    "mtime": 1779278303.3078902,
+    "hash": "bc3f260859edd5e97e3d21ddbe3ca89a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/jest.config.js": {
+    "mtime": 1778686749.0893724,
+    "hash": "2f9353c07aeb3c4d8fdf129351bef0e3"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/bin/assembly.ts": {
+    "mtime": 1778808937.1077025,
+    "hash": "2df72b8d50e3cfc6645f3c23fb1743cf"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/lib/network-stack.ts": {
+    "mtime": 1778809081.4639568,
+    "hash": "20018cb3e8a2da99ae5eff5ff49f3792"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/lib/data-stack.ts": {
+    "mtime": 1780365403.8658442,
+    "hash": "5c4a48ead1fc85cd55438a5a6519bf67"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/lib/ai-stack.ts": {
+    "mtime": 1778686809.0978205,
+    "hash": "b0f0e4ef1c4552331b160014335a99b9"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/lib/compute-stack.ts": {
+    "mtime": 1778807518.5244286,
+    "hash": "c80e71104113c208b7e4f9ffdf5fbde4"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/lib/edge-stack.ts": {
+    "mtime": 1778807530.9141078,
+    "hash": "2cfec40c813f5f3b596e238e8e9c007e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/lib/observability-stack.ts": {
+    "mtime": 1778686897.4255362,
+    "hash": "521e4b3cd90853c838936c364696a811"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/test/stacks.test.ts": {
+    "mtime": 1778751763.5470157,
+    "hash": "b2f4a2f8a5b4a2bb36640439c74a89a9"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/cdk.out/asset.d2191f6f199b95d1c044799f514b1ceca87200b3014c43c34839aad03dc69b8c/__entrypoint__.js": {
+    "mtime": 1778687335.514199,
+    "hash": "11b4baf36f4f3cc64a23100523aa68b7"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/cdk.out/asset.d2191f6f199b95d1c044799f514b1ceca87200b3014c43c34839aad03dc69b8c/index.js": {
+    "mtime": 1778687335.514199,
+    "hash": "7e17f05cb13a004d1dfae98b925311cc"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/cdk.out/asset.f06f7035054cb2aada184c7c251ec5cb31fb6b5e975284939b9ff097603ea769/__entrypoint__.js": {
+    "mtime": 1778687335.514199,
+    "hash": "11b4baf36f4f3cc64a23100523aa68b7"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/cdk.out/asset.f06f7035054cb2aada184c7c251ec5cb31fb6b5e975284939b9ff097603ea769/index.js": {
+    "mtime": 1778687335.514199,
+    "hash": "7e11d866efaf85b6db4eb2413c5f319e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/__init__.py": {
+    "mtime": 1778661818.2441967,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/schemas.py": {
+    "mtime": 1779283688.1889403,
+    "hash": "82536de2e4e98b964013e16dbf8f3622"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/load.py": {
+    "mtime": 1779281966.3433466,
+    "hash": "efd1256736e3f71fc9c35e51aeecc130"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/load_aws.py": {
+    "mtime": 1778826094.2737257,
+    "hash": "296f30c8f981efad47210e37bbd0af38"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/real/__init__.py": {
+    "mtime": 1778661818.2441967,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/real/_client.py": {
+    "mtime": 1779281618.392334,
+    "hash": "1938f394afd5291277f9cfeaa84479e9"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/real/bill.py": {
+    "mtime": 1779283699.7486413,
+    "hash": "3da052eaa2f4f99c6bd3abdb555e95bb"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/real/member.py": {
+    "mtime": 1778685680.6370394,
+    "hash": "26aa1386889d4a0a427b66971e6008a2"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/real/vote.py": {
+    "mtime": 1779284403.0604746,
+    "hash": "7706ee9cb6fe543a34b12794abaf7b38"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/real/committee.py": {
+    "mtime": 1778688630.9907005,
+    "hash": "3898b74ba296821f37dd9dcc53a416d5"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/real/session.py": {
+    "mtime": 1778688651.7101667,
+    "hash": "0b8b371eeae79c185b94dff17a39b00d"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/real/party.py": {
+    "mtime": 1778688661.2999184,
+    "hash": "eba902cdfbd3ba210ce8267ed72b940b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/real/agency.py": {
+    "mtime": 1778688674.3495808,
+    "hash": "a097bda5dca5d25fd87ea37ea146c09a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/synthetic/__init__.py": {
+    "mtime": 1778661818.2441967,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/synthetic/topics.py": {
+    "mtime": 1778684652.833636,
+    "hash": "63b3b2d3c1c57079c25c890c8c343208"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/synthetic/article.py": {
+    "mtime": 1778684703.0823376,
+    "hash": "8a628e6cdcee314b08f3f19867fbc793"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/synthetic/reader.py": {
+    "mtime": 1778684964.4555712,
+    "hash": "0c7ee1eaf4af0d2ecd7a4a3db6c61a7f"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/synthetic/advertisement.py": {
+    "mtime": 1778685078.2226226,
+    "hash": "944916335fc93898cc4296fdfca31311"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/synthetic/seeds.py": {
+    "mtime": 1780607067.884931,
+    "hash": "f766702e09e417aaa224dabe3e28631d"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/synthetic/placeholders.py": {
+    "mtime": 1778749349.099479,
+    "hash": "542cb477304143485c887d86a1cfa37a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/external/__init__.py": {
+    "mtime": 1778661818.2441967,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/external/naver_news.py": {
+    "mtime": 1778685944.3602138,
+    "hash": "80798dcd30264a0435e390771df82278"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/external/poll_result.py": {
+    "mtime": 1778685962.27975,
+    "hash": "0f492a8d4c95daa0fa4be44ef191e9f7"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/loader/__init__.py": {
+    "mtime": 1778661818.2441967,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/ontology/__init__.py": {
+    "mtime": 1778661818.2441967,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/ontology/adapters/__init__.py": {
+    "mtime": 1778661818.2441967,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/__init__.py": {
+    "mtime": 1778661818.2441967,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/conftest.py": {
+    "mtime": 1778668352.7552063,
+    "hash": "04d9dd47dd3bc19955fe827d4db3f37f"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_persona.py": {
+    "mtime": 1778668377.39457,
+    "hash": "4bbdb7e17baeae635b3cc34e25ea2049"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_smoke.py": {
+    "mtime": 1778687712.5444448,
+    "hash": "30c318b3d1783f81dbbdec9fdbc71485"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_schemas.py": {
+    "mtime": 1778670150.8387196,
+    "hash": "d6f4c8e62f095e41e3aa8419a3be52df"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_guardrails.py": {
+    "mtime": 1778671259.2300456,
+    "hash": "66ba1cb27748cc01bb24376a17c44f27"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_cohort.py": {
+    "mtime": 1778673897.4117837,
+    "hash": "ee70c54326f8bbcd3c57fee4449e78eb"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_bedrock.py": {
+    "mtime": 1778683765.6565957,
+    "hash": "3a66f164c0ce11cda09a6eedd28f4bee"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_neptune.py": {
+    "mtime": 1778675186.2284214,
+    "hash": "60da68a69eb2677445d987e86a508b6d"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_opensearch.py": {
+    "mtime": 1778675202.3180053,
+    "hash": "cedaf4e3c53b9ea3e1a88abbb9e35196"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_three_stage.py": {
+    "mtime": 1778682751.2228394,
+    "hash": "97293b2ef2368462e49c0a726fbb2305"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_multi_agent.py": {
+    "mtime": 1778682761.852564,
+    "hash": "4f714563c4e196c504630b859750b40b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_chat_router.py": {
+    "mtime": 1778682780.612079,
+    "hash": "8130c0a1fa9f850d86baecb80fd9535e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_synthetic_topics.py": {
+    "mtime": 1778684710.8121378,
+    "hash": "4d785b78121b0a10b2bbf5235a098c0b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_synthetic_article.py": {
+    "mtime": 1778684731.3816056,
+    "hash": "06b9e795038ba4d1365a77dcf86ec16b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_synthetic_reader.py": {
+    "mtime": 1778684992.824837,
+    "hash": "059b3830c8cc959dcbe1eecc1b772191"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_synthetic_advertisement.py": {
+    "mtime": 1778685099.3520756,
+    "hash": "8cd5c1851bbd784a2fba331f5ec8271a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_load.py": {
+    "mtime": 1778688863.6246839,
+    "hash": "6d0690d10cc11b2403210d51cee44d36"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_real_adapters.py": {
+    "mtime": 1778685755.3151052,
+    "hash": "65d3e72707f9f98ea9bd107c80ede3fd"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_external_adapters.py": {
+    "mtime": 1778685985.0191617,
+    "hash": "2df1d0552cadd16e683fde5d4255009a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_synthetic_seeds.py": {
+    "mtime": 1778686376.2490375,
+    "hash": "a950a4b06c012c331fc36726054084f5"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_verify_demo_dataset.py": {
+    "mtime": 1778688811.7860267,
+    "hash": "f4c521b46ffe2720a341f236b7f8295a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_search_router.py": {
+    "mtime": 1780726652.1110914,
+    "hash": "e4497e5ebf4b0ac0f2f2598b0e04f148"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_ad_match.py": {
+    "mtime": 1780607456.2749348,
+    "hash": "96e5505c8efa302fbe0cbaef4d56ab00"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_real_adapters_extra.py": {
+    "mtime": 1778688697.3489861,
+    "hash": "339a51fbd4673bfffafc9621389847dc"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_ops_metrics.py": {
+    "mtime": 1778690184.0204992,
+    "hash": "223b24e63686d3d3c70afbb2494e5a68"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_eval_wow_queries.py": {
+    "mtime": 1778744579.5528417,
+    "hash": "02acef45baf35956b00e8d43706641ab"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_chat_stream.py": {
+    "mtime": 1780364151.2782218,
+    "hash": "678464fa63d90c2cd026380f0fc06508"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_objects_router.py": {
+    "mtime": 1780601327.182598,
+    "hash": "8a67eaa0a3df54c2b4ec6749388204ec"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_outlier_router.py": {
+    "mtime": 1778710470.9156244,
+    "hash": "1d9d01f63325502effd162c34933824e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_journey_router.py": {
+    "mtime": 1778710869.565309,
+    "hash": "9af4ab71e72c33f93713418a0d622a27"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_neutrality_router.py": {
+    "mtime": 1778713392.4300447,
+    "hash": "92f5340b931ce4343ca092bc9b91928b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_district_map_router.py": {
+    "mtime": 1778713705.5019486,
+    "hash": "da947a6b92e4c672e976c778c3a3479a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_insights_router.py": {
+    "mtime": 1778713968.6851377,
+    "hash": "a42afba404c9a4032a496d7c59441222"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_external_signal_router.py": {
+    "mtime": 1778714208.1589377,
+    "hash": "70d86ccdc95243f01ad8857cf816ad08"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_persona_match_router.py": {
+    "mtime": 1778714460.162421,
+    "hash": "db7c1b47139415689c51f5753694f08d"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_cluster_router.py": {
+    "mtime": 1778714699.1362505,
+    "hash": "bcc9c2a47ee2b486ddd0d4c72e960f55"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_lookalike_router.py": {
+    "mtime": 1778714907.19087,
+    "hash": "7857cbe024e45bedce309afaddc4b2b1"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_issue_legislation_router.py": {
+    "mtime": 1778715086.9362204,
+    "hash": "11cd0994ae2a5d8d26a8234de5f24f66"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/test_article_roi_router.py": {
+    "mtime": 1778715280.3412201,
+    "hash": "5760eddc9b54ef99d30f0df8486ef014"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/api/__init__.py": {
+    "mtime": 1778661818.2441967,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/scripts/verify_demo_dataset.py": {
+    "mtime": 1778688797.5863943,
+    "hash": "775b61b3079fa35d1b3f30e5d5697dbc"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/scripts/eval_wow_queries.py": {
+    "mtime": 1778744520.9743602,
+    "hash": "929e890e9239277e6ec44d4631db3e31"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/requirements.txt": {
+    "mtime": 1778660706.392937,
+    "hash": "f6e6ab9eb17692229fe5fe3a87d730ec"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/requirements-dev.txt": {
+    "mtime": 1778660707.522908,
+    "hash": "662c90fd202b79d2464a4bbe55c3a95d"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/SECURITY.md": {
+    "mtime": 1778660751.2417793,
+    "hash": "559dc74677387af77db265bfb32dc5b1"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/CHANGELOG.md": {
+    "mtime": 1780608038.47997,
+    "hash": "91cceabc364e8869ec8d1af1373152dd"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/CLAUDE.md": {
+    "mtime": 1780365359.1869972,
+    "hash": "6669aaf14b39d1896c7a8baceb8314ac"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/README.md": {
+    "mtime": 1780204832.5905213,
+    "hash": "883a44a5a165e0026cd24a31e236a6aa"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/api/CLAUDE.md": {
+    "mtime": 1780288695.7299943,
+    "hash": "544c9b80c536c6e1e2cf08946ce09f18"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/web/CLAUDE.md": {
+    "mtime": 1780288727.1191895,
+    "hash": "e07df6a8d1f2f3321f5f65eaa830e03d"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/infra-cdk/CLAUDE.md": {
+    "mtime": 1780288765.19821,
+    "hash": "d7a53b6b25a9fb33cbd645564e3ba899"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/data/CLAUDE.md": {
+    "mtime": 1780288791.7175224,
+    "hash": "1af1a62152a0a342c73fd978b4f6d647"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/ontology/CLAUDE.md": {
+    "mtime": 1780204320.2037764,
+    "hash": "a1782cadd5787692519f56e7be12d374"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tests/fixtures/false-positives.txt": {
+    "mtime": 1779187014.7365873,
+    "hash": "3acac2d8b62da9ed9f050f7217fe067c"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/api-reference.md": {
+    "mtime": 1780365373.0766387,
+    "hash": "4fb2f8cd62449d4118ff2a8c01c84b6a"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/demo-walkthrough.md": {
+    "mtime": 1780365321.2179763,
+    "hash": "d3ce5cc827e61ce4aa7118d62efeb857"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/data-sources.md": {
+    "mtime": 1780365822.2150326,
+    "hash": "79f074d57503c20f227812a9ef95eb13"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/architecture-rationale.md": {
+    "mtime": 1779984652.7089374,
+    "hash": "deb6c233300dae6a4ac931d7cfa35a8f"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/call-flow.md": {
+    "mtime": 1779984630.5395098,
+    "hash": "69b14f2c8f5bf2cc16d38dd5b0fa63d8"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/data-ingestion-flow.md": {
+    "mtime": 1780365165.122009,
+    "hash": "96af843c76444c9faac99dfdbc6a2ba9"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/architecture.md": {
+    "mtime": 1780288827.6565912,
+    "hash": "af0b9ecd350379688599fb1bbfc304ef"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/onboarding.md": {
+    "mtime": 1780288801.0072823,
+    "hash": "671b68bd1abab83dfa27da5deb935718"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/decisions/0001-reference-gcc-architecture.md": {
+    "mtime": 1779278303.3078902,
+    "hash": "4c787ae7afc2b4d2cd7a3cac74c15a82"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/decisions/0002-six-persona-design.md": {
+    "mtime": 1780363920.0142052,
+    "hash": "26d7b5139a4806cd9caeb6ac1ebc67a5"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/decisions/0003-customer-facing-extension.md": {
+    "mtime": 1779278303.3078902,
+    "hash": "6c3c1555ebc278133900feb1623d89d5"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/decisions/0004-political-neutrality-guardrails.md": {
+    "mtime": 1779278303.3078902,
+    "hash": "c1bce793ae7b648b0ccacc2f82fd2105"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/decisions/0005-phase4-narrative-design-choices.md": {
+    "mtime": 1779278303.3078902,
+    "hash": "8cf3d20749792c8727a7a367b2f7034d"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/decisions/0006-shared-vpc-import.md": {
+    "mtime": 1779278303.3078902,
+    "hash": "1574cff262c9153e90cb10de95ebc447"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/decisions/0007-opensearch-iam-tightening.md": {
+    "mtime": 1779278303.3078902,
+    "hash": "5275f7043f67bbe67c175e965e89ee3f"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/decisions/0008-cloudfront-vpc-origins.md": {
+    "mtime": 1779278303.3078902,
+    "hash": "85b6682138e74a720dcc769bfb520932"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/decisions/0009-hybrid-mindmap-neptune.md": {
+    "mtime": 1779278303.3078902,
+    "hash": "068c2277d5043c4de24ff5db32e4e1d8"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/decisions/0010-real-data-adapter-mapping.md": {
+    "mtime": 1779283373.337083,
+    "hash": "c91b292426a10bef849d61b27a84132b"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/runbooks/01-deployment.md": {
+    "mtime": 1779278303.3078902,
+    "hash": "c8936619c00cbc5342c3aa491f4c5484"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/superpowers/specs/2026-05-13-ontology-assembly-design.md": {
+    "mtime": 1779278303.3578887,
+    "hash": "5fe854d1fa296b7229e1313c78889715"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/superpowers/specs/2026-06-04-ad-match-demo-content-expansion-design.md": {
+    "mtime": 1780604543.0299017,
+    "hash": "e3e4622280430e014ce0fa82f173d500"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/superpowers/plans/2026-06-04-ad-match-demo-content-expansion.md": {
+    "mtime": 1780605315.8000426,
+    "hash": "2565cdc1ac179e76bf9e85cbe97c44d5"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/docs/deploy-logs/cost-estimate.md": {
+    "mtime": 1779278303.3078902,
+    "hash": "b753a81dd1089d211b248a3df133f295"
+  },
+  "/home/ec2-user/my-project/ontology-for-assembly/tools/prompts/README.md": {
+    "mtime": 1779187070.6051428,
+    "hash": "0d9641855603706dd3019195ddd69aed"
+  }
+}

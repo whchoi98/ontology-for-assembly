@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — 코드 지식 그래프 (`/codegraph`) 메뉴 — graphify AST + Bedrock 라벨링 (2026-06-08)
+- gcc `/codegraph` 패턴 차용 — assembly 코드베이스 자체를 graphify AST(Python + TS/TSX)로 추출: 3,579 노드 / 4,626 엣지 / 233 커뮤니티. 백엔드 없이 정적 자산(`web/public/codegraph/`)을 iframe 임베드.
+- 233개 커뮤니티의 한글 라벨·설명·핵심 개념·대표 파일을 Bedrock Sonnet 4.6로 오프라인 생성(`scripts/label_codegraph_communities.py`). 빌드 시 LLM 미사용·개인정보/시크릿 미포함.
+- `web/app/codegraph/page.tsx`(vis-network iframe + 커뮤니티 검색·정렬·펼침 패널, slate 팔레트), 사이드바 "운영" 섹션 등록(staff 페르소나). 재생성: `bash scripts/refresh_codegraph.sh`.
+
+### Changed — 의원 연관 기사: 실 네이버 뉴스를 DEMO_PUBLIC_MODE와 분리 (2026-06-08)
+- `GET /api/members/{id}/news`가 유효한 `NAVER_NEWS_API_CLIENT_ID/SECRET`(Secrets Manager→task env)가 주입되면 DEMO 모드와 무관하게 실 네이버 뉴스를 우선 사용. 키 미설정·placeholder(`demo-mode`)·호출 실패·결과 0건이면 결정적 mock fallback(출처 배지 `mock_naver_news`로 구분).
+- (사용자 신고 2026-06-08) 데모 mock 기사가 실 기사처럼 보이고 링크가 가짜 제목 검색으로 이동해 무관/오래된 결과가 나오던 문제. 실 키 주입은 compute-stack 시크릿 배선 + 배포 필요.
+
 ### Added — 시나리오 L 광고 매칭 시연 콘텐츠 확대 (2026-06-04)
 - 데모 샘플 기사 2 → 6개: skip 3종(scandal·tragedy·minor_victim) + safe 3종(AI·핀테크·탄소중립). `data/synthetic/seeds.py:DEMO_AD_ARTICLES` 단일 카탈로그.
 - 신규 `GET /api/ad-match/samples` — 셀렉터 단일 진실원. 웹 `ad-match/page.tsx`가 하드코딩 대신 fetch + 거버넌스 배지(Agent 거절 예상/안전 매칭).

@@ -11,7 +11,7 @@ import { usePathname } from 'next/navigation';
 import {
   Search, MessageSquare, BarChart3, Users, Layers, GitMerge, TrendingUp,
   Map, ShieldCheck, Radio, AlertTriangle, Compass, Sparkles, LineChart,
-  Network, Activity, Database, Handshake, Mailbox, Building, ClipboardCheck, BarChart,
+  Network, Activity, Database, Code2, Handshake, Mailbox, Building, ClipboardCheck, BarChart,
   Scale, Crown, Target, Shuffle,
   type LucideIcon,
 } from 'lucide-react';
@@ -59,6 +59,7 @@ const MEDIA_LINKS: Array<{ icon: LucideIcon; name: string; href: string; badge?:
 const OPS_LINKS: Array<{ icon: LucideIcon; name: string; href: string; badge?: string }> = [
   { icon: Activity, name: '운영 콘솔',       href: '/ops',     badge: '5 패널' },
   { icon: Database, name: 'Object Explorer', href: '/objects', badge: '31 클래스' },
+  { icon: Code2,    name: '코드 지식 그래프', href: '/codegraph', badge: 'graphify' },
 ];
 
 

@@ -144,8 +144,8 @@ const CATEGORY_ORDER: CardDef['category'][] = ['핵심', '거버넌스', '데이
 const CATEGORY_META: Record<CardDef['category'], { name: string; color: string }> = {
   '핵심':         { name: '핵심 wow 시나리오',         color: 'border-blue-200 bg-blue-500/15' },
   '거버넌스':     { name: 'AI 거버넌스',              color: 'border-purple-200 bg-purple-500/15' },
-  '데이터·AI':    { name: '데이터·AI 분석',           color: 'border-cyan-200 bg-cyan-50' },
-  'B2C·B2B':      { name: 'B2C·B2B 시연',            color: 'border-emerald-200 bg-emerald-50' },
+  '데이터·AI':    { name: '데이터·AI 분석',           color: 'border-cyan-200 bg-cyan-500/15' },
+  'B2C·B2B':      { name: 'B2C·B2B 시연',            color: 'border-emerald-200 bg-emerald-500/15' },
 };
 
 

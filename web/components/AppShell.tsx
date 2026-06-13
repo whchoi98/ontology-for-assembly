@@ -8,7 +8,6 @@
  */
 import React from 'react';
 import { usePathname } from 'next/navigation';
-import { GuidedTour } from './GuidedTour';
 import { Sidebar } from './Sidebar';
 import { FloatingChat } from './FloatingChat';
 import { TopBar } from './TopBar';
@@ -29,7 +28,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <TopBar />
         <div className="max-w-7xl mx-auto w-full px-6 py-6">{children}</div>
       </main>
-      <GuidedTour />
       <FloatingChat />
     </>
   );

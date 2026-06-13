@@ -12,6 +12,7 @@
  * 채팅 popup 자체는 /chat/popup 페이지 (Sidebar 없는 standalone UI).
  */
 import React, { useEffect, useRef, useState } from 'react';
+import { MessageCircle } from 'lucide-react';
 import { readPersonaIdSync } from './PersonaSwitch';
 
 
@@ -83,7 +84,7 @@ export function FloatingChat() {
         title="챗봇 (시나리오 B)"
         aria-label="챗봇 열기"
         className="
-          fixed bottom-6 right-6 z-40
+          fixed bottom-20 right-6 z-40
           bg-gradient-to-br from-blue-500 to-blue-700
           hover:from-blue-400 hover:to-blue-600
           text-white rounded-full
@@ -92,7 +93,7 @@ export function FloatingChat() {
           transition-transform hover:scale-105
         "
       >
-        <span className="text-2xl">💬</span>
+        <MessageCircle className="w-7 h-7" strokeWidth={2.25} />
       </button>
 
       {open && mode === 'iframe' && (

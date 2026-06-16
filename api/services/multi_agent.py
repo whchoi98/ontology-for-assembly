@@ -112,39 +112,68 @@ def run_agentic_pipeline(
         from api.services.three_stage import _detect_district_keyword, _detect_member_name
         named_member = _detect_member_name(query)
         if named_member:
-            tools_called.append("member_journey_lookup")
             mid = getattr(named_member, "assembly_id", "")
             name = getattr(named_member, "name", "—")
             party = getattr(named_member, "party", "—")
             district = getattr(named_member, "district", "—")
             committee = getattr(named_member, "committee", None) or "—"
             reelection = getattr(named_member, "reelection", None) or "—"
-            stats_line = ""
-            events_lines = ""
-            try:
-                from api.services import journey_builder
-                jr = journey_builder.build_journey(mid)
-                stats = (jr.stats if jr else None) or {}
-                stats_line = (
-                    f"발의 {stats.get('proposed', '?')}건 · 공동발의 {stats.get('co_proposed','?')}건 "
-                    f"· 표결 {stats.get('voted','?')}건 · 발언 {stats.get('statements','?')}건"
-                )
-                events = ((jr.events if jr else None) or [])[:5]
-                if events:
-                    events_lines = "\n".join(
-                        f"  - {getattr(e,'date','—')} | {getattr(e,'event_type','—')} | {(getattr(e,'title','') or '')[:60]}"
-                        for e in events
+            # 유사-의원 intent → 시나리오 F lookalike (활동 이력 아님). 사용자 신고 2026-06-16.
+            _sim_intent = (any(k in query for k in ("비슷", "유사", "닮은", "투표성향", "투표 성향", "룩어라이크"))
+                           or "lookalike" in qlow or "similar" in qlow)
+            _sim_done = False
+            if _sim_intent:
+                try:
+                    from api.services import lookalike_builder
+                    lr = lookalike_builder.build_lookalikes(mid, top_k=5)
+                except Exception:
+                    lr = None
+                if lr and lr.candidates:
+                    tools_called.append("lookalike_lookup")
+                    cand_lines = "\n".join(
+                        f"  - {c.name} ({c.party}) similarity {c.similarity:.2f}"
+                        + (" · cross-party" if c.cross_party_signal else "")
+                        + (f" · {c.factors[0]}" if c.factors else "")
+                        for c in lr.candidates[:5]
                     )
-            except Exception:
-                pass
-            extra_context = (
-                f"\n\n[real /api/journey/{mid} · 의원 이력]\n"
-                f"- {name} ({party}) — {district}\n"
-                f"- 위원회: {committee} · {reelection}\n"
-                f"- 활동: {stats_line}\n"
-                f"- 최근 이벤트:\n{events_lines}\n"
-            )
-            sources_used.append({"id": mid, "title": f"{name} ({party})", "source": "real", "node_type": "Person"})
+                    extra_context = (
+                        f"\n\n[real lookalike /api/lookalike/{mid} · {name} 유사 의원]\n"
+                        f"- seed: {name} ({party}) · cluster {lr.seed_cluster_label or '—'}\n"
+                        f"- 유사 의원 top {len(lr.candidates[:5])} (cluster + 활동 근접 + cross-party 신호):\n{cand_lines}\n"
+                    )
+                    sources_used.extend([
+                        {"id": c.person_id, "title": f"{c.name} ({c.party})", "source": "real", "node_type": "Person"}
+                        for c in lr.candidates[:5]
+                    ])
+                    _sim_done = True
+            if not _sim_done:
+                tools_called.append("member_journey_lookup")
+                stats_line = ""
+                events_lines = ""
+                try:
+                    from api.services import journey_builder
+                    jr = journey_builder.build_journey(mid)
+                    stats = (jr.stats if jr else None) or {}
+                    stats_line = (
+                        f"발의 {stats.get('proposed', '?')}건 · 공동발의 {stats.get('co_proposed','?')}건 "
+                        f"· 표결 {stats.get('voted','?')}건 · 발언 {stats.get('statements','?')}건"
+                    )
+                    events = ((jr.events if jr else None) or [])[:5]
+                    if events:
+                        events_lines = "\n".join(
+                            f"  - {getattr(e,'date','—')} | {getattr(e,'event_type','—')} | {(getattr(e,'title','') or '')[:60]}"
+                            for e in events
+                        )
+                except Exception:
+                    pass
+                extra_context = (
+                    f"\n\n[real /api/journey/{mid} · 의원 이력]\n"
+                    f"- {name} ({party}) — {district}\n"
+                    f"- 위원회: {committee} · {reelection}\n"
+                    f"- 활동: {stats_line}\n"
+                    f"- 최근 이벤트:\n{events_lines}\n"
+                )
+                sources_used.append({"id": mid, "title": f"{name} ({party})", "source": "real", "node_type": "Person"})
         # 지역구 lookup (예: "분당갑 국회의원은?")
         district_keyword = _detect_district_keyword(query)
         if not extra_context and district_keyword and ("의원" in query or "대표" in query or "국회" in query or "지역구" in query):

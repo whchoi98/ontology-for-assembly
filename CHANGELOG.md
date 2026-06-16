@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed — 챗봇: 의원 "유사/투표성향 비슷" 질문이 활동 이력만 반복 (2026-06-16)
+- 챗(시나리오 B) Stage 2/3가 쿼리에서 의원 이름을 감지하면 **intent와 무관하게 항상 journey(의정활동 이력)** 컨텍스트를 세팅 → "이해민과 투표성향 비슷한 의원은?" 질문에도 활동 이력만 반복 출력.
+- `three_stage.stage2_agent` + `multi_agent.run_agentic_pipeline`에 **유사-의원 intent**("비슷·유사·닮은·투표성향·룩어라이크·lookalike·similar") 분기 추가 → `lookalike_builder`(시나리오 F, cluster+활동근접+cross-party)로 유사 의원 top-5 반환 + `bedrock` mock 렌더 분기. 순수 활동이력 질문은 journey 유지. (사용자 신고 2026-06-16, 검증: 이해민→김도읍 0.98·어기구 0.95 등.)
+
 ### Fixed — 위원회 영향력(Q) 온톨로지 맵에 비소속 의원 표시 (2026-06-16)
 - `committee-heatmap/page.tsx:pickCommitteeMembers`가 위원회 멤버를 `committee_id` 해시로 **전체 286명에서 추출** → 실제 소속과 무관(예: 과방위 맵에 과방위 아닌 의원). 실 `CMIT_NM`(`/api/members`의 `committee`)으로 필터해 해당 위원회 소속 의원 중에서만 위원장·간사 선택. `MemberLite`에 `committee` 필드 추가. (사용자 신고 2026-06-16, 검증: 과방위 pool에 이해민·노종면·박정훈 등 실 소속.)
 

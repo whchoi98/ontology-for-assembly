@@ -273,6 +273,24 @@ def _mock_response(user_message: str, sys_prompt: str) -> str:
                 f"- 시나리오 F (룩어라이크)로 *{name} 의원과 협업 패턴 유사한 의원* 매칭\n"
                 f"- 시나리오 O (인물 관계)에서 *{name} ↔ 다른 의원* 5차원 cross-tab\n"
             )
+    if "[real lookalike /api/lookalike/" in user_message and "유사 의원" in user_message:
+        import re
+        blk = re.search(r"\[real lookalike /api/lookalike/([^ ]+) · (.+?) 유사 의원\]\n(.+?)(?=\n\n|\Z)", user_message, re.DOTALL)
+        if blk:
+            mid = blk.group(1)
+            name = blk.group(2)
+            body = blk.group(3).strip()
+            return (
+                f"## 📌 *{name}* 의원과 활동·표결 패턴이 유사한 의원 (real — 시나리오 F 룩어라이크)\n\n"
+                f"{body}\n\n"
+                f"### 🔍 분석 방법\n"
+                f"- `/api/lookalike/{mid}` — cluster 일치 + 활동 강도 근접 + cross-party 신호 가중 similarity (0–1)\n"
+                f"- 표결·공동발의 cohort 기반 (real Neptune 74,249 edges)\n\n"
+                f"### 💡 후속 분석\n"
+                f"- 시나리오 F (룩어라이크)에서 *seed {name} · top-k 슬라이더*로 후보 확대\n"
+                f"- 시나리오 O (인물 관계)로 *{name} ↔ 후보* 5차원 cross-tab (공동발의·표결 일치율·토픽 중첩)\n"
+                f"- 시나리오 V (표결 cluster)로 *동일 표결 성향 그룹* 확인\n"
+            )
     if "[real /api/members district=" in user_message:
         import re
         dk = re.search(r"\[real /api/members district='([^']+)'\s*·\s*(\d+)명\]\n(.+?)(?=\n\n|\Z)", user_message, re.DOTALL)

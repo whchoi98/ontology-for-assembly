@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed — 온톨로지 관계 그래프 의원 위원회: 해시 합성 → 실제 CMIT_NM (2026-06-16)
+- `api/routers/objects.py` 서브그래프 빌더(`_add_synthetic_hop` Person 분기 + `_synthetic_multi_hop._expand_person`)가 의원 소속 위원회를 **assembly_id 해시로 합성**해 실제와 무관하게 배정하던 버그. 모든 의원에 영향(예: 이해민 조국혁신당이 실제 **과학기술정보방송통신위원회**인데 그래프에서 **정무위원회**로 표기).
+- `member_directory`의 실 `CMIT_NM` 사용으로 수정(depth 1·2-3 모두). 겸임 다수 위원회는 대표(상임위 = 첫 번째) 1개만 노드 라벨로 표기. 실 위원회 미상 시에만 결정적 합성 fallback. (사용자 신고 2026-06-16, 검증 19명 전원 일치.)
+
 ### Added — 코드 지식 그래프 (`/codegraph`) 메뉴 — graphify AST + Bedrock 라벨링 (2026-06-08)
 - gcc `/codegraph` 패턴 차용 — assembly 코드베이스 자체를 graphify AST(Python + TS/TSX)로 추출: 3,579 노드 / 4,626 엣지 / 233 커뮤니티. 백엔드 없이 정적 자산(`web/public/codegraph/`)을 iframe 임베드.
 - 233개 커뮤니티의 한글 라벨·설명·핵심 개념·대표 파일을 Bedrock Sonnet 4.6로 오프라인 생성(`scripts/label_codegraph_communities.py`). 빌드 시 LLM 미사용·개인정보/시크릿 미포함.

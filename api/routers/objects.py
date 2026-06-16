@@ -651,10 +651,18 @@ def _add_synthetic_hop(
             "data": {"name": topic_name, "summary_label": topic_name},
         })
         edges.append({"source": instance_id, "target": topic_id, "type": "ABOUT"})
-        # 소속 위원회 1개
-        committee_names = ("기획재정", "정무", "과학기술정보방송통신", "교육", "외교통일",
-                           "국토교통", "보건복지", "환경노동", "법제사법")
-        cmt_name = committee_names[seed_int % len(committee_names)] + "위원회"
+        # 소속 위원회 1개 — 실제 CMIT_NM(member_directory) 사용. 해시 합성 금지.
+        # (사용자 신고 2026-06-16: 이해민 의원이 실제 과방위인데 온톨로지 그래프에서 정무위로 표기.)
+        _root_m = member_directory.get_member(member_directory.resolve_id(instance_id))
+        cmt_name = (_root_m.committee if _root_m and _root_m.committee else None) \
+            or (instance_data.get("committee") if isinstance(instance_data, dict) else None)
+        if cmt_name:
+            cmt_name = cmt_name.split(",")[0].strip()  # 겸임 다수 위원회 시 대표(상임위) 1개만
+        else:
+            # 실 위원회 미상일 때만 결정적 합성 fallback
+            committee_names = ("기획재정", "정무", "과학기술정보방송통신", "교육", "외교통일",
+                               "국토교통", "보건복지", "환경노동", "법제사법")
+            cmt_name = committee_names[seed_int % len(committee_names)] + "위원회"
         cmt_id = f"cmt_{cmt_name}"
         if not any(node["id"] == cmt_id for node in nodes):
             nodes.append({"id": cmt_id, "label": "Committee",
@@ -702,11 +710,15 @@ def _synthetic_multi_hop(
                           "data": {"title": bill_title, "summary_label": bill_title}})
             edges.append({"source": person_id, "target": bill_id, "type": "PROPOSED"})
             node_ids.add(bill_id)
-        cmt = f"cmt_hop_{s % 9}"
-        cmt_names = ("기획재정", "정무", "과학기술", "교육", "외교통일",
-                     "국토교통", "보건복지", "환경노동", "법제사법")
-        if cmt not in node_ids and len(nodes) < 30:
+        # 소속 위원회 — 실제 CMIT_NM(member_directory) 우선, 미상 시 결정적 합성
+        _pm = member_directory.get_member(member_directory.resolve_id(person_id))
+        cmt_full = _pm.committee.split(",")[0].strip() if _pm and _pm.committee else None
+        if not cmt_full:
+            cmt_names = ("기획재정", "정무", "과학기술", "교육", "외교통일",
+                         "국토교통", "보건복지", "환경노동", "법제사법")
             cmt_full = f"{cmt_names[s % 9]}위원회"
+        cmt = f"cmt_{cmt_full}"
+        if cmt not in node_ids and len(nodes) < 30:
             nodes.append({"id": cmt, "label": "Committee",
                           "data": {"name": cmt_full, "summary_label": cmt_full}})
             edges.append({"source": person_id, "target": cmt, "type": "MEMBER_OF"})

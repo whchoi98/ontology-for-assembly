@@ -136,6 +136,10 @@ export class ComputeStack extends cdk.Stack {
         DEMO_PUBLIC_MODE: 'true',
         REQUIRE_ORIGIN_AUTH: 'false',
         NEPTUNE_ENDPOINT: neptuneEndpoint,
+        // Phase 4f: DEMO_PUBLIC_MODE여도 Neptune은 실 openCypher 사용 (74K edges 적재됨).
+        // T·U·V·W REAL 시나리오 + mindmap depth≥2가 실 그래프로 동작 (generic mock은 고급
+        // Cypher 투영과 불일치 → 빈 결과였음). 사용자 신고 2026-06-16.
+        ENABLE_NEPTUNE_REAL: 'true',
         OPENSEARCH_ENDPOINT: openSearchEndpoint,
         OPENSEARCH_INDEX: 'assembly-dev-kb-index',
         BEDROCK_CHAT_MODEL_ID: 'global.anthropic.claude-sonnet-4-6',

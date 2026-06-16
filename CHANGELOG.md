@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed — Object Explorer 의원 상세 9 메트릭 일부 누락 (공동발의·표결참여·정당일치·발언) (2026-06-16)
+- objects_catalog(`data.real.member.fetch_members`) analytics가 `bills_co_proposed`·`floor_votes`·`party_alignment_pct`·`statements`를 생성하지 않아, Object Explorer Person 상세 카드의 9 메트릭 칩 중 4개가 빈 값으로 노출(전 의원 영향, 예: `1WE5693J` 김태년).
+- `objects.py:get_object` Person enrich에서 `member_directory`(MemberAnalytics 9필드 SSOT)로 9 메트릭 전체를 채우도록 수정. (사용자 신고 2026-06-16, 검증 9/9 채워짐.)
+
 ### Fixed — 온톨로지 관계 그래프 의원 위원회: 해시 합성 → 실제 CMIT_NM (2026-06-16)
 - `api/routers/objects.py` 서브그래프 빌더(`_add_synthetic_hop` Person 분기 + `_synthetic_multi_hop._expand_person`)가 의원 소속 위원회를 **assembly_id 해시로 합성**해 실제와 무관하게 배정하던 버그. 모든 의원에 영향(예: 이해민 조국혁신당이 실제 **과학기술정보방송통신위원회**인데 그래프에서 **정무위원회**로 표기).
 - `member_directory`의 실 `CMIT_NM` 사용으로 수정(depth 1·2-3 모두). 겸임 다수 위원회는 대표(상임위 = 첫 번째) 1개만 노드 라벨로 표기. 실 위원회 미상 시에만 결정적 합성 fallback. (사용자 신고 2026-06-16, 검증 19명 전원 일치.)

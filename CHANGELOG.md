@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed — 위원회 영향력(Q) 온톨로지 맵에 비소속 의원 표시 (2026-06-16)
+- `committee-heatmap/page.tsx:pickCommitteeMembers`가 위원회 멤버를 `committee_id` 해시로 **전체 286명에서 추출** → 실제 소속과 무관(예: 과방위 맵에 과방위 아닌 의원). 실 `CMIT_NM`(`/api/members`의 `committee`)으로 필터해 해당 위원회 소속 의원 중에서만 위원장·간사 선택. `MemberLite`에 `committee` 필드 추가. (사용자 신고 2026-06-16, 검증: 과방위 pool에 이해민·노종면·박정훈 등 실 소속.)
+
 ### Fixed — REAL 시나리오(T·U·V·W) 데모 모드 빈 결과 → 실 Neptune 활성화 (2026-06-16)
 - generic Neptune mock(`neptune._mock_result`)이 고급 Cypher 투영 컬럼(`mona`·`cohort_weight`·`parties` 등)을 생성하지 못해 **T 정당응집도·U 의원영향력·V 표결cluster·W swing voter**가 데모 모드에서 모두 빈 결과(U는 placeholder `—` 1건).
 - `compute-stack.ts` api env에 `ENABLE_NEPTUNE_REAL: 'true'` 추가 → `DEMO_PUBLIC_MODE`와 무관하게 실 openCypher 사용(74K edges 적재된 Neptune). 4 REAL 시나리오 + mindmap depth≥2가 실 그래프 데이터로 동작. (사용자 신고 2026-06-16, 검증: U 40 candidate/윤준병 #1, T 8정당, V 5클러스터, W 303명 평가.)

@@ -20,6 +20,7 @@ interface MemberLite {
   party: string;
   district: string;
   profile_image_url: string;
+  committee?: string;
 }
 
 interface Committee {
@@ -89,14 +90,19 @@ function colorFor(value: number, max: number): string {
 // committee_id로 deterministic 의원 3명 선택 (위원장 + 양당 간사 우선)
 function pickCommitteeMembers(c: Committee, members: MemberLite[]): { chair?: MemberLite; whipA?: MemberLite; whipB?: MemberLite } {
   if (members.length < 3) return {};
+  // 실제 소속(CMIT_NM) 위원회 의원만 추림 — c.name이 의원 committee 문자열에 포함되면 매칭.
+  // (committee는 겸임 다수 위원회 콤마 결합 가능; c.name 일부는 truncate라 includes 부분매칭.)
+  // 사용자 신고 2026-06-16: 과방위 맵에 과방위 아닌 의원이 보임 (이전엔 전체 286명에서 해시 추출).
+  const pool0 = members.filter((m) => m.committee && m.committee.includes(c.name));
+  const pool = pool0.length >= 3 ? pool0 : members;  // 매칭 부족 시에만 전체 fallback
   const seed = c.committee_id.split('').reduce((s, ch) => (s + ch.charCodeAt(0)) % 1000, 0);
-  const chair = members[seed % members.length];
+  const chair = pool[seed % pool.length];
   // 다른 정당의 첫 의원 (cross-party whip 우선)
-  const whipA = members.find((m, i) => i !== members.indexOf(chair) && m.party !== chair.party)
-              ?? members[(seed + 1) % members.length];
-  const whipB = members.find((m, i) =>
-    i !== members.indexOf(chair) && i !== members.indexOf(whipA) && m.party !== chair.party,
-  ) ?? members[(seed + 2) % members.length];
+  const whipA = pool.find((m, i) => i !== pool.indexOf(chair) && m.party !== chair.party)
+              ?? pool[(seed + 1) % pool.length];
+  const whipB = pool.find((m, i) =>
+    i !== pool.indexOf(chair) && i !== pool.indexOf(whipA) && m.party !== chair.party,
+  ) ?? pool[(seed + 2) % pool.length];
   return { chair, whipA, whipB };
 }
 
